@@ -49,7 +49,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
 
       <div className="relative z-10 px-6 py-8 pt-20 md:pt-8">
         <div className="w-full lg:w-4/5 mx-auto">
-          <div className="flex flex-col min-h-[90vh] justify-start md:justify-center xl:justify-end">
+          <div className="flex flex-col min-h-[80vh] lg:min-h-[90vh] justify-center xl:justify-end">
             {/* Main heading - close to content below */}
             <div className="w-full mb-8 xl:mb-[18rem]">
               {/* NAMe tag */}
