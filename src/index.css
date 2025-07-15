@@ -1,0 +1,69 @@
+/**
+ * Global Styles and Tailwind Imports
+ * 
+ * This file contains:
+ * - Tailwind CSS imports
+ * - Global base styles
+ * - Custom component classes
+ * - Pixel-style utilities
+ * 
+ * 🔧 UPDATE LOCATIONS:
+ * - @layer base: Global element styles
+ * - @layer components: Reusable component classes
+ * - body font-family: Default font stack
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-transparent; /* Remove default borders */
+  }
+  
+  /* 🔧 UPDATE: Global body styles and default font */
+  body {
+    @apply bg-primary-bg-light text-text-primary;
+    font-family: 'JetBrains Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* 🔧 UPDATE: Custom component classes - modify these for global component styling */
+@layer components {
+  /* Pixel-style border utility */
+  .pixel-border {
+    @apply border-2 border-accent-orange;
+    border-image: url("data:image/svg+xml;charset=utf-8,%3csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m1,1 l0,6 l2,0 l0,2 l6,0 l0,-2 l2,0 l0,-6 l-2,0 l0,-2 l-6,0 l0,2 z' fill='%23ff8c42'/%3e%3c/svg%3e") 2;
+  }
+  
+  
+  /* Base button styling - used by PixelButton component */
+  .pixel-button {
+    @apply text-text-primary px-4 py-2 border-2 font-tech text-sm rounded-xl;
+    @apply transition-all duration-200;
+    @apply active:scale-95 active:shadow-inner;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* Base card styling - used by ProjectCard component */
+  .pixel-card {
+    @apply bg-primary-bg-light border-2 border-accent-orange-dark p-6 rounded-xl;
+    @apply hover:border-accent-orange hover:shadow-lg hover:shadow-accent-orange/20;
+    @apply transition-all duration-300;
+    image-rendering: pixelated; /* Crisp pixel rendering */
+  }
+  
+  /* Green variant for data science/backend cards */
+  .pixel-card-green {
+    @apply bg-primary-bg-light border-2 border-accent-green-dark p-6 rounded-xl;
+    @apply hover:border-accent-green hover:shadow-lg hover:shadow-accent-green/20;
+    @apply transition-all duration-300;
+    image-rendering: pixelated; /* Crisp pixel rendering */
+  }
+}
