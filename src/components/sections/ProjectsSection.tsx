@@ -117,7 +117,7 @@ export const ProjectsSection: React.FC = () => {
         <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">02</span>
       </div>
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto mobile-padding relative z-10">
         {/* Centered section header */}
         <div className="relative mb-20">
           

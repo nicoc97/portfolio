@@ -25,7 +25,7 @@ function App() {
       case 'about':
         return (
           <section className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto mobile-padding">
               <div className="text-center space-y-6">
                 <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
                   ABOUT
@@ -44,7 +44,7 @@ function App() {
       case 'skills':
         return (
           <section className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto mobile-padding">
               <div className="text-center space-y-6">
                 <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
                   SKILLS
@@ -63,7 +63,7 @@ function App() {
       case 'contact':
         return (
           <section className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto mobile-padding">
               <div className="text-center space-y-6">
                 <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
                   CONTACT
@@ -89,7 +89,7 @@ function App() {
       {renderActiveSection()}
       
       {/* Navigation bar - Full width on mobile, Top Left on desktop */}
-      <nav className="fixed top-4 left-2 right-2 md:left-8 md:right-auto md:translate-x-0 z-50">
+      <nav className="fixed top-4 left-8 right-8 md:left-8 md:right-auto md:translate-x-0 z-50">
         <div className="flex gap-1 md:gap-2 justify-evenly md:justify-start overflow-x-auto">
           <button
             onClick={() => setActiveSection('hero')}
