@@ -42,7 +42,7 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
   const getSlideFromRotation = (angle: number): number => {
     // The dial rotates counter-clockwise to bring numbers to the top
     // So we need to negate the angle
-    const normalizedAngle = normalizeAngle(-angle);
+    const normalizedAngle = normalizeAngle(angle);
     const degreesPerSlide = 360 / totalSlides;
     const slideIndex = Math.round(normalizedAngle / degreesPerSlide) % totalSlides;
     return slideIndex;
@@ -53,7 +53,7 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
     const slideIndex = getSlideFromRotation(currentRotation);
     const degreesPerSlide = 360 / totalSlides;
     // Negative because we rotate counter-clockwise
-    const targetRotation = -slideIndex * degreesPerSlide;
+    const targetRotation = slideIndex * degreesPerSlide;
     
     // Find shortest rotation path
     let rotationDiff = targetRotation - currentRotation;
@@ -118,7 +118,7 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
     if (!isDragging && !isAnimating) {
       const degreesPerSlide = 360 / totalSlides;
       // Negative because we rotate counter-clockwise
-      const targetRotation = -currentSlide * degreesPerSlide;
+      const targetRotation = currentSlide * degreesPerSlide;
       setRotation(targetRotation);
     }
   }, [currentSlide, totalSlides, isDragging, isAnimating]);
@@ -192,8 +192,8 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
       
       {/* Current channel display */}
       <div className={`channel-display ${isChangingChannel ? 'glitching' : ''}`}>
-        <span className="channel-label">CH</span>
-        <span className="channel-number-display">{activeChannel + 1}</span>
+        <span className="channel-label font-tech text-xl">CH</span>
+        <span className="channel-number-display font-tech text-xl">{activeChannel + 1}</span>
       </div>
     </div>
   );
