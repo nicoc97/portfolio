@@ -1,0 +1,51 @@
+/* Custom Swiper Styles */
+.projects-swiper {
+  padding: 3rem 3rem;
+  overflow: visible;
+}
+
+.projects-swiper .swiper-wrapper {
+  padding: 2rem 2rem;
+}
+
+.projects-swiper .swiper-slide {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.swiper-pagination-custom .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+  border: 2px solid #e97419;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-custom .swiper-pagination-bullet-active {
+  background: #e97419;
+  transform: scale(1.2);
+}
+
+.swiper-button-prev-custom:disabled,
+.swiper-button-next-custom:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.swiper-button-prev-custom:disabled:hover,
+.swiper-button-next-custom:disabled:hover {
+  border-color: #e97419;
+}
+
+/* Hide default swiper buttons */
+.projects-swiper .swiper-button-next,
+.projects-swiper .swiper-button-prev {
+  display: none;
+}
+
+/* Hide default pagination */
+.projects-swiper .swiper-pagination {
+  display: none;
+}

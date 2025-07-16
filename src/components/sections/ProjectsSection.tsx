@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { ProjectCard } from '../ui/ProjectCard';
 import type { Project } from '../../types';
+
+import 'swiper/swiper-bundle.css';
+import '../../styles/swiper-custom.css';
 
 /**
  * ProjectsSection Component
@@ -157,14 +162,62 @@ export const ProjectsSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Structured projects grid */}
+        {/* Projects Swiper */}
         <div className="relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={32}
+            slidesPerView={1}
+            navigation={{
+              nextEl: '.swiper-button-next-custom',
+              prevEl: '.swiper-button-prev-custom',
+            }}
+            pagination={{
+              clickable: true,
+              el: '.swiper-pagination-custom',
+            }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              640: {
+                slidesPerView: 1,
+                spaceBetween: 24,
+              },
+              768: {
+                slidesPerView: 2,
+                spaceBetween: 32,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 32,
+              },
+            }}
+            className="projects-swiper"
+          >
             {filteredProjects.map((project, index) => (
-              <div key={project.id}>
+              <SwiperSlide key={project.id}>
                 <ProjectCard project={project} index={index} />
-              </div>
+              </SwiperSlide>
             ))}
+          </Swiper>
+
+          {/* Custom Navigation Buttons */}
+          <div className="flex justify-center items-center gap-8 mt-8">
+            <button className="swiper-button-prev-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            
+            <div className="swiper-pagination-custom flex gap-2"></div>
+            
+            <button className="swiper-button-next-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
           </div>
         </div>
 

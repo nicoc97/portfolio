@@ -14,7 +14,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
   });
 
   return (
-    <section className="min-h-screen relative bg-primary-bg-light overflow-hidden">
+    <section className="min-h-screen relative bg-primary-bg overflow-hidden">
       {/* Wave background */}
       <WaveBackground />
 
