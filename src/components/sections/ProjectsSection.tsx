@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Navigation, Autoplay } from 'swiper/modules';
 import { ProjectCard } from '../ui/ProjectCard';
+import { VintageTVDial } from '../ui/VintageTVDial';
 import type { Project } from '../../types';
+import type { Swiper as SwiperType } from 'swiper';
 
 import 'swiper/swiper-bundle.css';
 import '../../styles/swiper-custom.css';
@@ -14,8 +16,8 @@ import '../../styles/swiper-custom.css';
  * - Category filtering (All, Web Apps, Data Science, Full-Stack)
  * - Responsive grid layout
  * - Project cards with hover effects
+ * - Vintage TV dial navigation
  * - Sample data (replace with real projects)
-
  */
 
 // 🔧 UPDATE: Replace this sample data with actual projects
@@ -96,6 +98,8 @@ const sampleProjects: Project[] = [
 export const ProjectsSection: React.FC = () => {
   // Filter state management
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'web' | 'data' | 'fullstack'>('all');
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
   // Filter projects based on selected category
   const filteredProjects = selectedFilter === 'all' 
@@ -147,7 +151,7 @@ export const ProjectsSection: React.FC = () => {
                 key={key}
                 onClick={() => setSelectedFilter(key)}
                 className={`
-                  pixel-button px-6 py-2 font-tech text-sm transition-all duration-200
+                  pixel-button px-6 py-2 font-tech text-base transition-all duration-200
                   ${selectedFilter === key 
                     ? (key === 'data' 
                       ? 'bg-accent-green text-primary-bg border-accent-green' 
@@ -165,16 +169,14 @@ export const ProjectsSection: React.FC = () => {
         {/* Projects Swiper */}
         <div className="relative">
           <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
+            modules={[Navigation, Autoplay]}
             spaceBetween={32}
             slidesPerView={1}
+            onSwiper={setSwiperInstance}
+            onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
             navigation={{
               nextEl: '.swiper-button-next-custom',
               prevEl: '.swiper-button-prev-custom',
-            }}
-            pagination={{
-              clickable: true,
-              el: '.swiper-pagination-custom',
             }}
             autoplay={{
               delay: 5000,
@@ -203,7 +205,7 @@ export const ProjectsSection: React.FC = () => {
             ))}
           </Swiper>
 
-          {/* Custom Navigation Buttons */}
+          {/* Custom Navigation with TV Dial */}
           <div className="flex justify-center items-center gap-8 mt-8">
             <button className="swiper-button-prev-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -211,7 +213,13 @@ export const ProjectsSection: React.FC = () => {
               </svg>
             </button>
             
-            <div className="swiper-pagination-custom flex gap-2"></div>
+            {/* TV Dial Navigation */}
+            <VintageTVDial
+              totalSlides={filteredProjects.length}
+              currentSlide={currentSlide}
+              onSlideChange={(index) => swiperInstance?.slideTo(index)}
+              swiperInstance={swiperInstance}
+            />
             
             <button className="swiper-button-next-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
