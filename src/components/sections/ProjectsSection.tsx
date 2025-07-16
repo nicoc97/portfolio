@@ -9,16 +9,11 @@ import type { Project } from '../../types';
  * - Category filtering (All, Web Apps, Data Science, Full-Stack)
  * - Responsive grid layout
  * - Project cards with hover effects
- * - Sample data (replace with your real projects)
- * 
- * To customize:
- * 1. Replace sampleProjects with your actual project data
- * 2. Update filter categories if needed
- * 3. Modify grid layout classes for different responsive behavior
- * 4. Add project images to public/images/ folder
+ * - Sample data (replace with real projects)
+
  */
 
-// 🔧 UPDATE: Replace this sample data with your actual projects
+// 🔧 UPDATE: Replace this sample data with actual projects
 const sampleProjects: Project[] = [
   {
     id: '1',
