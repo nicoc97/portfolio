@@ -8,7 +8,7 @@ import React from 'react';
  */
 export const AboutSection: React.FC = () => {
   return (
-    <section className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
+    <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
       <div className="container mx-auto mobile-padding">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}

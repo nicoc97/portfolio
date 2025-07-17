@@ -4,17 +4,24 @@ import { WaveBackground } from '../ui/WaveBackground';
 import { useTypingAnimation } from '../../hooks/useTypingAnimation';
 import { HERO_CONSTANTS } from '../../constants/hero';
 
-interface HeroSectionProps {
-  onNavigate: (section: 'hero' | 'projects' | 'about' | 'skills' | 'contact') => void;
-}
-
-export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
+export const HeroSection: React.FC = () => {
   const displayedText = useTypingAnimation({
     strings: HERO_CONSTANTS.TYPING_STRINGS,
   });
 
+  // Smooth scroll to section
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
-    <section className="min-h-screen relative bg-primary-bg overflow-hidden">
+    <section id="hero" className="min-h-screen relative bg-primary-bg overflow-hidden">
       {/* Wave background */}
       <WaveBackground />
 
@@ -55,7 +62,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 <PixelButton
                   variant="primary"
                   size="lg"
-                  onClick={() => onNavigate('projects')}
+                  onClick={() => scrollToSection('projects')}
                   className="min-w-44 text-base"
                 >
                   {HERO_CONSTANTS.BUTTONS.PRIMARY}
@@ -64,7 +71,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                 <PixelButton
                   variant="secondary"
                   size="lg"
-                  onClick={() => onNavigate('contact')}
+                  onClick={() => scrollToSection('contact')}
                   className="min-w-44 text-base"
                 >
                   {HERO_CONSTANTS.BUTTONS.SECONDARY}
