@@ -8,26 +8,32 @@ import { motion } from 'framer-motion';
  * with smooth, organic wave animations and orange-brown gradient theme.
  */
 export const WaveBackground: React.FC = () => {
+  // Generate unique IDs to avoid conflicts when component remounts
+  const uniqueId = React.useId();
+  
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* Wave layers with different gradients and animations */}
       <div className="absolute inset-0">
         {/* Wave 1 - Primary gradient */}
         <div className="absolute inset-0 opacity-40">
-          <motion.svg
+          <svg
             className="absolute bottom-0 left-0 w-full h-full"
             viewBox="0 0 1440 320"
             preserveAspectRatio="none"
           >
             <defs>
-              <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient id={`wave1-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#b85c00" />
                 <stop offset="50%" stopColor="#ff8c42" />
                 <stop offset="100%" stopColor="#ffb380" />
               </linearGradient>
             </defs>
             <motion.path
-              fill="url(#wave1)"
+              fill={`url(#wave1-${uniqueId})`}
+              initial={{
+                d: "M0,160 C240,200,480,120,720,140 C960,160,1200,180,1440,160 L1440,320 L0,320 Z"
+              }}
               animate={{
                 d: [
                   "M0,160 C240,200,480,120,720,140 C960,160,1200,180,1440,160 L1440,320 L0,320 Z",
@@ -39,28 +45,32 @@ export const WaveBackground: React.FC = () => {
               transition={{
                 duration: 20,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
+                repeatType: "loop"
               }}
             />
-          </motion.svg>
+          </svg>
         </div>
 
         {/* Wave 2 - Secondary gradient */}
         <div className="absolute inset-0 opacity-30">
-          <motion.svg
+          <svg
             className="absolute bottom-0 left-0 w-full h-full"
             viewBox="0 0 1440 320"
             preserveAspectRatio="none"
           >
             <defs>
-              <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient id={`wave2-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#ff8c42" />
                 <stop offset="50%" stopColor="#ffb380" />
                 <stop offset="100%" stopColor="#b85c00" />
               </linearGradient>
             </defs>
             <motion.path
-              fill="url(#wave2)"
+              fill={`url(#wave2-${uniqueId})`}
+              initial={{
+                d: "M0,200 C360,160,720,240,1080,200 C1260,180,1350,190,1440,200 L1440,320 L0,320 Z"
+              }}
               animate={{
                 d: [
                   "M0,200 C360,160,720,240,1080,200 C1260,180,1350,190,1440,200 L1440,320 L0,320 Z",
@@ -73,28 +83,32 @@ export const WaveBackground: React.FC = () => {
                 duration: 15,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 0.5
+                delay: 0.5,
+                repeatType: "loop"
               }}
             />
-          </motion.svg>
+          </svg>
         </div>
 
         {/* Wave 3 - Tertiary gradient */}
         <div className="absolute inset-0 opacity-20">
-          <motion.svg
+          <svg
             className="absolute bottom-0 left-0 w-full h-full"
             viewBox="0 0 1440 320"
             preserveAspectRatio="none"
           >
             <defs>
-              <linearGradient id="wave3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <linearGradient id={`wave3-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="#ffb380" />
                 <stop offset="50%" stopColor="#b85c00" />
                 <stop offset="100%" stopColor="#ff8c42" />
               </linearGradient>
             </defs>
             <motion.path
-              fill="url(#wave3)"
+              fill={`url(#wave3-${uniqueId})`}
+              initial={{
+                d: "M0,240 C480,280,960,200,1440,240 L1440,320 L0,320 Z"
+              }}
               animate={{
                 d: [
                   "M0,240 C480,280,960,200,1440,240 L1440,320 L0,320 Z",
@@ -107,10 +121,11 @@ export const WaveBackground: React.FC = () => {
                 duration: 25,
                 repeat: Infinity,
                 ease: "easeInOut",
-                delay: 1
+                delay: 1,
+                repeatType: "loop"
               }}
             />
-          </motion.svg>
+          </svg>
         </div>
 
       </div>
