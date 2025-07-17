@@ -12,7 +12,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   return (
     <div
       className={`
-        pixel-card group relative
+        pixel-card group relative h-full min-h-[500px] flex flex-col
         ${isHovered ? 'transform -translate-y-1' : ''}
       `}
       onMouseEnter={() => setIsHovered(true)}
@@ -70,7 +70,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
         {project.techStack.map((tech, techIndex) => (
           <span
             key={techIndex}
-            className="bg-accent-orange-dark text-accent-orange px-3 py-1 text-xs font-tech border border-accent-orange rounded-full"
+            className="bg-accent-green-dark text-accent-green px-3 py-1 text-base font-tech border border-accent-green rounded-full"
           >
             {tech}
           </span>
@@ -78,7 +78,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       </div>
 
       {/* Description */}
-      <p className="text-text-secondary text-sm mb-4 line-clamp-3">
+      <p className="text-text-secondary text-sm mb-4 line-clamp-3 flex-grow">
         {project.description}
       </p>
 

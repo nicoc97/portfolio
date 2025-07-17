@@ -102,8 +102,8 @@ export const ProjectsSection: React.FC = () => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
   // Filter projects based on selected category
-  const filteredProjects = selectedFilter === 'all' 
-    ? sampleProjects 
+  const filteredProjects = selectedFilter === 'all'
+    ? sampleProjects
     : sampleProjects.filter(project => project.category === selectedFilter);
 
   // 🔧 UPDATE: Modify filter categories here if you have different project types
@@ -117,14 +117,14 @@ export const ProjectsSection: React.FC = () => {
   return (
     <section id="projects" className="py-20 bg-primary-bg relative overflow-hidden">
       {/* Large background text */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
+      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
         <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">02</span>
       </div>
-      
+
       <div className="container mx-auto mobile-padding relative z-10">
         {/* Centered section header */}
         <div className="relative mb-20">
-          
+
           {/* Centered header layout */}
           <div className="text-center space-y-6">
             <div className="relative">
@@ -134,7 +134,7 @@ export const ProjectsSection: React.FC = () => {
               {/* Centered decorative line */}
               <div className="mx-auto mt-4 w-32 h-px bg-accent-orange"></div>
             </div>
-            
+
             {/* Centered description */}
             <div className="mx-auto max-w-2xl">
               <p className="text-text-secondary text-sm leading-relaxed">
@@ -152,9 +152,9 @@ export const ProjectsSection: React.FC = () => {
                 onClick={() => setSelectedFilter(key)}
                 className={`
                   pixel-button px-6 py-2 font-tech text-base transition-all duration-200
-                  ${selectedFilter === key 
-                    ? (key === 'data' 
-                      ? 'bg-accent-green text-primary-bg border-accent-green' 
+                  ${selectedFilter === key
+                    ? (key === 'data'
+                      ? 'bg-accent-green text-primary-bg border-accent-green'
                       : 'bg-accent-orange text-primary-bg border-accent-orange')
                     : 'bg-primary-bg-light text-text-primary border-accent-orange-dark hover:border-accent-orange'
                   }
@@ -199,8 +199,10 @@ export const ProjectsSection: React.FC = () => {
             className="projects-swiper"
           >
             {filteredProjects.map((project, index) => (
-              <SwiperSlide key={project.id}>
-                <ProjectCard project={project} index={index} />
+              <SwiperSlide key={project.id} className="h-auto">
+                <div className="h-full">
+                  <ProjectCard project={project} index={index} />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -209,10 +211,10 @@ export const ProjectsSection: React.FC = () => {
           <div className="flex justify-center items-center gap-8 mt-8">
             <button className="swiper-button-prev-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
             </button>
-            
+
             {/* TV Dial Navigation */}
             <VintageTVDial
               totalSlides={filteredProjects.length}
@@ -220,10 +222,10 @@ export const ProjectsSection: React.FC = () => {
               onSlideChange={(index) => swiperInstance?.slideTo(index)}
               swiperInstance={swiperInstance}
             />
-            
+
             <button className="swiper-button-next-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
+                <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </button>
           </div>
