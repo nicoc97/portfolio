@@ -89,7 +89,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             variant="primary"
             size="sm"
             onClick={() => window.open(project.liveUrl, '_blank')}
-            className="flex-1"
+            className="flex-1 flex items-center justify-center"
           >
             <ExternalLink className="w-4 h-4 mr-1" />
             LIVE DEMO
@@ -100,7 +100,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
           variant="success"
           size="sm"
           onClick={() => window.open(project.githubUrl, '_blank')}
-          className="flex-1"
+          className="flex-1 flex items-center justify-center"
         >
           <Github className="w-4 h-4 mr-1" />
           CODE
