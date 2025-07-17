@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { HeroSection } from './components/sections/HeroSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
+import { AboutSection } from './components/sections/AboutSection';
 
 /**
  * Main App Component
@@ -23,24 +24,7 @@ function App() {
       case 'projects':
         return <ProjectsSection />;
       case 'about':
-        return (
-          <section className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-            <div className="container mx-auto mobile-padding">
-              <div className="text-center space-y-6">
-                <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
-                  ABOUT
-                </h2>
-                <div className="mx-auto w-16 h-px bg-accent-orange"></div>
-                <p className="text-accent-orange font-tech text-lg">
-                  [ABOUT_SECTION_PLACEHOLDER]
-                </p>
-                <div className="mt-8 text-text-secondary text-sm">
-                  More detailed content coming soon...
-                </div>
-              </div>
-            </div>
-          </section>
-        );
+        return <AboutSection />;
       case 'skills':
         return (
           <section className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
