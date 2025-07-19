@@ -51,8 +51,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   };
 
   return (
-    <section className={`py-16 px-4 ${className}`} id="skills">
-      <div className="max-w-6xl mx-auto">
+    <section className={`py-16 px-4 ${className} relative overflow-hidden`} id="skills">
+      {/* Large background text */}
+      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
+        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-green font-retro leading-none">03</span>
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">

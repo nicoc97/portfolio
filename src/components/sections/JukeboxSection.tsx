@@ -133,7 +133,10 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
         ref={sectionRef}
         className="py-20 bg-primary-bg relative overflow-hidden min-h-screen"
       >
-
+        {/* Large background text */}
+        <div className="absolute inset-0 flex items-start pt-[2rem] pl-[2rem] justify-start opacity-5 pointer-events-none">
+          <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">04</span>
+        </div>
 
         <div className="container mx-auto mobile-padding relative z-10">
           {/* Section Header */}
