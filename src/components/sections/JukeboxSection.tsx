@@ -138,7 +138,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
           <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">04</span>
         </div>
 
-        <div className="container mx-auto mobile-padding relative z-10">
+        <div className="w-full lg:w-4/5 mx-auto mobile-padding relative z-10">
           {/* Section Header */}
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">

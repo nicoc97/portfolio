@@ -57,7 +57,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
         <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-green font-retro leading-none">03</span>
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="w-full lg:w-4/5 mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">

@@ -67,7 +67,7 @@ function App() {
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-        <div className="container mx-auto lg:w-4/5 mobile-padding">
+        <div className="w-full lg:w-4/5 mx-auto mobile-padding">
           <div className="text-left space-y-6">
             <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
               CONTACT

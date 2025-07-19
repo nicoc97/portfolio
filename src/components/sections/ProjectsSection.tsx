@@ -121,22 +121,22 @@ export const ProjectsSection: React.FC = () => {
         <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">02</span>
       </div>
 
-      <div className="container mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         {/* Centered section header */}
         <div className="relative mb-20">
 
           {/* Centered header layout */}
-          <div className="text-center space-y-6">
+          <div className="text-left space-y-6">
             <div className="relative">
-              <h2 className="text-5xl md:text-7xl font-bold text-accent-orange font-retro">
+              <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange font-retro">
                 PROJECTS
               </h2>
-              {/* Centered decorative line */}
-              <div className="mx-auto mt-4 w-32 h-px bg-accent-orange"></div>
+              {/* decorative line */}
+              <div className="mt-4 w-32 h-px bg-accent-orange"></div>
             </div>
 
-            {/* Centered description */}
-            <div className="mx-auto max-w-2xl">
+            {/* description */}
+            <div className="max-w-2xl">
               <p className="text-text-secondary text-sm leading-relaxed">
                 A collection of web applications, data science projects, and creative experiments
                 showcasing modern development practices.
@@ -145,7 +145,7 @@ export const ProjectsSection: React.FC = () => {
           </div>
 
           {/* Centered filter buttons */}
-          <div className="mt-12 flex flex-wrap gap-4 justify-center">
+          <div className="mt-6 flex flex-wrap gap-4">
             {filterButtons.map(({ key, label }) => (
               <button
                 key={key}

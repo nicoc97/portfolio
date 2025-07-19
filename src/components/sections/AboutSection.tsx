@@ -19,7 +19,7 @@ export const AboutSection: React.FC = () => {
         <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">01</span>
       </div>
 
-      <div className="container mx-auto mobile-padding">
+      <div className="w-full lg:w-4/5 mx-auto mobile-padding">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
           <div
