@@ -96,14 +96,14 @@ const sampleProjects: Project[] = [
 ];
 
 export const ProjectsSection: React.FC = () => {
-  // Filter state management
+  // State management
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'web' | 'data' | 'fullstack'>('all');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
-  // Filter projects based on selected category
-  const filteredProjects = selectedFilter === 'all'
-    ? sampleProjects
+  // Filter projects
+  const filteredProjects = selectedFilter === 'all' 
+    ? sampleProjects 
     : sampleProjects.filter(project => project.category === selectedFilter);
 
   // 🔧 UPDATE: Modify filter categories here if you have different project types
@@ -116,10 +116,7 @@ export const ProjectsSection: React.FC = () => {
 
   return (
     <section id="projects" className="py-20 bg-primary-bg relative overflow-hidden">
-      {/* Large background text */}
-      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
-        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">02</span>
-      </div>
+
 
       <div className="container mx-auto mobile-padding relative z-10">
         {/* Centered section header */}

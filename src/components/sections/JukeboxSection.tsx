@@ -133,35 +133,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
         ref={sectionRef}
         className="py-20 bg-primary-bg relative overflow-hidden min-h-screen"
       >
-        {/* Background pattern overlay */}
-        <div className="absolute inset-0 opacity-5">
-          <div
-            className="w-full h-full"
-            style={{
-              backgroundImage: `repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(255, 140, 66, 0.02) 2px,
-                rgba(255, 140, 66, 0.02) 4px
-              )`
-            }}
-          />
-        </div>
 
-        {/* Gradient background effects */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute w-full h-full"
-            style={{
-              background: `
-                radial-gradient(ellipse at 20% 30%, rgba(255, 140, 66, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 70%, rgba(124, 151, 86, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, #2a2419 0%, #1a1611 50%, #2a2419 100%)
-              `
-            }}
-          />
-        </div>
 
         <div className="container mx-auto mobile-padding relative z-10">
           {/* Section Header */}

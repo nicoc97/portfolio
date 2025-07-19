@@ -8,22 +8,21 @@ import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScroll
  * Features scroll-triggered animations and proper content hierarchy.
  */
 export const AboutSection: React.FC = () => {
-  // Animation hooks for different sections
+  // Animation hooks
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation(6, 150);
+  const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation(5, 150);
   const { ref: techStackRef, isVisible: techStackVisible } = useScrollAnimation({ threshold: 0.2 });
   return (
     <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
       <div className="container mx-auto mobile-padding">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
-          <div 
+          <div
             ref={headerRef}
-            className={`text-center mb-16 transition-all duration-700 ${
-              headerVisible 
-                ? 'opacity-100 translate-y-0' 
-                : 'opacity-0 translate-y-8'
-            }`}
+            className={`text-center mb-16 transition-all duration-700 ${headerVisible
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-8'
+              }`}
           >
             <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">
               ABOUT
@@ -38,33 +37,31 @@ export const AboutSection: React.FC = () => {
           <div ref={contentTriggerRef} className="grid md:grid-cols-2 gap-12 items-start">
             {/* Left Column - Introduction */}
             <div className="space-y-6">
-              <div className={`pixel-card transition-all duration-700 ${
-                contentVisible[0] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-              }`}>
+              <div className={`pixel-card transition-all duration-700 ${contentVisible[0]
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+                }`}>
                 <h3 className="text-2xl font-bold text-accent-orange font-retro mb-4">
                   Hello, I'm Nico
                 </h3>
                 <p className="text-text-secondary leading-relaxed mb-4">
-                  I'm a collaborative web developer with a passion for fostering teamwork and delivering results. 
-                  With experience in both custom code and CMS solutions, I thrive in dynamic environments where 
-                  I can leverage my strong communication skills to bridge the gap between technical and 
+                  I'm a collaborative web developer with a passion for fostering teamwork and delivering results.
+                  With experience in both custom code and CMS solutions, I thrive in dynamic environments where
+                  I can leverage my strong communication skills to bridge the gap between technical and
                   non-technical stakeholders.
                 </p>
                 <p className="text-text-secondary leading-relaxed">
-                  I have a keen interest in tech and enjoy staying current with industry trends to deliver 
-                  innovative solutions. My diverse background enables me to adapt quickly and contribute 
+                  I have a keen interest in tech and enjoy staying current with industry trends to deliver
+                  innovative solutions. My diverse background enables me to adapt quickly and contribute
                   across different areas of tech and digital innovation.
                 </p>
               </div>
 
               {/* Location & Contact */}
-              <div className={`pixel-card-green transition-all duration-700 ${
-                contentVisible[1] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-              }`}>
+              <div className={`pixel-card-green transition-all duration-700 ${contentVisible[1]
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+                }`}>
                 <h4 className="text-lg font-bold text-accent-green font-tech mb-3">
                   Based in Glasgow, UK
                 </h4>
@@ -77,11 +74,10 @@ export const AboutSection: React.FC = () => {
             {/* Right Column - Experience Highlights */}
             <div className="space-y-6">
               {/* Current Role */}
-              <div className={`pixel-card transition-all duration-700 ${
-                contentVisible[2] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-              }`}>
+              <div className={`pixel-card transition-all duration-700 ${contentVisible[2]
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+                }`}>
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="text-lg font-bold text-accent-orange font-tech">
                     WordPress Developer
@@ -94,17 +90,16 @@ export const AboutSection: React.FC = () => {
                   Scoot Digital • Aug 2024 - Dec 2024
                 </p>
                 <p className="text-text-secondary text-sm leading-relaxed">
-                  Developing custom WordPress themes with ACF and Timber, creating intuitive 
+                  Developing custom WordPress themes with ACF and Timber, creating intuitive
                   content management solutions for diverse clients.
                 </p>
               </div>
 
               {/* Key Experience */}
-              <div className={`pixel-card-green transition-all duration-700 ${
-                contentVisible[3] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-              }`}>
+              <div className={`pixel-card-green transition-all duration-700 ${contentVisible[3]
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+                }`}>
                 <h4 className="text-lg font-bold text-accent-green font-tech mb-3">
                   Experience Highlights
                 </h4>
@@ -129,17 +124,16 @@ export const AboutSection: React.FC = () => {
               </div>
 
               {/* Personal Interests */}
-              <div className={`pixel-card transition-all duration-700 ${
-                contentVisible[4] 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-              }`}>
+              <div className={`pixel-card transition-all duration-700 ${contentVisible[4]
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+                }`}>
                 <h4 className="text-lg font-bold text-accent-orange font-tech mb-3">
                   Beyond Code
                 </h4>
                 <p className="text-text-secondary text-sm leading-relaxed">
-                  I'm passionate about retro technology - tinkering with analogue gadgets like record players 
-                  and CRT TVs. I enjoy reading political philosophy and horror books (big fan of Alasdair Grey), 
+                  I'm passionate about retro technology - tinkering with analogue gadgets like record players
+                  and CRT TVs. I enjoy reading political philosophy and horror books (big fan of Alasdair Grey),
                   and I'm currently learning 3D modeling with Blender.
                 </p>
               </div>
@@ -147,13 +141,12 @@ export const AboutSection: React.FC = () => {
           </div>
 
           {/* Tech Stack Preview */}
-          <div 
+          <div
             ref={techStackRef}
-            className={`mt-16 text-center transition-all duration-700 ${
-              techStackVisible 
-                ? 'opacity-100 translate-y-0' 
-                : 'opacity-0 translate-y-8'
-            }`}
+            className={`mt-16 text-center transition-all duration-700 ${techStackVisible
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-8'
+              }`}
           >
             <h3 className="text-2xl font-bold text-accent-orange font-retro mb-6">
               Core Technologies
@@ -161,26 +154,23 @@ export const AboutSection: React.FC = () => {
             <div className="flex flex-wrap justify-center gap-3">
               {[
                 'HTML/CSS/JavaScript',
-                'React & Next.js', 
+                'React & Next.js',
                 'PHP & Symfony',
                 'WordPress & ACF',
                 'C# & .NET Core',
                 'SQL Databases'
               ].map((tech, index) => (
-                <span 
+                <span
                   key={tech}
-                  className={`bg-accent-orange/20 border border-accent-orange/30 text-accent-orange px-3 py-1 rounded-lg font-tech text-sm hover:bg-accent-orange/30 transition-all duration-300 relative ${
-                    techStackVisible 
-                      ? 'opacity-100 translate-y-0' 
-                      : 'opacity-0 translate-y-4'
-                  }`}
-                  style={{ 
+                  className={`bg-accent-orange/20 border border-accent-orange/30 text-accent-orange px-3 py-1 rounded-lg font-tech text-sm hover:bg-accent-orange/30 transition-all duration-300 relative ${techStackVisible
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-4'
+                    }`}
+                  style={{
                     transitionDelay: techStackVisible ? `${index * 100}ms` : '0ms'
                   }}
                 >
                   {tech}
-                  {/* Subtle pixel accent on hover */}
-                  <div className="absolute -top-0.5 -right-0.5 w-1 h-1 bg-accent-green opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
                 </span>
               ))}
             </div>

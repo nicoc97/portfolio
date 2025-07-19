@@ -20,26 +20,17 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
     return getSkillsByCategory(selectedCategory);
   }, [selectedCategory]);
 
-  // Get related skills for highlighting
+  // Simplified skill relationships
   const getRelatedSkills = (skill: TechSkill): string[] => {
-    // Define skill relationships for highlighting
     const relationships: Record<string, string[]> = {
-      'React': ['TypeScript', 'JavaScript', 'HTML5', 'CSS3', 'Tailwind'],
+      'React': ['TypeScript', 'JavaScript', 'Tailwind'],
       'TypeScript': ['React', 'JavaScript', 'Node.js'],
-      'JavaScript': ['React', 'TypeScript', 'Node.js', 'HTML5'],
-      'Node.js': ['JavaScript', 'TypeScript', 'MongoDB', 'PostgreSQL'],
-      'Python': ['Pandas', 'NumPy', 'Matplotlib', 'Scikit-learn', 'Jupyter'],
-      'Pandas': ['Python', 'NumPy', 'Matplotlib', 'Jupyter', 'SQL'],
-      'PostgreSQL': ['SQL', 'Node.js', 'Python'],
-      'MongoDB': ['Node.js', 'JavaScript'],
+      'JavaScript': ['React', 'TypeScript', 'Node.js'],
+      'Node.js': ['JavaScript', 'TypeScript', 'MongoDB'],
+      'Python': ['Pandas', 'NumPy', 'Scikit-learn'],
       'Docker': ['Linux', 'AWS'],
-      'AWS': ['Docker', 'Linux'],
-      'Git': ['Linux'],
-      'Tailwind': ['CSS3', 'HTML5', 'React'],
-      'CSS3': ['HTML5', 'Tailwind', 'React'],
-      'HTML5': ['CSS3', 'JavaScript', 'React'],
+      'Tailwind': ['CSS3', 'React'],
     };
-    
     return relationships[skill.name] || [];
   };
 

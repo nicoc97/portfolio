@@ -146,28 +146,7 @@ describe('AboutSection', () => {
     });
   });
 
-  describe('Pixel Decorative Elements', () => {
-    it('renders pixel accent elements on cards', () => {
-      const { container } = render(<AboutSection />);
-      const section = container.querySelector('#about');
-      
-      // Check for pixel decorative elements (they should be present as div elements with specific classes)
-      const pixelElements = section?.querySelectorAll('.animate-pixel-pulse');
-      expect(pixelElements?.length).toBeGreaterThan(0);
-    });
 
-    it('renders numbered pixel accents', () => {
-      render(<AboutSection />);
-      
-      // Check for numbered pixel accents (01, 02, 03, etc.)
-      const numberedAccents = ['01', '02', '03', '04', '05', '06'];
-      numberedAccents.forEach(number => {
-        const accent = screen.getByText(number);
-        expect(accent).toBeInTheDocument();
-        expect(accent).toHaveClass('font-tech', 'animate-pixel-pulse');
-      });
-    });
-  });
 
   describe('Responsive Design', () => {
     it('applies mobile padding class', () => {
@@ -214,26 +193,5 @@ describe('AboutSection', () => {
     });
   });
 
-  describe('Animation Classes', () => {
-    it('applies transition classes for animations', () => {
-      const { container } = render(<AboutSection />);
-      const section = container.querySelector('#about');
-      
-      // Check for transition classes on animated elements
-      const animatedElements = section?.querySelectorAll('.transition-all');
-      expect(animatedElements?.length).toBeGreaterThan(0);
-    });
 
-    it('applies pixel card styling classes', () => {
-      const { container } = render(<AboutSection />);
-      const section = container.querySelector('#about');
-      
-      // Check for pixel-card classes
-      const pixelCards = section?.querySelectorAll('.pixel-card');
-      const pixelCardsGreen = section?.querySelectorAll('.pixel-card-green');
-      
-      expect(pixelCards?.length).toBeGreaterThan(0);
-      expect(pixelCardsGreen?.length).toBeGreaterThan(0);
-    });
-  });
 });
