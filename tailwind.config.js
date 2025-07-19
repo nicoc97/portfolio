@@ -49,9 +49,6 @@ export default {
         'wave-1': 'wave1 20s ease-in-out infinite',                     // Wave animation 1
         'wave-2': 'wave2 18s ease-in-out infinite reverse',             // Wave animation 2
         'wave-3': 'wave3 22s ease-in-out infinite',                     // Wave animation 3
-        'float-1': 'float1 6s ease-in-out infinite',                    // Floating particles 1
-        'float-2': 'float2 8s ease-in-out infinite',                    // Floating particles 2
-        'float-3': 'float3 10s ease-in-out infinite',                   // Floating particles 3
       },
       // 🔧 UPDATE: Animation keyframes - define the actual animation sequences
       keyframes: {
@@ -76,21 +73,6 @@ export default {
           '0%, 100%': { transform: 'translateY(0px)' },
           '25%': { transform: 'translateY(-5px)' },
           '75%': { transform: 'translateY(-12px)' },
-        },
-        float1: {
-          '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
-          '33%': { transform: 'translateY(-20px) translateX(10px)' },
-          '66%': { transform: 'translateY(10px) translateX(-5px)' },
-        },
-        float2: {
-          '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
-          '50%': { transform: 'translateY(-15px) translateX(-10px)' },
-        },
-        float3: {
-          '0%, 100%': { transform: 'translateY(0px) translateX(0px)' },
-          '25%': { transform: 'translateY(-10px) translateX(5px)' },
-          '50%': { transform: 'translateY(5px) translateX(-10px)' },
-          '75%': { transform: 'translateY(-5px) translateX(5px)' },
         },
       },
     },

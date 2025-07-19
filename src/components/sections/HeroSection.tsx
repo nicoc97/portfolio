@@ -13,7 +13,7 @@ export const HeroSection: React.FC = () => {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ 
+      element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
@@ -25,26 +25,26 @@ export const HeroSection: React.FC = () => {
       {/* Wave background */}
       <WaveBackground />
 
-      <div className="relative z-10 px-6 py-8 pt-20 md:pt-8">
+      <div className="relative z-10 pt-20 md:pt-0 mobile-padding">
         <div className="w-full lg:w-4/5 mx-auto">
-          <div className="flex flex-col min-h-[80vh] lg:min-h-[90vh] justify-center xl:justify-end">
-            {/* Main heading*/}
-            <div className="w-full mb-8 xl:mb-[18rem]">
+          <div className="flex flex-col min-h-[80vh] lg:min-h-[100vh]">
+            {/* Main heading - truly centered */}
+            <div className="flex-1 flex flex-col justify-center">
               {/* Name tag with typing animation */}
-              <div className="flex justify-center lg:justify-start mb-4">
-                <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-lg uppercase tracking-wider border border-accent-green hover:scale-102 transition-all duration-200">
+              <div className="flex justify-center lg:justify-start mb-2">
+                <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-lg uppercase tracking-wider border border-accent-orange hover:scale-102 transition-all duration-200">
                   Nico Cruickshank ✦ {displayedText}
                   <span className="text-accent-green inline-block">|</span>
                 </span>
               </div>
-              
+
               <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-[11rem] font-bold font-retro tracking-tight text-center lg:text-left transition-all duration-300">
                 <span>{HERO_CONSTANTS.MAIN_HEADING}</span>
               </h1>
             </div>
 
-            {/* Subtitle and buttons side by side */}
-            <div className="grid grid-cols-12 gap-4 md:gap-8 items-center">
+            {/* Subtitle and buttons - aligned at bottom */}
+            <div className="grid grid-cols-12 gap-4 md:gap-8 items-center pb-8">
               {/* Subtitle - positioned asymmetrically */}
               <div className="col-span-12 lg:col-span-6 lg:col-start-1 transition-opacity duration-1000 opacity-100">
                 <p className="text-md md:text-xl lg:text-2xl text-text-secondary text-center lg:text-left">
@@ -67,7 +67,7 @@ export const HeroSection: React.FC = () => {
                 >
                   {HERO_CONSTANTS.BUTTONS.PRIMARY}
                 </PixelButton>
-                
+
                 <PixelButton
                   variant="secondary"
                   size="lg"

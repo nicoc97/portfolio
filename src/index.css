@@ -37,7 +37,7 @@
 @layer components {
   /* Mobile padding utility - 2rem left and right on mobile */
   .mobile-padding {
-    @apply px-8 md:px-4;
+    @apply px-8 md:px-0;
   }
 
   /* Pixel-style border utility */
