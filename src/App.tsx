@@ -4,6 +4,7 @@ import { ProjectsSection } from './components/sections/ProjectsSection';
 import { AboutSection } from './components/sections/AboutSection';
 import { JukeboxSection } from './components/sections/JukeboxSection';
 import { SkillsSection } from './components/sections/SkillsSection';
+import { ContactSection } from './components/sections/ContactSection';
 
 /**
  * Main App Component
@@ -64,24 +65,7 @@ function App() {
       <AboutSection />
       <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
       <SkillsSection />
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-        <div className="w-full lg:w-4/5 mx-auto mobile-padding">
-          <div className="text-left space-y-6">
-            <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
-              CONTACT
-            </h2>
-            <div className="mx-auto w-16 h-px bg-accent-orange"></div>
-            <p className="text-accent-orange font-tech text-lg">
-              [CONTACT_SECTION_PLACEHOLDER]
-            </p>
-            <div className="mt-8 text-text-secondary text-sm">
-              Contact form and social links coming soon...
-            </div>
-          </div>
-        </div>
-      </section>
+      <ContactSection />
 
       {/* Navigation bar - Full width on mobile, Top Left on desktop */}
       <nav className={`fixed top-4 left-8 right-8 md:left-8 md:right-auto md:translate-x-0 z-50 transition-opacity duration-300 ${isLightboxOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
