@@ -39,6 +39,15 @@
   border-color: #e97419;
 }
 
+/* Hide navigation arrows on mobile */
+@media (max-width: 767px) {
+
+  .swiper-button-prev-custom,
+  .swiper-button-next-custom {
+    display: none;
+  }
+}
+
 /* Enhanced TV Dial Styles - Pixelated Version */
 .vintage-tv-dial-container {
   position: relative;
@@ -65,21 +74,29 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    transparent 30%,
-    rgba(233, 116, 25, 0.15) 70%,
-    transparent 100%
-  );
+  background: radial-gradient(circle at center,
+      transparent 30%,
+      rgba(233, 116, 25, 0.15) 70%,
+      transparent 100%);
   border-radius: 50%;
   animation: channel-change-pulse 0.3s ease-out;
   pointer-events: none;
 }
 
 @keyframes channel-change-pulse {
-  0% { opacity: 0; transform: scale(0.9); }
-  50% { opacity: 1; }
-  100% { opacity: 0; transform: scale(1.1); }
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
 }
 
 .dial-face {
@@ -131,22 +148,17 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-image: 
-    repeating-linear-gradient(
-      0deg,
+  background-image:
+    repeating-linear-gradient(0deg,
       transparent,
       transparent 4px,
       rgba(255, 255, 255, 0.02) 4px,
-      rgba(255, 255, 255, 0.02) 5px
-    ),
-    repeating-linear-gradient(
-      90deg,
+      rgba(255, 255, 255, 0.02) 5px),
+    repeating-linear-gradient(90deg,
       transparent,
       transparent 4px,
       rgba(255, 255, 255, 0.02) 4px,
-      rgba(255, 255, 255, 0.02) 5px
-    );
+      rgba(255, 255, 255, 0.02) 5px);
   border-radius: 50%;
   pointer-events: none;
 }
-

@@ -63,7 +63,6 @@ function App() {
       <ProjectsSection />
       <AboutSection />
       <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
-
       <SkillsSection />
 
       {/* Contact Section */}
