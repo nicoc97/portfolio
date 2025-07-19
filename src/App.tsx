@@ -3,6 +3,7 @@ import { HeroSection } from './components/sections/HeroSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { AboutSection } from './components/sections/AboutSection';
 import { JukeboxSection } from './components/sections/JukeboxSection';
+import { SkillsSection } from './components/sections/SkillsSection';
 
 /**
  * Main App Component
@@ -63,23 +64,7 @@ function App() {
       <AboutSection />
       <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
 
-      {/* Skills Section */}
-      <section id="skills" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-        <div className="container mx-auto mobile-padding">
-          <div className="text-center space-y-6">
-            <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
-              SKILLS
-            </h2>
-            <div className="mx-auto w-16 h-px bg-accent-orange"></div>
-            <p className="text-accent-orange font-tech text-lg">
-              [SKILLS_SECTION_PLACEHOLDER]
-            </p>
-            <div className="mt-8 text-text-secondary text-sm">
-              Interactive skill badges and proficiency levels coming soon...
-            </div>
-          </div>
-        </div>
-      </section>
+      <SkillsSection />
 
       {/* Contact Section */}
       <section id="contact" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">

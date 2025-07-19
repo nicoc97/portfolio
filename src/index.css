@@ -72,3 +72,45 @@
     image-rendering: pixelated; /* Crisp pixel rendering */
   }
 }
+
+/* Custom animations for pixel effects */
+@keyframes pixel-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes pixel-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 140, 66, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 140, 66, 0.6), 0 0 30px rgba(255, 140, 66, 0.4);
+  }
+}
+
+@keyframes pixel-glow-green {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(124, 151, 86, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(124, 151, 86, 0.6), 0 0 30px rgba(124, 151, 86, 0.4);
+  }
+}
+
+.animate-pixel-pulse {
+  animation: pixel-pulse 2s ease-in-out infinite;
+}
+
+.animate-pixel-glow {
+  animation: pixel-glow 1.5s ease-in-out infinite alternate;
+}
+
+.animate-pixel-glow-green {
+  animation: pixel-glow-green 1.5s ease-in-out infinite alternate;
+}

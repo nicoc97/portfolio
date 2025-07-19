@@ -37,4 +37,7 @@ export interface ProjectCardProps {
 export interface TechBadgeProps {
   skill: TechSkill;
   onClick?: () => void;
+  className?: string;
+  animated?: boolean;
+  showTooltip?: boolean;
 }

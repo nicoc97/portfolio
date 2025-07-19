@@ -1,4 +1,5 @@
 import React from 'react';
+import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 
 /**
  * AboutSection Component
@@ -7,12 +8,23 @@ import React from 'react';
  * Features scroll-triggered animations and proper content hierarchy.
  */
 export const AboutSection: React.FC = () => {
+  // Animation hooks for different sections
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation(6, 150);
+  const { ref: techStackRef, isVisible: techStackVisible } = useScrollAnimation({ threshold: 0.2 });
   return (
     <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
       <div className="container mx-auto mobile-padding">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <div 
+            ref={headerRef}
+            className={`text-center mb-16 transition-all duration-700 ${
+              headerVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-8'
+            }`}
+          >
             <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">
               ABOUT
             </h2>
@@ -23,10 +35,14 @@ export const AboutSection: React.FC = () => {
           </div>
 
           {/* Main Content Grid */}
-          <div className="grid md:grid-cols-2 gap-12 items-start">
+          <div ref={contentTriggerRef} className="grid md:grid-cols-2 gap-12 items-start">
             {/* Left Column - Introduction */}
             <div className="space-y-6">
-              <div className="pixel-card">
+              <div className={`pixel-card transition-all duration-700 ${
+                contentVisible[0] 
+                  ? 'opacity-100 translate-y-0' 
+                  : 'opacity-0 translate-y-8'
+              }`}>
                 <h3 className="text-2xl font-bold text-accent-orange font-retro mb-4">
                   Hello, I'm Nico
                 </h3>
@@ -44,7 +60,11 @@ export const AboutSection: React.FC = () => {
               </div>
 
               {/* Location & Contact */}
-              <div className="pixel-card-green">
+              <div className={`pixel-card-green transition-all duration-700 ${
+                contentVisible[1] 
+                  ? 'opacity-100 translate-y-0' 
+                  : 'opacity-0 translate-y-8'
+              }`}>
                 <h4 className="text-lg font-bold text-accent-green font-tech mb-3">
                   Based in Glasgow, UK
                 </h4>
@@ -57,12 +77,16 @@ export const AboutSection: React.FC = () => {
             {/* Right Column - Experience Highlights */}
             <div className="space-y-6">
               {/* Current Role */}
-              <div className="pixel-card">
+              <div className={`pixel-card transition-all duration-700 ${
+                contentVisible[2] 
+                  ? 'opacity-100 translate-y-0' 
+                  : 'opacity-0 translate-y-8'
+              }`}>
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="text-lg font-bold text-accent-orange font-tech">
                     WordPress Developer
                   </h4>
-                  <span className="text-xs text-accent-green font-tech">
+                  <span className="text-xs text-accent-green font-tech bg-accent-green/20 px-2 py-1 rounded border border-accent-green/30">
                     CURRENT
                   </span>
                 </div>
@@ -76,32 +100,40 @@ export const AboutSection: React.FC = () => {
               </div>
 
               {/* Key Experience */}
-              <div className="pixel-card-green">
+              <div className={`pixel-card-green transition-all duration-700 ${
+                contentVisible[3] 
+                  ? 'opacity-100 translate-y-0' 
+                  : 'opacity-0 translate-y-8'
+              }`}>
                 <h4 className="text-lg font-bold text-accent-green font-tech mb-3">
                   Experience Highlights
                 </h4>
                 <ul className="space-y-2 text-text-secondary text-sm">
                   <li className="flex items-start">
-                    <span className="text-accent-green mr-2">▸</span>
+                    <span className="text-accent-green mr-2 font-tech">▸</span>
                     <span>5+ years in web development across multiple industries</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-accent-green mr-2">▸</span>
+                    <span className="text-accent-green mr-2 font-tech">▸</span>
                     <span>Full-stack experience with modern frameworks</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-accent-green mr-2">▸</span>
+                    <span className="text-accent-green mr-2 font-tech">▸</span>
                     <span>Strong background in team collaboration and stakeholder communication</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-accent-green mr-2">▸</span>
+                    <span className="text-accent-green mr-2 font-tech">▸</span>
                     <span>Apprenticeship to senior developer progression</span>
                   </li>
                 </ul>
               </div>
 
               {/* Personal Interests */}
-              <div className="pixel-card">
+              <div className={`pixel-card transition-all duration-700 ${
+                contentVisible[4] 
+                  ? 'opacity-100 translate-y-0' 
+                  : 'opacity-0 translate-y-8'
+              }`}>
                 <h4 className="text-lg font-bold text-accent-orange font-tech mb-3">
                   Beyond Code
                 </h4>
@@ -115,7 +147,14 @@ export const AboutSection: React.FC = () => {
           </div>
 
           {/* Tech Stack Preview */}
-          <div className="mt-16 text-center">
+          <div 
+            ref={techStackRef}
+            className={`mt-16 text-center transition-all duration-700 ${
+              techStackVisible 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 translate-y-8'
+            }`}
+          >
             <h3 className="text-2xl font-bold text-accent-orange font-retro mb-6">
               Core Technologies
             </h3>
@@ -127,12 +166,21 @@ export const AboutSection: React.FC = () => {
                 'WordPress & ACF',
                 'C# & .NET Core',
                 'SQL Databases'
-              ].map((tech) => (
+              ].map((tech, index) => (
                 <span 
                   key={tech}
-                  className="bg-accent-orange/20 border border-accent-orange/30 text-accent-orange px-3 py-1 rounded-lg font-tech text-sm hover:bg-accent-orange/30 transition-colors duration-200"
+                  className={`bg-accent-orange/20 border border-accent-orange/30 text-accent-orange px-3 py-1 rounded-lg font-tech text-sm hover:bg-accent-orange/30 transition-all duration-300 relative ${
+                    techStackVisible 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-4'
+                  }`}
+                  style={{ 
+                    transitionDelay: techStackVisible ? `${index * 100}ms` : '0ms'
+                  }}
                 >
                   {tech}
+                  {/* Subtle pixel accent on hover */}
+                  <div className="absolute -top-0.5 -right-0.5 w-1 h-1 bg-accent-green opacity-0 hover:opacity-100 transition-opacity duration-200"></div>
                 </span>
               ))}
             </div>
