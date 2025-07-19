@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { PixelButton } from './PixelButton';
+import { ExternalLink } from 'lucide-react';
 
 // Define the AlbumData type since it's imported in the original
 interface AlbumData {
@@ -144,30 +146,33 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     const sleeveGroup = new THREE.Group();
     scene.add(sleeveGroup);
 
-    // Create sleeve
-    const sleeveSize = 2.6;
-    const sleeveDepth = 0.12;
+    // Create sleeve - made 1.4x as large
+    const sleeveSize = 3.64; // 2.6 * 1.4
+    const sleeveDepth = 0.168; // 0.12 * 1.4
     const albumTexture = createAlbumArt(album);
 
-    const sleeveMaterials = [
-      new THREE.MeshPhongMaterial({ color: 0x5a4a3a, flatShading: true }),
-      new THREE.MeshPhongMaterial({ color: 0x5a4a3a, flatShading: true }),
-      new THREE.MeshPhongMaterial({ color: 0x6a5a4a, flatShading: true }),
-      new THREE.MeshPhongMaterial({ color: 0x4a3a2a, flatShading: true }),
-      new THREE.MeshPhongMaterial({ map: albumTexture, flatShading: true }),
-      new THREE.MeshPhongMaterial({ color: 0x3a2a1a, flatShading: true })
-    ];
-
+    // Create the main sleeve body using BoxGeometry instead of separate planes
     const sleeveGeometry = new THREE.BoxGeometry(sleeveSize, sleeveSize, sleeveDepth);
-    const sleeve3D = new THREE.Mesh(sleeveGeometry, sleeveMaterials);
+    
+    // Create materials array for each face of the box
+    const materials = [
+      new THREE.MeshPhongMaterial({ color: 0x5a4a3a, flatShading: true }), // right
+      new THREE.MeshPhongMaterial({ color: 0x5a4a3a, flatShading: true }), // left
+      new THREE.MeshPhongMaterial({ color: 0x5a4a3a, flatShading: true }), // top
+      new THREE.MeshPhongMaterial({ color: 0x5a4a3a, flatShading: true }), // bottom
+      new THREE.MeshPhongMaterial({ map: albumTexture, flatShading: true }), // front
+      new THREE.MeshPhongMaterial({ color: 0x3a2a1a, flatShading: true })  // back
+    ];
+    
+    const sleeve3D = new THREE.Mesh(sleeveGeometry, materials);
     sleeve3D.castShadow = true;
     sleeve3D.receiveShadow = true;
     sleeveGroup.add(sleeve3D);
 
-    // Create inner pocket
+    // Create inner pocket - slightly smaller and offset
     const pocketWidth = sleeveSize * 0.92;
     const pocketHeight = sleeveSize * 0.96;
-    const pocketDepth = sleeveDepth * 1.2;
+    const pocketDepth = sleeveDepth * 0.8; // Reduced depth to prevent overlap
     const pocketGeometry = new THREE.BoxGeometry(pocketWidth, pocketHeight, pocketDepth);
     const pocketMaterial = new THREE.MeshPhongMaterial({
       color: 0x0f0e0c,
@@ -176,7 +181,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     });
     const pocket = new THREE.Mesh(pocketGeometry, pocketMaterial);
     pocket.position.x = sleeveSize * 0.02;
-    pocket.position.z = -0.02;
+    pocket.position.z = -sleeveDepth * 0.1; // Adjusted to prevent ridge
     sleeveGroup.add(pocket);
 
     sceneRef.current = {
@@ -194,9 +199,13 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       // Update sleeve texture
       const newAlbumTexture = createAlbumArt(album);
       const materials = sceneRef.current.sleeve3D.material;
-      if (Array.isArray(materials) && materials[4]) {
+      
+      // Check if materials is an array (BoxGeometry uses material array)
+      if (Array.isArray(materials)) {
+        // Index 4 is the front face in BoxGeometry
         const frontMaterial = materials[4] as THREE.MeshPhongMaterial;
-        if (frontMaterial.map) {
+        if (frontMaterial && frontMaterial.map) {
+          frontMaterial.map.dispose(); // Dispose old texture
           frontMaterial.map = newAlbumTexture;
           frontMaterial.needsUpdate = true;
         }
@@ -262,9 +271,9 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     const deltaX = event.touches[0].clientX - mousePos.x;
     const deltaY = event.touches[0].clientY - mousePos.y;
 
-    // Update rotation using refs
-    targetRotationRef.current.y += deltaX * 0.01;
-    targetRotationRef.current.x += deltaY * 0.01;
+    // Update rotation using refs - increased sensitivity for touch
+    targetRotationRef.current.y += deltaX * 0.025; // 2.5x more sensitive than mouse
+    targetRotationRef.current.x += deltaY * 0.025;
 
     // Clamp vertical rotation
     targetRotationRef.current.x = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, targetRotationRef.current.x));
@@ -286,21 +295,29 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     }
   };
 
-  // Initialize scene when opened
+  // Initialize scene when opened and handle body scroll
   useEffect(() => {
     if (isOpen) {
       // Reset rotation refs when opening
       targetRotationRef.current = { x: 0, y: 0 };
       currentRotationRef.current = { x: 0, y: 0 };
 
+      // Prevent body scrolling
+      document.body.style.overflow = 'hidden';
+
       init3DScene();
       animate();
+    } else {
+      // Restore body scrolling
+      document.body.style.overflow = 'unset';
     }
 
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      // Cleanup: restore scrolling
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
 
@@ -326,14 +343,6 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       }}
       onClick={handleBackgroundClick}
     >
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="absolute top-5 right-5 w-10 h-10 bg-primary-bg-light border-2 border-accent-orange-dark text-accent-orange text-2xl font-bold hover:bg-accent-orange hover:text-primary-black hover:border-accent-green transition-all duration-200 z-10 font-tech rounded-lg hover:scale-110"
-      >
-        ×
-      </button>
-
       {/* 3D Container */}
       <div className="w-[500px] h-[500px] relative mb-8">
         <canvas
@@ -364,29 +373,41 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
           {album.year}
         </p>
 
-        {/* Music Links */}
-        <div className="flex gap-4 justify-center">
+        {/* Action buttons */}
+        <div className="flex gap-3 mb-4">
           {album.spotifyUrl && (
-            <a
-              href={album.spotifyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-accent-green text-primary-black px-6 py-3 font-bold transition-all duration-200 inline-block uppercase tracking-wide text-sm border-2 border-transparent font-tech rounded-lg hover:bg-accent-green-soft hover:transform hover:-translate-y-1 hover:border-accent-orange active:scale-95"
+            <PixelButton
+              variant="success"
+              size="sm"
+              onClick={() => window.open(album.spotifyUrl, '_blank')}
+              className="flex-1 flex items-center justify-center"
             >
-              Listen on Spotify
-            </a>
+              <ExternalLink className="w-4 h-4 mr-1" />
+              SPOTIFY
+            </PixelButton>
           )}
           {album.appleMusicUrl && (
-            <a
-              href={album.appleMusicUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-accent-orange text-primary-black px-6 py-3 font-bold transition-all duration-200 inline-block uppercase tracking-wide text-sm border-2 border-transparent font-tech rounded-lg hover:bg-accent-orange-soft hover:transform hover:-translate-y-1 hover:border-accent-green active:scale-95"
+            <PixelButton
+              variant="primary"
+              size="sm"
+              onClick={() => window.open(album.appleMusicUrl, '_blank')}
+              className="flex-1 flex items-center justify-center"
             >
-              Apple Music
-            </a>
+              <ExternalLink className="w-4 h-4 mr-1" />
+              APPLE MUSIC
+            </PixelButton>
           )}
         </div>
+
+        {/* Close button */}
+        <PixelButton
+          variant="ghost"
+          size="sm"
+          onClick={onClose}
+          className="w-full"
+        >
+          CLOSE
+        </PixelButton>
       </div>
     </div>
   );

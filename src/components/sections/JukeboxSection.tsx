@@ -90,7 +90,11 @@ const ALBUM_DATA: AlbumData[] = [
   }
 ];
 
-export const JukeboxSection: React.FC = () => {
+interface JukeboxSectionProps {
+  onLightboxStateChange?: (isOpen: boolean) => void;
+}
+
+export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateChange }) => {
   const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -100,11 +104,13 @@ export const JukeboxSection: React.FC = () => {
   const handleRecordClick = (album: AlbumData) => {
     setSelectedAlbum(album);
     setIsLightboxOpen(true);
+    onLightboxStateChange?.(true);
   };
 
   const closeLightbox = () => {
     setIsLightboxOpen(false);
     setSelectedAlbum(null);
+    onLightboxStateChange?.(false);
   };
 
   // Handle hover to pause/resume autoplay

@@ -18,12 +18,13 @@ import { JukeboxSection } from './components/sections/JukeboxSection';
  */
 function App() {
   const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'jukebox' | 'skills' | 'contact'>('hero');
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ 
+      element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
@@ -60,8 +61,8 @@ function App() {
       <HeroSection />
       <ProjectsSection />
       <AboutSection />
-      <JukeboxSection />
-      
+      <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
+
       {/* Skills Section */}
       <section id="skills" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
         <div className="container mx-auto mobile-padding">
@@ -97,9 +98,9 @@ function App() {
           </div>
         </div>
       </section>
-      
+
       {/* Navigation bar - Full width on mobile, Top Left on desktop */}
-      <nav className="fixed top-4 left-8 right-8 md:left-8 md:right-auto md:translate-x-0 z-50">
+      <nav className={`fixed top-4 left-8 right-8 md:left-8 md:right-auto md:translate-x-0 z-50 transition-opacity duration-300 ${isLightboxOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
         <div className="flex gap-1 md:gap-2 justify-evenly md:justify-start overflow-x-auto">
           <button
             onClick={() => scrollToSection('hero')}
