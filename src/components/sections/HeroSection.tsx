@@ -32,9 +32,9 @@ export const HeroSection: React.FC = () => {
             <div className="w-full mb-8 xl:mb-[18rem]">
               {/* Name tag with typing animation */}
               <div className="flex justify-center lg:justify-start mb-4">
-                <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-lg uppercase tracking-wider border border-accent-green hover:scale-105 transition-all duration-200">
+                <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-lg uppercase tracking-wider border border-accent-green hover:scale-102 transition-all duration-200">
                   Nico Cruickshank ✦ {displayedText}
-                  <span className="text-accent-green inline-block animate-pulse">|</span>
+                  <span className="text-accent-green inline-block">|</span>
                 </span>
               </div>
               

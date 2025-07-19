@@ -10,8 +10,8 @@ interface UseTypingAnimationProps {
 export const useTypingAnimation = ({
   strings,
   typingSpeed = 100,
-  deleteSpeed = 50,
-  pauseTime = 2000,
+  deleteSpeed = 25,
+  pauseTime = 600,
 }: UseTypingAnimationProps) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentStringIndex, setCurrentStringIndex] = useState(0);

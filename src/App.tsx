@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { HeroSection } from './components/sections/HeroSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { AboutSection } from './components/sections/AboutSection';
+import { JukeboxSection } from './components/sections/JukeboxSection';
 
 /**
  * Main App Component
@@ -16,7 +17,7 @@ import { AboutSection } from './components/sections/AboutSection';
  * - Skills, Contact: Placeholder sections (ready for development)
  */
 function App() {
-  const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'skills' | 'contact'>('hero');
+  const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'jukebox' | 'skills' | 'contact'>('hero');
 
   // Smooth scroll to section
   const scrollToSection = (sectionId: string) => {
@@ -32,7 +33,7 @@ function App() {
   // Track active section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'projects', 'about', 'skills', 'contact'];
+      const sections = ['hero', 'projects', 'about', 'jukebox', 'skills', 'contact'];
       const scrollPosition = window.scrollY + 100; // Offset for better detection
 
       for (const sectionId of sections) {
@@ -59,6 +60,7 @@ function App() {
       <HeroSection />
       <ProjectsSection />
       <AboutSection />
+      <JukeboxSection />
       
       {/* Skills Section */}
       <section id="skills" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
@@ -116,6 +118,12 @@ function App() {
             className={`${activeSection === 'about' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
           >
             ABOUT
+          </button>
+          <button
+            onClick={() => scrollToSection('jukebox')}
+            className={`${activeSection === 'jukebox' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
+          >
+            JUKEBOX
           </button>
           <button
             onClick={() => scrollToSection('skills')}
