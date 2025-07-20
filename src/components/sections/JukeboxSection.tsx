@@ -135,7 +135,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Record List (Accordion) */}
             <div className="lg:w-1/2 space-y-4">
-              {ALBUM_DATA.map((album, index) => (
+              {ALBUM_DATA.map((album) => (
                 <div
                   key={album.id}
                   onClick={() => handleAccordionItemClick(album)}

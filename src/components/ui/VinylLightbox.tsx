@@ -107,7 +107,6 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
     // Get actual canvas dimensions
     const canvasRect = canvasRef.current.getBoundingClientRect();
-    const canvasSize = Math.min(canvasRect.width, canvasRect.height);
 
     // Scene setup
     const scene = new THREE.Scene();
