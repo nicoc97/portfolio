@@ -105,21 +105,25 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
   const init3DScene = () => {
     if (!canvasRef.current) return;
 
+    // Get actual canvas dimensions
+    const canvasRect = canvasRef.current.getBoundingClientRect();
+    const canvasSize = Math.min(canvasRect.width, canvasRect.height);
+
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = null;
 
-    // Camera setup
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+    // Camera setup - adjust aspect ratio based on actual canvas size
+    const camera = new THREE.PerspectiveCamera(45, canvasRect.width / canvasRect.height, 0.1, 1000);
     camera.position.set(0, 0, 6.5);
 
-    // Renderer setup
+    // Renderer setup - use actual canvas dimensions
     const renderer = new THREE.WebGLRenderer({
       canvas: canvasRef.current,
       antialias: false,
       alpha: true
     });
-    renderer.setSize(500, 500);
+    renderer.setSize(canvasRect.width, canvasRect.height);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setPixelRatio(0.5);
@@ -153,7 +157,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
     // Create the main sleeve body using BoxGeometry instead of separate planes
     const sleeveGeometry = new THREE.BoxGeometry(sleeveSize, sleeveSize, sleeveDepth);
-    
+
     // Create materials array for each face of the box
     const materials = [
       new THREE.MeshPhongMaterial({ color: 0x5a4a3a, flatShading: true }), // right
@@ -163,7 +167,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       new THREE.MeshPhongMaterial({ map: albumTexture, flatShading: true }), // front
       new THREE.MeshPhongMaterial({ color: 0x3a2a1a, flatShading: true })  // back
     ];
-    
+
     const sleeve3D = new THREE.Mesh(sleeveGeometry, materials);
     sleeve3D.castShadow = true;
     sleeve3D.receiveShadow = true;
@@ -199,7 +203,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       // Update sleeve texture
       const newAlbumTexture = createAlbumArt(album);
       const materials = sceneRef.current.sleeve3D.material;
-      
+
       // Check if materials is an array (BoxGeometry uses material array)
       if (Array.isArray(materials)) {
         // Index 4 is the front face in BoxGeometry
@@ -332,7 +336,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
   return (
     <div
-      className={`fixed inset-0 bg-primary-black/95 flex flex-col items-center justify-center z-50 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      className={`fixed inset-0 bg-primary-black/95 flex flex-col items-center justify-center z-50 transition-opacity duration-300 p-8 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       style={{
         backgroundImage: `repeating-linear-gradient(45deg,
           transparent,
@@ -344,7 +348,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       onClick={handleBackgroundClick}
     >
       {/* 3D Container */}
-      <div className="w-[500px] h-[500px] relative mb-8">
+      <div className="w-[500px] h-[500px] max-w-[calc(100vw-4rem)] max-h-[calc(100vh-16rem)] relative mb-8">
         <canvas
           ref={canvasRef}
           className={`w-full h-full ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
@@ -362,7 +366,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       </div>
 
       {/* Album Info */}
-      <div className="pixel-card max-w-lg w-full mx-4 text-center">
+      <div className="pixel-card max-w-lg w-full text-center mx-4">
         <h3 className="text-3xl font-bold text-accent-orange mb-2 font-retro uppercase tracking-wider">
           {album.title}
         </h3>

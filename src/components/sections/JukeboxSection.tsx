@@ -1,13 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Autoplay } from 'swiper/modules';
 import { VinylRecord } from '../ui/VinylRecord.tsx';
 import { VinylLightbox } from '../ui/VinylLightbox.tsx';
-import { VintageTVDial } from '../ui/VintageTVDial';
-import type { Swiper as SwiperType } from 'swiper';
-
-import 'swiper/swiper-bundle.css';
-import '../../styles/swiper-custom.css';
 
 /**
  * JukeboxSection Component
@@ -95,10 +88,8 @@ interface JukeboxSectionProps {
 }
 
 export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateChange }) => {
-  const [selectedAlbum, setSelectedAlbum] = useState<AlbumData | null>(null);
+  const [selectedAlbum, setSelectedAlbum] = useState<AlbumData>(ALBUM_DATA[0]);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   const handleRecordClick = (album: AlbumData) => {
@@ -107,23 +98,13 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
     onLightboxStateChange?.(true);
   };
 
+  const handleAccordionItemClick = (album: AlbumData) => {
+    setSelectedAlbum(album);
+  };
+
   const closeLightbox = () => {
     setIsLightboxOpen(false);
-    setSelectedAlbum(null);
     onLightboxStateChange?.(false);
-  };
-
-  // Handle hover to pause/resume autoplay
-  const handleMouseEnter = () => {
-    if (swiperInstance?.autoplay) {
-      swiperInstance.autoplay.stop();
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (swiperInstance?.autoplay) {
-      swiperInstance.autoplay.start();
-    }
   };
 
   return (
@@ -138,88 +119,100 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
           <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">04</span>
         </div>
 
-        <div className="w-full lg:w-4/5 mx-auto mobile-padding relative z-10">
+        <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">
+          <div className="text-left mb-16">
+            <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange tracking-wide font-retro text-left">
               GROOVE COLLECTION
             </h2>
-            <div className="mx-auto w-16 h-px bg-accent-orange mb-6"></div>
+            <div className="w-16 h-px bg-accent-orange mb-6"></div>
             <p className="text-accent-orange font-tech text-lg">
               Spin the Vinyl ↻ Click to Play
             </p>
           </div>
 
-          {/* Vinyl Records Swiper */}
-          <div
-            className="relative"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <Swiper
-              modules={[Navigation, Autoplay]}
-              spaceBetween={32}
-              slidesPerView={1}
-              onSwiper={setSwiperInstance}
-              onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
-              navigation={{
-                nextEl: '.swiper-button-next-custom',
-                prevEl: '.swiper-button-prev-custom',
-              }}
-              autoplay={{
-                delay: 4000,
-                disableOnInteraction: false,
-              }}
-              breakpoints={{
-                640: {
-                  slidesPerView: 1,
-                  spaceBetween: 24,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 32,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 32,
-                },
-              }}
-              className="vinyl-swiper"
-            >
+          {/* Accordion Layout */}
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Record List (Accordion) */}
+            <div className="lg:w-1/2 space-y-4">
               {ALBUM_DATA.map((album, index) => (
-                <SwiperSlide key={album.id} className="h-auto">
-                  <div className="h-full">
-                    <VinylRecord
-                      album={album}
-                      index={index}
-                      onClick={() => handleRecordClick(album)}
-                    />
+                <div
+                  key={album.id}
+                  onClick={() => handleAccordionItemClick(album)}
+                  className={`
+                    cursor-pointer p-4 rounded-lg border-2 transition-all duration-300
+                    ${selectedAlbum.id === album.id
+                      ? 'border-accent-orange bg-primary-bg-light shadow-lg'
+                      : 'border-accent-orange-dark hover:border-accent-orange bg-primary-bg-light/50'
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Mini Record Icon */}
+                    <div
+                      className={`
+                        w-[68px] h-[68px] rounded-full flex-shrink-0 relative
+                        transition-all duration-300 pixel-art bg-black
+                        ${selectedAlbum.id === album.id ? 'animate-spin' : ''}
+                      `}
+                      style={{
+                        filter: 'contrast(1.2) saturate(1.1)'
+                      }}
+                    >
+                      {/* Subtle record grooves */}
+                      <div className="absolute inset-[2px] rounded-full border border-gray-700/70"></div>
+                      <div className="absolute inset-[8px] rounded-full border border-gray-600/60"></div>
+                      <div className="absolute inset-[14px] rounded-full border border-gray-500/50"></div>
+
+                      {/* Center colored label */}
+                      <div
+                        className="absolute inset-[22px] rounded-full"
+                        style={{
+                          backgroundColor: album.labelColor,
+                        }}
+                      >
+                        {/* Center hole */}
+                        <div
+                          className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-bg/50 rounded-full transform -translate-x-1/2 -translate-y-1/2"
+                        ></div>
+                      </div>
+                    </div>
+
+                    {/* Album Info */}
+                    <div className="flex-1">
+                      <h3 className="text-accent-orange font-retro text-lg font-bold">
+                        {album.title}
+                      </h3>
+                      <p className="text-accent-orange-dark font-tech text-sm">
+                        {album.artist}
+                      </p>
+                      <p className="text-accent-orange-dark font-tech text-xs">
+                        {album.year}
+                      </p>
+                    </div>
+
+                    {/* Play/Pause Indicator */}
+                    {selectedAlbum.id === album.id && (
+                      <div className="text-accent-orange">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    )}
                   </div>
-                </SwiperSlide>
+                </div>
               ))}
-            </Swiper>
+            </div>
 
-            {/* Custom Navigation with TV Dial */}
-            <div className="flex justify-center items-center gap-8 mt-8">
-              <button className="swiper-button-prev-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M19 12H5M12 19l-7-7 7-7" />
-                </svg>
-              </button>
-
-              {/* TV Dial Navigation */}
-              <VintageTVDial
-                totalSlides={ALBUM_DATA.length}
-                currentSlide={currentSlide}
-                onSlideChange={(index) => swiperInstance?.slideTo(index)}
-                swiperInstance={swiperInstance}
-              />
-
-              <button className="swiper-button-next-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+            {/* Selected Record Display */}
+            <div className="lg:w-1/2 flex justify-center items-center min-h-[500px]">
+              <div className="w-full max-w-lg">
+                <VinylRecord
+                  album={selectedAlbum}
+                  index={ALBUM_DATA.findIndex(album => album.id === selectedAlbum.id)}
+                  onClick={() => handleRecordClick(selectedAlbum)}
+                />
+              </div>
             </div>
           </div>
 
@@ -233,13 +226,11 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
       </section>
 
       {/* Lightbox */}
-      {selectedAlbum && (
-        <VinylLightbox
-          album={selectedAlbum}
-          isOpen={isLightboxOpen}
-          onClose={closeLightbox}
-        />
-      )}
+      <VinylLightbox
+        album={selectedAlbum}
+        isOpen={isLightboxOpen}
+        onClose={closeLightbox}
+      />
     </>
   );
 };

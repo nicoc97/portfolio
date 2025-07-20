@@ -122,13 +122,13 @@ export const ProjectsSection: React.FC = () => {
       </div>
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
-        {/* Centered section header */}
+        {/*  section header */}
         <div className="relative mb-20">
 
-          {/* Centered header layout */}
+          {/*  header layout */}
           <div className="text-left space-y-6">
             <div className="relative">
-              <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange font-retro">
+              <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange tracking-wide font-retro">
                 PROJECTS
               </h2>
               {/* decorative line */}

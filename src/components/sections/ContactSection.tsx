@@ -52,11 +52,11 @@ export const ContactSection: React.FC = () => {
 
   return (
     <section id="contact" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-      <div className="w-full lg:w-4/5 mx-auto mobile-padding">
+      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         <div className="text-left space-y-8">
           {/* Section Header */}
           <div className="space-y-4">
-            <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro">
+            <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange tracking-wide font-retro text-left">
               CONTACT
             </h2>
             <div className="w-16 h-px bg-accent-orange"></div>

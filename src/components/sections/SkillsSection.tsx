@@ -51,23 +51,23 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   };
 
   return (
-    <section className={`py-16 px-4 ${className} relative overflow-hidden`} id="skills">
+    <section className={`py-16 ${className} relative overflow-hidden`} id="skills">
       {/* Large background text */}
       <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
         <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-green font-retro leading-none">03</span>
       </div>
 
-      <div className="w-full lg:w-4/5 mx-auto relative z-10">
+      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">
+          <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange tracking-wide font-retro text-left">
             SKILLS
           </h2>
-          <div className="mx-auto w-16 h-px bg-accent-orange mb-6"></div>
-          <p className="text-accent-orange font-tech text-lg mb-4">
+          <div className="w-16 h-px bg-accent-orange mb-6"></div>
+          <p className="text-accent-orange font-tech text-left text-lg mb-4">
             Interactive Tech Stack
           </p>
-          <p className="text-text-secondary text-sm leading-relaxed max-w-2xl mx-auto">
+          <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
             Explore my technical skills and expertise across web development and data science
           </p>
         </div>

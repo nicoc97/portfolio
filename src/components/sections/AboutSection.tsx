@@ -19,8 +19,8 @@ export const AboutSection: React.FC = () => {
         <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">01</span>
       </div>
 
-      <div className="w-full lg:w-4/5 mx-auto mobile-padding">
-        <div className="max-w-4xl mx-auto">
+      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+        <div className="max-w-4xl">
           {/* Section Header */}
           <div
             ref={headerRef}
@@ -29,11 +29,11 @@ export const AboutSection: React.FC = () => {
               : 'opacity-0 translate-y-8'
               }`}
           >
-            <h2 className="text-5xl md:text-6xl font-bold text-accent-orange font-retro mb-4">
+            <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange tracking-wide font-retro text-left">
               ABOUT
             </h2>
-            <div className="mx-auto w-16 h-px bg-accent-orange mb-6"></div>
-            <p className="text-accent-orange font-tech text-lg">
+            <div className="w-16 h-px bg-accent-orange mb-6"></div>
+            <p className="text-accent-orange text-left font-tech text-lg">
               Collaborative Web Developer
             </p>
           </div>
