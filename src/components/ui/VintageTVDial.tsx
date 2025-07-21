@@ -192,8 +192,8 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
 
       {/* Current channel display */}
       <div className={`channel-display ${isChangingChannel ? 'glitching' : ''}`}>
-        <span className="channel-label font-tech text-xl">CH</span>
-        <span className="channel-number-display font-tech text-xl">{activeChannel + 1}</span>
+        <span className="channel-label font-tech text-lg">PROJECT</span>
+        <span className="channel-number-display font-tech text-lg">0{activeChannel + 1}</span>
       </div>
     </div>
   );

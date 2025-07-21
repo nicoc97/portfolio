@@ -104,14 +104,14 @@ export const ProjectsSection: React.FC = () => {
   const [playbackSpeed, setPlaybackSpeed] = useState(5000); // autoplay delay
 
   // Filter projects
-  const filteredProjects = selectedFilter === 'all' 
-    ? sampleProjects 
+  const filteredProjects = selectedFilter === 'all'
+    ? sampleProjects
     : sampleProjects.filter(project => project.category === selectedFilter);
 
   // Hi-Fi Control Functions
   const handlePlayPause = () => {
     if (!swiperInstance) return;
-    
+
     if (isPlaying) {
       swiperInstance.autoplay.stop();
       setIsPlaying(false);
@@ -172,33 +172,45 @@ export const ProjectsSection: React.FC = () => {
         {/*  section header */}
         <div className="relative mb-20">
 
-          {/*  header layout */}
-          <div className="text-left space-y-6">
-            <div className="relative">
-              <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro">
-                PROJECTS
-              </h2>
-              {/* decorative line */}
-              <div className="mt-4 w-32 h-px bg-accent-orange"></div>
+          {/*  header layout with vintage dial */}
+          <div className="flex items-start justify-between gap-8">
+            <div className="text-left space-y-6 flex-1">
+              <div className="relative">
+                <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro">
+                  PROJECTS
+                </h2>
+                {/* decorative line */}
+                <div className="mt-4 w-32 h-px bg-accent-orange"></div>
+              </div>
+
+              {/* description */}
+              <div className="max-w-2xl">
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  A collection of web applications, data science projects, and creative experiments
+                  showcasing modern development practices.
+                </p>
+              </div>
             </div>
 
-            {/* description */}
-            <div className="max-w-2xl">
-              <p className="text-text-secondary text-sm leading-relaxed">
-                A collection of web applications, data science projects, and creative experiments
-                showcasing modern development practices.
-              </p>
+            {/* Vintage Radio Dial - positioned to the right of header */}
+            <div className="flex-shrink-0 mt-4">
+              <VintageTVDial
+                totalSlides={filteredProjects.length}
+                currentSlide={currentSlide}
+                onSlideChange={(index) => swiperInstance?.slideTo(index)}
+                swiperInstance={swiperInstance}
+              />
             </div>
           </div>
 
-          {/* Centered filter buttons */}
-          <div className="mt-6 flex flex-wrap gap-4">
+          {/* filter buttons */}
+          <div className="mt-4 flex flex-wrap gap-3 justify-center">
             {filterButtons.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setSelectedFilter(key)}
                 className={`
-                  pixel-button px-6 py-2 font-tech text-base transition-all duration-200
+                  pixel-button px-6 py-2 font-tech transition-all duration-200
                   ${selectedFilter === key
                     ? (key === 'data'
                       ? 'bg-accent-green text-primary-bg border-accent-green'
@@ -219,6 +231,7 @@ export const ProjectsSection: React.FC = () => {
             modules={[Navigation, Autoplay]}
             spaceBetween={32}
             slidesPerView={1}
+            slidesPerGroup={1}
             onSwiper={setSwiperInstance}
             onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
             navigation={{
@@ -232,14 +245,17 @@ export const ProjectsSection: React.FC = () => {
             breakpoints={{
               640: {
                 slidesPerView: 1,
+                slidesPerGroup: 1,
                 spaceBetween: 24,
               },
               768: {
                 slidesPerView: 2,
+                slidesPerGroup: 1,
                 spaceBetween: 32,
               },
               1024: {
                 slidesPerView: 3,
+                slidesPerGroup: 1,
                 spaceBetween: 32,
               },
             }}
@@ -255,11 +271,11 @@ export const ProjectsSection: React.FC = () => {
           </Swiper>
 
           {/* Hi-Fi Style Controls */}
-          <div className="flex justify-center items-start mt-8">
+          <div className="flex justify-center items-center mt-4">
             {/* Left Side: Transport Controls */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {/* Rewind */}
-              <button 
+              <button
                 onClick={handleRewind}
                 className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
                 title="Rewind to start"
@@ -271,8 +287,7 @@ export const ProjectsSection: React.FC = () => {
               </button>
 
               {/* Previous (Skip Back) */}
-              <button 
-                onClick={handlePrevious}
+              <button
                 className="swiper-button-prev-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
                 title="Previous track"
               >
@@ -283,7 +298,7 @@ export const ProjectsSection: React.FC = () => {
               </button>
 
               {/* Play/Pause */}
-              <button 
+              <button
                 onClick={handlePlayPause}
                 className="p-4 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
                 title={isPlaying ? "Pause" : "Play"}
@@ -301,8 +316,7 @@ export const ProjectsSection: React.FC = () => {
               </button>
 
               {/* Next (Skip Forward) */}
-              <button 
-                onClick={handleNext}
+              <button
                 className="swiper-button-next-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
                 title="Next track"
               >
@@ -313,7 +327,7 @@ export const ProjectsSection: React.FC = () => {
               </button>
 
               {/* Fast Forward */}
-              <button 
+              <button
                 onClick={handleFastForward}
                 className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
                 title="Fast forward to end"
@@ -327,7 +341,7 @@ export const ProjectsSection: React.FC = () => {
               {/* Speed Control */}
               <div className="flex items-center gap-2 ml-4">
                 <span className="text-xs text-text-secondary font-tech">SPEED</span>
-                <select 
+                <select
                   value={playbackSpeed}
                   onChange={(e) => handleSpeedChange(Number(e.target.value))}
                   className="text-xs bg-transparent text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-pointer"
@@ -340,15 +354,7 @@ export const ProjectsSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Side: TV Dial Navigation */}
-            <div className="flex items-center gap-4">
-              <VintageTVDial
-                totalSlides={filteredProjects.length}
-                currentSlide={currentSlide}
-                onSlideChange={(index) => swiperInstance?.slideTo(index)}
-                swiperInstance={swiperInstance}
-              />
-            </div>
+
           </div>
         </div>
 

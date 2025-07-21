@@ -77,7 +77,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           <button
             onClick={() => setSelectedCategory('all')}
             className={`
-              px-4 py-2 rounded-lg font-tech text-sm border-2 transition-all duration-200
+              px-4 py-2 rounded-lg font-tech border-2 transition-all duration-200
               ${selectedCategory === 'all'
                 ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg'
                 : 'bg-transparent text-text-secondary border-text-secondary/30 hover:border-accent-orange hover:text-accent-orange'
