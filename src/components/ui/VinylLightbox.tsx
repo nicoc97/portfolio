@@ -22,6 +22,7 @@ interface VinylLightboxProps {
 
 export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onClose }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<{
     scene: THREE.Scene;
     camera: THREE.PerspectiveCamera;
@@ -34,10 +35,40 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [viewportHeight, setViewportHeight] = useState('100vh');
 
   // Use refs for rotation values so they can be accessed in the animation loop
   const targetRotationRef = useRef({ x: 0, y: 0 });
   const currentRotationRef = useRef({ x: 0, y: 0 });
+
+  // Handle iOS viewport height
+  useEffect(() => {
+    const updateViewportHeight = () => {
+      // Use visualViewport API if available (better for iOS)
+      const vh = window.visualViewport?.height || window.innerHeight;
+      setViewportHeight(`${vh}px`);
+    };
+
+    // Update on mount
+    updateViewportHeight();
+
+    // Listen for viewport changes (iOS URL bar hide/show)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', updateViewportHeight);
+      window.visualViewport.addEventListener('scroll', updateViewportHeight);
+    } else {
+      window.addEventListener('resize', updateViewportHeight);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', updateViewportHeight);
+        window.visualViewport.removeEventListener('scroll', updateViewportHeight);
+      } else {
+        window.removeEventListener('resize', updateViewportHeight);
+      }
+    };
+  }, []);
 
   // Create album art texture (same as VinylRecord)
   const createAlbumArt = (albumData: AlbumData) => {
@@ -334,6 +365,14 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       // Add passive: false to make preventDefault work on iOS
       document.addEventListener('touchmove', preventScroll, { passive: false });
 
+      // For iOS: Try to hide the URL bar by scrolling slightly
+      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+          window.scrollTo(0, 1);
+        }, 10);
+      }
+
       init3DScene();
       animate();
 
@@ -370,85 +409,110 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
   return (
     <div
-      className={`fixed inset-0 bg-primary-black/95 flex flex-col items-center justify-center z-50 transition-opacity duration-300 p-8 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      ref={overlayRef}
+      className="fixed inset-0 bg-primary-black/95 flex flex-col items-center justify-center z-50 transition-opacity duration-300"
       style={{
+        height: viewportHeight,
         backgroundImage: `repeating-linear-gradient(45deg,
           transparent,
           transparent 10px,
           rgba(255, 140, 66, 0.02) 10px,
           rgba(255, 140, 66, 0.02) 20px
         )`,
-        touchAction: 'none' // Prevent touch gestures from scrolling
+        touchAction: 'none', // Prevent touch gestures from scrolling
+        WebkitTouchCallout: 'none', // iOS specific
+        WebkitUserSelect: 'none', // iOS specific
+        overscrollBehavior: 'none', // Prevent overscroll
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
       }}
       onClick={handleBackgroundClick}
       onTouchMove={preventTouchScroll}
     >
-      {/* 3D Container */}
-      <div className="w-[500px] h-[500px] max-w-[calc(100vw-4rem)] max-h-[calc(100vh-16rem)] relative mb-8">
-        <canvas
-          ref={canvasRef}
-          className={`w-full h-full ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
-          style={{ touchAction: 'none' }} // Prevent default touch actions on canvas
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        />
-        <p className="text-center text-text-secondary text-sm mt-2 font-tech uppercase tracking-wider">
-          ↔ Drag to Rotate ↔
-        </p>
-      </div>
-
-      {/* Album Info */}
-      <div className="pixel-card max-w-lg w-full text-center mx-4">
-        <h3 className="text-3xl font-bold text-accent-orange mb-2 font-retro uppercase tracking-wider">
-          {album.title}
-        </h3>
-        <p className="text-xl text-accent-green mb-2 font-tech uppercase tracking-wider">
-          {album.artist}
-        </p>
-        <p className="text-text-secondary uppercase tracking-wide font-tech text-sm mb-6">
-          {album.year}
-        </p>
-
-        {/* Action buttons */}
-        <div className="flex gap-3 mb-4">
-          {album.spotifyUrl && (
-            <PixelButton
-              variant="success"
-              size="sm"
-              onClick={() => window.open(album.spotifyUrl, '_blank')}
-              className="flex-1 flex items-center justify-center"
-            >
-              <ExternalLink className="w-4 h-4 mr-1" />
-              SPOTIFY
-            </PixelButton>
-          )}
-          {album.appleMusicUrl && (
-            <PixelButton
-              variant="primary"
-              size="sm"
-              onClick={() => window.open(album.appleMusicUrl, '_blank')}
-              className="flex-1 flex items-center justify-center"
-            >
-              <ExternalLink className="w-4 h-4 mr-1" />
-              APPLE MUSIC
-            </PixelButton>
-          )}
+      {/* Inner container with safe area padding for iOS */}
+      <div 
+        className="w-full h-full flex flex-col items-center justify-center p-8"
+        style={{
+          paddingTop: 'max(2rem, env(safe-area-inset-top))',
+          paddingBottom: 'max(2rem, env(safe-area-inset-bottom))',
+          paddingLeft: 'max(2rem, env(safe-area-inset-left))',
+          paddingRight: 'max(2rem, env(safe-area-inset-right))'
+        }}
+      >
+        {/* 3D Container */}
+        <div className="w-[500px] h-[500px] max-w-[calc(100vw-4rem)] max-h-[50vh] relative mb-4">
+          <canvas
+            ref={canvasRef}
+            className={`w-full h-full ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
+            style={{ 
+              touchAction: 'none',
+              WebkitTouchCallout: 'none',
+              WebkitUserSelect: 'none'
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          />
+          <p className="text-center text-text-secondary text-sm mt-2 font-tech uppercase tracking-wider">
+            ↔ Drag to Rotate ↔
+          </p>
         </div>
 
-        {/* Close button */}
-        <PixelButton
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          className="w-full"
-        >
-          CLOSE
-        </PixelButton>
+        {/* Album Info */}
+        <div className="pixel-card max-w-lg w-full text-center mx-4">
+          <h3 className="text-2xl sm:text-3xl font-bold text-accent-orange mb-2 font-retro uppercase tracking-wider">
+            {album.title}
+          </h3>
+          <p className="text-lg sm:text-xl text-accent-green mb-2 font-tech uppercase tracking-wider">
+            {album.artist}
+          </p>
+          <p className="text-text-secondary uppercase tracking-wide font-tech text-sm mb-4 sm:mb-6">
+            {album.year}
+          </p>
+
+          {/* Action buttons */}
+          <div className="flex gap-3 mb-4">
+            {album.spotifyUrl && (
+              <PixelButton
+                variant="success"
+                size="sm"
+                onClick={() => window.open(album.spotifyUrl, '_blank')}
+                className="flex-1 flex items-center justify-center"
+              >
+                <ExternalLink className="w-4 h-4 mr-1" />
+                SPOTIFY
+              </PixelButton>
+            )}
+            {album.appleMusicUrl && (
+              <PixelButton
+                variant="primary"
+                size="sm"
+                onClick={() => window.open(album.appleMusicUrl, '_blank')}
+                className="flex-1 flex items-center justify-center"
+              >
+                <ExternalLink className="w-4 h-4 mr-1" />
+                APPLE MUSIC
+              </PixelButton>
+            )}
+          </div>
+
+          {/* Close button */}
+          <PixelButton
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="w-full"
+          >
+            CLOSE
+          </PixelButton>
+        </div>
       </div>
     </div>
   );
