@@ -100,11 +100,58 @@ export const ProjectsSection: React.FC = () => {
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'web' | 'data' | 'fullstack'>('all');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [playbackSpeed, setPlaybackSpeed] = useState(5000); // autoplay delay
 
   // Filter projects
   const filteredProjects = selectedFilter === 'all' 
     ? sampleProjects 
     : sampleProjects.filter(project => project.category === selectedFilter);
+
+  // Hi-Fi Control Functions
+  const handlePlayPause = () => {
+    if (!swiperInstance) return;
+    
+    if (isPlaying) {
+      swiperInstance.autoplay.stop();
+      setIsPlaying(false);
+    } else {
+      swiperInstance.autoplay.start();
+      setIsPlaying(true);
+    }
+  };
+
+  const handleRewind = () => {
+    if (!swiperInstance) return;
+    swiperInstance.slideTo(0);
+  };
+
+  const handleFastForward = () => {
+    if (!swiperInstance) return;
+    swiperInstance.slideTo(filteredProjects.length - 1);
+  };
+
+  const handleSpeedChange = (newSpeed: number) => {
+    setPlaybackSpeed(newSpeed);
+    if (swiperInstance && isPlaying) {
+      swiperInstance.autoplay.stop();
+      // Update autoplay delay
+      if (swiperInstance.params.autoplay && typeof swiperInstance.params.autoplay === 'object') {
+        swiperInstance.params.autoplay.delay = newSpeed;
+      }
+      swiperInstance.autoplay.start();
+    }
+  };
+
+  const handlePrevious = () => {
+    if (!swiperInstance) return;
+    swiperInstance.slidePrev();
+  };
+
+  const handleNext = () => {
+    if (!swiperInstance) return;
+    swiperInstance.slideNext();
+  };
 
   // 🔧 UPDATE: Modify filter categories here if you have different project types
   const filterButtons = [
@@ -179,7 +226,7 @@ export const ProjectsSection: React.FC = () => {
               prevEl: '.swiper-button-prev-custom',
             }}
             autoplay={{
-              delay: 5000,
+              delay: playbackSpeed,
               disableOnInteraction: false,
             }}
             breakpoints={{
@@ -207,27 +254,101 @@ export const ProjectsSection: React.FC = () => {
             ))}
           </Swiper>
 
-          {/* Custom Navigation with TV Dial */}
-          <div className="flex justify-center items-center gap-8 mt-8">
-            <button className="swiper-button-prev-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
-            </button>
+          {/* Hi-Fi Style Controls */}
+          <div className="flex justify-center items-start mt-8">
+            {/* Left Side: Transport Controls */}
+            <div className="flex items-center gap-4">
+              {/* Rewind */}
+              <button 
+                onClick={handleRewind}
+                className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                title="Rewind to start"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="11,19 2,12 11,5" />
+                  <polygon points="22,19 13,12 22,5" />
+                </svg>
+              </button>
 
-            {/* TV Dial Navigation */}
-            <VintageTVDial
-              totalSlides={filteredProjects.length}
-              currentSlide={currentSlide}
-              onSlideChange={(index) => swiperInstance?.slideTo(index)}
-              swiperInstance={swiperInstance}
-            />
+              {/* Previous (Skip Back) */}
+              <button 
+                onClick={handlePrevious}
+                className="swiper-button-prev-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                title="Previous track"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="19,20 9,12 19,4" />
+                  <line x1="5" y1="19" x2="5" y2="5" />
+                </svg>
+              </button>
 
-            <button className="swiper-button-next-custom pixel-button p-3 bg-primary-bg-light border-accent-orange-dark hover:border-accent-orange transition-all duration-200">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
+              {/* Play/Pause */}
+              <button 
+                onClick={handlePlayPause}
+                className="p-4 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                title={isPlaying ? "Pause" : "Play"}
+              >
+                {isPlaying ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="6" y="4" width="4" height="16" />
+                    <rect x="14" y="4" width="4" height="16" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="5,3 19,12 5,21" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Next (Skip Forward) */}
+              <button 
+                onClick={handleNext}
+                className="swiper-button-next-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                title="Next track"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="5,4 15,12 5,20" />
+                  <line x1="19" y1="5" x2="19" y2="19" />
+                </svg>
+              </button>
+
+              {/* Fast Forward */}
+              <button 
+                onClick={handleFastForward}
+                className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                title="Fast forward to end"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="13,19 22,12 13,5" />
+                  <polygon points="2,19 11,12 2,5" />
+                </svg>
+              </button>
+
+              {/* Speed Control */}
+              <div className="flex items-center gap-2 ml-4">
+                <span className="text-xs text-text-secondary font-tech">SPEED</span>
+                <select 
+                  value={playbackSpeed}
+                  onChange={(e) => handleSpeedChange(Number(e.target.value))}
+                  className="text-xs bg-transparent text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-pointer"
+                >
+                  <option value={2000}>2x</option>
+                  <option value={3000}>1.5x</option>
+                  <option value={5000}>1x</option>
+                  <option value={8000}>0.5x</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Right Side: TV Dial Navigation */}
+            <div className="flex items-center gap-4">
+              <VintageTVDial
+                totalSlides={filteredProjects.length}
+                currentSlide={currentSlide}
+                onSlideChange={(index) => swiperInstance?.slideTo(index)}
+                swiperInstance={swiperInstance}
+              />
+            </div>
           </div>
         </div>
 
