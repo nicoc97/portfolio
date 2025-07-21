@@ -136,76 +136,90 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             {/* Record List (Accordion) */}
             <div className="lg:w-1/2 space-y-4">
               {ALBUM_DATA.map((album) => (
-                <div
-                  key={album.id}
-                  onClick={() => handleAccordionItemClick(album)}
-                  className={`
-                    cursor-pointer p-4 rounded-lg border-2 transition-all duration-300
-                    ${selectedAlbum.id === album.id
-                      ? 'border-accent-orange bg-primary-bg-light shadow-lg'
-                      : 'border-accent-orange-dark hover:border-accent-orange bg-primary-bg-light/50'
-                    }
-                  `}
-                >
-                  <div className="flex items-center gap-4">
-                    {/* Mini Record Icon */}
-                    <div
-                      className={`
-                        w-[68px] h-[68px] rounded-full flex-shrink-0 relative
-                        transition-all duration-300 pixel-art bg-black
-                        ${selectedAlbum.id === album.id ? 'animate-spin' : ''}
-                      `}
-                      style={{
-                        filter: 'contrast(1.2) saturate(1.1)'
-                      }}
-                    >
-                      {/* Subtle record grooves */}
-                      <div className="absolute inset-[2px] rounded-full border border-gray-700/70"></div>
-                      <div className="absolute inset-[8px] rounded-full border border-gray-600/60"></div>
-                      <div className="absolute inset-[14px] rounded-full border border-gray-500/50"></div>
-
-                      {/* Center colored label */}
+                <div key={album.id} className="space-y-4">
+                  <div
+                    onClick={() => handleAccordionItemClick(album)}
+                    className={`
+                      cursor-pointer p-4 rounded-lg border-2 transition-all duration-300
+                      ${selectedAlbum.id === album.id
+                        ? 'border-accent-orange bg-primary-bg-light shadow-lg'
+                        : 'border-accent-orange-dark hover:border-accent-orange bg-primary-bg-light/50'
+                      }
+                    `}
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* Mini Record Icon */}
                       <div
-                        className="absolute inset-[22px] rounded-full"
+                        className={`
+                          w-[68px] h-[68px] rounded-full flex-shrink-0 relative
+                          transition-all duration-300 pixel-art bg-black
+                          ${selectedAlbum.id === album.id ? 'animate-spin' : ''}
+                        `}
                         style={{
-                          backgroundColor: album.labelColor,
+                          filter: 'contrast(1.2) saturate(1.1)'
                         }}
                       >
-                        {/* Center hole */}
+                        {/* Subtle record grooves */}
+                        <div className="absolute inset-[2px] rounded-full border border-gray-700/70"></div>
+                        <div className="absolute inset-[8px] rounded-full border border-gray-600/60"></div>
+                        <div className="absolute inset-[14px] rounded-full border border-gray-500/50"></div>
+
+                        {/* Center colored label */}
                         <div
-                          className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-bg/50 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-                        ></div>
+                          className="absolute inset-[22px] rounded-full"
+                          style={{
+                            backgroundColor: album.labelColor,
+                          }}
+                        >
+                          {/* Center hole */}
+                          <div
+                            className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-bg/50 rounded-full transform -translate-x-1/2 -translate-y-1/2"
+                          ></div>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Album Info */}
-                    <div className="flex-1">
-                      <h3 className="text-accent-orange font-retro text-lg font-bold">
-                        {album.title}
-                      </h3>
-                      <p className="text-accent-orange-dark font-tech text-sm">
-                        {album.artist}
-                      </p>
-                      <p className="text-accent-orange-dark font-tech text-xs">
-                        {album.year}
-                      </p>
-                    </div>
-
-                    {/* Play/Pause Indicator */}
-                    {selectedAlbum.id === album.id && (
-                      <div className="text-accent-orange">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
+                      {/* Album Info */}
+                      <div className="flex-1">
+                        <h3 className="text-accent-orange font-retro text-lg font-bold">
+                          {album.title}
+                        </h3>
+                        <p className="text-accent-orange-dark font-tech text-sm">
+                          {album.artist}
+                        </p>
+                        <p className="text-accent-orange-dark font-tech text-xs">
+                          {album.year}
+                        </p>
                       </div>
-                    )}
+
+                      {/* Play/Pause Indicator */}
+                      {selectedAlbum.id === album.id && (
+                        <div className="text-accent-orange">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
                   </div>
+
+                  {/* Mobile/Tablet Record Display - appears directly below selected item */}
+                  {selectedAlbum.id === album.id && (
+                    <div className="lg:hidden flex justify-center items-center py-8">
+                      <div className="w-full max-w-sm">
+                        <VinylRecord
+                          album={selectedAlbum}
+                          index={ALBUM_DATA.findIndex(a => a.id === selectedAlbum.id)}
+                          onClick={() => handleRecordClick(selectedAlbum)}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
 
-            {/* Selected Record Display */}
-            <div className="lg:w-1/2 flex justify-center items-center min-h-[500px]">
+            {/* Desktop Record Display - side panel */}
+            <div className="hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px]">
               <div className="w-full max-w-lg">
                 <VinylRecord
                   album={selectedAlbum}
@@ -214,13 +228,6 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                 />
               </div>
             </div>
-          </div>
-
-          {/* Hint text */}
-          <div className="text-center mt-16">
-            <p className="text-accent-orange font-tech text-lg animate-pixel-pulse">
-              // Far Out, Man //
-            </p>
           </div>
         </div>
       </section>

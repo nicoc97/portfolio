@@ -169,8 +169,8 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
     const containerWidth = containerRef.current.offsetWidth || 800;
     const containerHeight = 320;
     const camera = new THREE.PerspectiveCamera(50, containerWidth / containerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 8);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(-0.5, 0, 8); // Moved camera to the left to make scene appear more to the right
+    camera.lookAt(-0.5, 0, 0); // Look at point also moved to the left
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
