@@ -460,13 +460,14 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
           />
-          <p className="text-center text-text-secondary text-sm mt-2 font-tech uppercase tracking-wider">
-            ↔ Drag to Rotate ↔
-          </p>
+
         </div>
 
         {/* Album Info */}
         <div className="pixel-card max-w-lg w-full text-center mx-4">
+          <p className="text-center text-text-secondary text-sm mb-2 font-tech uppercase tracking-wider">
+            ↔ Drag to Rotate ↔
+          </p>
           <h3 className="text-2xl sm:text-3xl font-bold text-accent-orange mb-2 font-retro uppercase tracking-wider">
             {album.title}
           </h3>
