@@ -104,13 +104,12 @@
   height: 100%;
   background: #1a1a1a;
   border-radius: 50%;
-  border: 3px solid #333;
+  border: 4px solid #333;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 0 2px #0a0a0a;
+  box-shadow: 0 0 0 2px #e97419;
 }
 
-/* Arrow indicators around the edge */
 .dial-inner-glow {
   position: absolute;
   inset: 8px;

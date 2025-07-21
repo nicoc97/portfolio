@@ -54,18 +54,18 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
     const degreesPerSlide = 360 / totalSlides;
     // Negative because we rotate counter-clockwise
     const targetRotation = slideIndex * degreesPerSlide;
-    
+
     // Find shortest rotation path
     let rotationDiff = targetRotation - currentRotation;
     if (Math.abs(rotationDiff) > 180) {
       rotationDiff = rotationDiff > 0 ? rotationDiff - 360 : rotationDiff + 360;
     }
     const finalRotation = currentRotation + rotationDiff;
-    
+
     setIsAnimating(true);
     setIsChangingChannel(true);
     setRotation(finalRotation);
-    
+
     // Change slide after a brief delay for visual effect
     setTimeout(() => {
       if (swiperInstance && swiperInstance.slideTo) {
@@ -74,7 +74,7 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
       onSlideChange(slideIndex);
       setIsChangingChannel(false);
     }, 150);
-    
+
     setTimeout(() => setIsAnimating(false), 300);
   };
 
@@ -96,11 +96,11 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
     const rect = dialRef.current.getBoundingClientRect();
     const currentAngle = getAngle(e, rect);
     let angleDiff = currentAngle - startAngle;
-    
+
     // Handle angle wrap-around
     if (angleDiff > 180) angleDiff -= 360;
     if (angleDiff < -180) angleDiff += 360;
-    
+
     const newRotation = startRotation + angleDiff;
     setRotation(newRotation);
   };
@@ -128,12 +128,12 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
     if (isDragging) {
       const handleGlobalMove = (e: MouseEvent | TouchEvent) => handleMove(e);
       const handleGlobalEnd = () => handleEnd();
-      
+
       window.addEventListener('mousemove', handleGlobalMove);
       window.addEventListener('mouseup', handleGlobalEnd);
       window.addEventListener('touchmove', handleGlobalMove, { passive: false });
       window.addEventListener('touchend', handleGlobalEnd);
-      
+
       return () => {
         window.removeEventListener('mousemove', handleGlobalMove);
         window.removeEventListener('mouseup', handleGlobalEnd);
@@ -148,7 +148,7 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
 
   return (
     <div className="vintage-tv-dial-container">
-      <div 
+      <div
         ref={dialRef}
         className={`vintage-tv-dial ${isDragging ? 'dragging' : ''} ${isChangingChannel ? 'changing-channel' : ''}`}
         onMouseDown={handleStart}
@@ -162,9 +162,9 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
         <div className="dial-face">
           {/* Inner glow ring */}
           <div className="dial-inner-glow" />
-          
-          
-          {/* Notches - positioned to align with numbers */}
+
+
+          {/* Notches */}
           {Array.from({ length: totalSlides * 4 }).map((_, i) => (
             <div
               key={i}
@@ -175,7 +175,7 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
               }}
             />
           ))}
-          
+
           {/* Center knob */}
           <div className="dial-center">
             <div className="dial-grip" />
@@ -183,13 +183,13 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
           </div>
         </div>
       </div>
-      
+
       {/* Static effect overlay */}
       <div className={`static-overlay ${isChangingChannel ? 'active' : ''}`} />
-      
+
       {/* Static pointer */}
       <div className="dial-pointer" />
-      
+
       {/* Current channel display */}
       <div className={`channel-display ${isChangingChannel ? 'glitching' : ''}`}>
         <span className="channel-label font-tech text-xl">CH</span>
