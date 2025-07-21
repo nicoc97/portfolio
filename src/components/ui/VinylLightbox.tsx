@@ -30,6 +30,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     sleeve3D: THREE.Mesh;
   } | null>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
+  const scrollPositionRef = useRef<number>(0);
 
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -298,6 +299,11 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     }
   };
 
+  // Prevent touch scrolling on the overlay
+  const preventTouchScroll = (e: React.TouchEvent) => {
+    e.preventDefault();
+  };
+
   // Initialize scene when opened and handle body scroll
   useEffect(() => {
     if (isOpen) {
@@ -305,23 +311,52 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       targetRotationRef.current = { x: 0, y: 0 };
       currentRotationRef.current = { x: 0, y: 0 };
 
-      // Prevent body scrolling
+      // Save current scroll position
+      scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
+
+      // Prevent body scrolling with a more robust approach for mobile
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollPositionRef.current}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
       document.body.style.overflow = 'hidden';
+      // Prevent layout shift from scrollbar
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+
+      // Additional prevention for iOS bounce scrolling
+      const preventScroll = (e: TouchEvent) => {
+        e.preventDefault();
+      };
+      
+      // Add passive: false to make preventDefault work on iOS
+      document.addEventListener('touchmove', preventScroll, { passive: false });
 
       init3DScene();
       animate();
-    } else {
-      // Restore body scrolling
-      document.body.style.overflow = 'unset';
-    }
 
-    return () => {
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      // Cleanup: restore scrolling
-      document.body.style.overflow = 'unset';
-    };
+      return () => {
+        // Restore body scrolling and position
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+        
+        // Restore scroll position
+        window.scrollTo(0, scrollPositionRef.current);
+        
+        // Remove event listener
+        document.removeEventListener('touchmove', preventScroll);
+
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+        }
+      };
+    }
   }, [isOpen]);
 
   // Update texture when album changes
@@ -342,15 +377,18 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
           transparent 10px,
           rgba(255, 140, 66, 0.02) 10px,
           rgba(255, 140, 66, 0.02) 20px
-        )`
+        )`,
+        touchAction: 'none' // Prevent touch gestures from scrolling
       }}
       onClick={handleBackgroundClick}
+      onTouchMove={preventTouchScroll}
     >
       {/* 3D Container */}
       <div className="w-[500px] h-[500px] max-w-[calc(100vw-4rem)] max-h-[calc(100vh-16rem)] relative mb-8">
         <canvas
           ref={canvasRef}
           className={`w-full h-full ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
+          style={{ touchAction: 'none' }} // Prevent default touch actions on canvas
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
