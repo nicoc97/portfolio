@@ -15,8 +15,8 @@ export const AboutSection: React.FC = () => {
   return (
     <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
       {/* Large background text */}
-      <div className="absolute inset-0 flex items-start pt-[2rem] pl-[2rem] justify-start opacity-5 pointer-events-none">
-        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">01</span>
+      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
+        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro tracking-tight leading-none">02</span>
       </div>
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
@@ -29,10 +29,10 @@ export const AboutSection: React.FC = () => {
               : 'opacity-0 translate-y-8'
               }`}
           >
-            <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange tracking-wide font-retro text-left">
+            <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
               ABOUT
             </h2>
-            <div className="w-16 h-px bg-accent-orange mb-6"></div>
+            <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>
             <p className="text-accent-orange text-left font-tech text-lg">
               Collaborative Web Developer
             </p>

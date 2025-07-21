@@ -115,19 +115,19 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
         className="py-20 bg-primary-bg relative overflow-hidden min-h-screen"
       >
         {/* Large background text */}
-        <div className="absolute inset-0 flex items-start pt-[2rem] pl-[2rem] justify-start opacity-5 pointer-events-none">
-          <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">04</span>
+        <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
+          <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none tracking-tight">03</span>
         </div>
 
         <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
           {/* Section Header */}
           <div className="text-left mb-16">
-            <h2 className="text-5xl md:text-[8rem] font-bold text-accent-orange tracking-wide font-retro text-left">
-              GROOVE COLLECTION
+            <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
+              GROOVE<br></br>COLLECTION
             </h2>
-            <div className="w-16 h-px bg-accent-orange mb-6"></div>
+            <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>
             <p className="text-accent-orange font-tech text-lg">
-              Spin the Vinyl ↻ Click to Play
+              Click to Play
             </p>
           </div>
 
