@@ -148,7 +148,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
               onMouseLeave={() => handleSkillHover(null)}
               className={`
                 transition-all duration-300
-                ${isSkillHighlighted(skill) ? 'scale-105 z-10' : ''}
+                ${isSkillHighlighted(skill) ? 'scale-102 z-10' : ''}
                 ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
                 ${getStaggeredClasses(index, 'slide')}
               `}
@@ -168,7 +168,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
         {/* Progressive Disclosure - Detailed Skill Information */}
         {selectedSkill && (
-          <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6 animate-pixel-pulse">
+          <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-accent-green text-primary-bg rounded-lg flex items-center justify-center text-xl font-bold border-2 border-accent-green-soft">

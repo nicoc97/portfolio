@@ -74,7 +74,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
   const getInteractionClasses = () => {
     const isActive = isHovered || isFocused;
     return isActive 
-      ? `scale-105 ${styles.glow} shadow-lg animate-pixel-glow` 
+      ? `scale-105 ${styles.glow} shadow-lg` 
       : '';
   };
 
@@ -82,7 +82,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
   const getAnimationClasses = () => {
     if (!animated) return '';
     return isVisible 
-      ? 'animate-pixel-pulse opacity-100 translate-y-0' 
+      ? 'opacity-100 translate-y-0' 
       : 'opacity-0 translate-y-4';
   };
 
@@ -151,7 +151,6 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
               bg-primary-bg-light border-2 px-4 py-3 text-xs font-tech
               rounded-lg shadow-xl backdrop-blur-sm
               ${styles.tooltipBorder}
-              animate-pixel-pulse
             `}
             style={{ minWidth: '200px', maxWidth: '280px' }}
           >
