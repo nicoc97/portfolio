@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { VinylRecord } from '../ui/VinylRecord.tsx';
 import { VinylLightbox } from '../ui/VinylLightbox.tsx';
+import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 
 /**
  * JukeboxSection Component
@@ -92,6 +93,22 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Animation hooks
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ 
+    threshold: 0.3, 
+    animationType: 'slide' 
+  });
+  const { triggerRef: albumListRef, getStaggeredClasses } = useStaggeredAnimation(
+    ALBUM_DATA.length,
+    100,
+    { threshold: 0.2 }
+  );
+  const { ref: recordDisplayRef, isVisible: recordDisplayVisible } = useScrollAnimation({ 
+    threshold: 0.3, 
+    delay: 400,
+    animationType: 'pixel' 
+  });
+
   const handleRecordClick = (album: AlbumData) => {
     setSelectedAlbum(album);
     setIsLightboxOpen(true);
@@ -121,7 +138,13 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
 
         <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
           {/* Section Header */}
-          <div className="text-left mb-16">
+          <div 
+            ref={headerRef}
+            className={`text-left mb-16 transition-all duration-700 ${headerVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
+            }`}
+          >
             <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
               GROOVE<br></br>COLLECTION
             </h2>
@@ -134,8 +157,8 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
           {/* Accordion Layout */}
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Record List (Accordion) */}
-            <div className="lg:w-1/2 space-y-4">
-              {ALBUM_DATA.map((album) => (
+            <div ref={albumListRef} className="lg:w-1/2 space-y-4">
+              {ALBUM_DATA.map((album, index) => (
                 <div key={album.id} className="space-y-4">
                   <div
                     onClick={() => handleAccordionItemClick(album)}
@@ -145,6 +168,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                         ? 'border-accent-orange bg-primary-bg-light shadow-lg'
                         : 'border-accent-orange-dark hover:border-accent-orange bg-primary-bg-light/50'
                       }
+                      ${getStaggeredClasses(index, 'slide')}
                     `}
                   >
                     <div className="flex items-center gap-4">
@@ -219,7 +243,13 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             </div>
 
             {/* Desktop Record Display - side panel */}
-            <div className="hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px]">
+            <div 
+              ref={recordDisplayRef}
+              className={`hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px] transition-all duration-700 ${recordDisplayVisible 
+                ? 'opacity-100 translate-y-0 scale-100 blur-none' 
+                : 'opacity-0 translate-y-4 scale-95 blur-sm'
+              }`}
+            >
               <div className="w-full max-w-lg">
                 <VinylRecord
                   album={selectedAlbum}

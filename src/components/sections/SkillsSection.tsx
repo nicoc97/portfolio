@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { TechBadge } from '../ui/TechBadge';
 import { techSkills, skillCategories, getSkillsByCategory } from '../../constants/skills';
+import { ParallaxText } from '../animations/ScrollAnimations';
+import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 import type { TechSkill } from '../../types';
 
 interface SkillsSectionProps {
@@ -20,6 +22,27 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
     return getSkillsByCategory(selectedCategory);
   }, [selectedCategory]);
 
+  // Animation hooks
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({
+    threshold: 0.2,
+    animationType: 'slide'
+  });
+  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation({
+    threshold: 0.3,
+    delay: 200,
+    animationType: 'pixel'
+  });
+  const { triggerRef: skillsGridRef, getStaggeredClasses } = useStaggeredAnimation(
+    filteredSkills.length,
+    50,
+    { threshold: 0.1 }
+  );
+  const { triggerRef: summaryRef, getStaggeredClasses: getSummaryClasses } = useStaggeredAnimation(
+    skillCategories.length,
+    100,
+    { threshold: 0.2 }
+  );
+
   // Simplified skill relationships
   const getRelatedSkills = (skill: TechSkill): string[] => {
     const relationships: Record<string, string[]> = {
@@ -37,7 +60,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   const isSkillHighlighted = (skill: TechSkill): boolean => {
     if (!hoveredSkill) return false;
     if (hoveredSkill.name === skill.name) return true;
-    
+
     const relatedSkills = getRelatedSkills(hoveredSkill);
     return relatedSkills.includes(skill.name);
   };
@@ -52,14 +75,18 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
   return (
     <section className={`py-16 ${className} relative overflow-hidden`} id="skills">
-      {/* Large background text */}
-      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
-        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none">04</span>
-      </div>
+      {/* Parallax background text */}
+      <ParallaxText text="04" speed={0.15} opacity={0.05} />
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         {/* Section Header */}
-        <div className="mb-16">
+        <div
+          ref={headerRef}
+          className={`mb-16 transition-all duration-700 ${headerVisible
+            ? 'opacity-100 translate-y-0'
+            : 'opacity-0 translate-y-8'
+            }`}
+        >
           <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
             SKILLS
           </h2>
@@ -73,7 +100,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
+        <div
+          ref={filtersRef}
+          className={`flex flex-wrap justify-center gap-3 mb-8 transition-all duration-700 ${filtersVisible
+            ? 'opacity-100 translate-y-0 scale-100 blur-none'
+            : 'opacity-0 translate-y-4 scale-95 blur-sm'
+            }`}
+        >
           <button
             onClick={() => setSelectedCategory('all')}
             className={`
@@ -107,8 +140,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
         </div>
 
         {/* Skills Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
-          {filteredSkills.map((skill) => (
+        <div ref={skillsGridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
+          {filteredSkills.map((skill, index) => (
             <div
               key={skill.name}
               onMouseEnter={() => handleSkillHover(skill)}
@@ -117,6 +150,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 transition-all duration-300
                 ${isSkillHighlighted(skill) ? 'scale-105 z-10' : ''}
                 ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
+                ${getStaggeredClasses(index, 'pixel')}
               `}
             >
               <TechBadge
@@ -162,7 +196,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 ×
               </button>
             </div>
-            
+
             {selectedSkill.description && (
               <p className="text-text-secondary font-mono text-sm leading-relaxed mb-4">
                 {selectedSkill.description}
@@ -193,15 +227,15 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
         )}
 
         {/* Skills Summary */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
-          {skillCategories.map((category) => {
+        <div ref={summaryRef} className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+          {skillCategories.map((category, index) => {
             const categorySkills = getSkillsByCategory(category.key);
             const avgProficiency = categorySkills.reduce((sum, skill) => sum + skill.proficiency, 0) / categorySkills.length;
-            
+
             return (
               <div
                 key={category.key}
-                className="bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center hover:border-accent-green transition-colors duration-300"
+                className={`bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center hover:border-accent-green transition-colors duration-300 ${getSummaryClasses(index, 'pixel')}`}
               >
                 <h3 className="font-tech text-accent-green text-sm mb-2">{category.label}</h3>
                 <div className="text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>

@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface UseScrollAnimationOptions {
   threshold?: number;
   rootMargin?: string;
   triggerOnce?: boolean;
+  delay?: number;
+  animationType?: 'fade' | 'slide' | 'scale' | 'pixel';
 }
 
 /**
@@ -14,7 +16,9 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   const {
     threshold = 0.1,
     rootMargin = '0px 0px -50px 0px',
-    triggerOnce = true
+    triggerOnce = true,
+    delay = 0,
+    animationType = 'fade'
   } = options;
 
   const [isVisible, setIsVisible] = useState(false);
@@ -28,9 +32,18 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
-          if (triggerOnce) {
-            setHasTriggered(true);
+          if (delay > 0) {
+            setTimeout(() => {
+              setIsVisible(true);
+              if (triggerOnce) {
+                setHasTriggered(true);
+              }
+            }, delay);
+          } else {
+            setIsVisible(true);
+            if (triggerOnce) {
+              setHasTriggered(true);
+            }
           }
         } else if (!triggerOnce && !hasTriggered) {
           setIsVisible(false);
@@ -47,9 +60,41 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
     return () => {
       observer.unobserve(element);
     };
-  }, [threshold, rootMargin, triggerOnce, hasTriggered]);
+  }, [threshold, rootMargin, triggerOnce, hasTriggered, delay]);
 
-  return { ref: elementRef, isVisible };
+  // Generate CSS classes based on animation type and visibility
+  const getAnimationClasses = useCallback(() => {
+    const baseClasses = 'transition-all duration-700 ease-out';
+    
+    switch (animationType) {
+      case 'slide':
+        return `${baseClasses} ${isVisible 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 translate-y-8'
+        }`;
+      case 'scale':
+        return `${baseClasses} ${isVisible 
+          ? 'opacity-100 scale-100' 
+          : 'opacity-0 scale-95'
+        }`;
+      case 'pixel':
+        return `${baseClasses} ${isVisible 
+          ? 'opacity-100 translate-y-0 scale-100' 
+          : 'opacity-0 translate-y-4 scale-98'
+        }`;
+      default: // fade
+        return `${baseClasses} ${isVisible 
+          ? 'opacity-100' 
+          : 'opacity-0'
+        }`;
+    }
+  }, [isVisible, animationType]);
+
+  return { 
+    ref: elementRef, 
+    isVisible, 
+    animationClasses: getAnimationClasses() 
+  };
 };
 
 /**
@@ -78,5 +123,106 @@ export const useStaggeredAnimation = (
     }
   }, [isVisible, count, staggerDelay]);
 
-  return { triggerRef, visibleItems };
+  // Generate staggered animation classes
+  const getStaggeredClasses = useCallback((index: number, animationType: 'fade' | 'slide' | 'scale' | 'pixel' = 'slide') => {
+    const baseClasses = 'transition-all duration-500 ease-out';
+    const isItemVisible = visibleItems[index];
+    
+    switch (animationType) {
+      case 'slide':
+        return `${baseClasses} ${isItemVisible 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 translate-y-6'
+        }`;
+      case 'scale':
+        return `${baseClasses} ${isItemVisible 
+          ? 'opacity-100 scale-100' 
+          : 'opacity-0 scale-90'
+        }`;
+      case 'pixel':
+        return `${baseClasses} ${isItemVisible 
+          ? 'opacity-100 translate-y-0 scale-100 filter-none' 
+          : 'opacity-0 translate-y-3 scale-95 blur-sm'
+        }`;
+      default: // fade
+        return `${baseClasses} ${isItemVisible 
+          ? 'opacity-100' 
+          : 'opacity-0'
+        }`;
+    }
+  }, [visibleItems]);
+
+  return { triggerRef, visibleItems, getStaggeredClasses };
+};
+
+/**
+ * Hook for parallax scroll effects
+ */
+export const useParallaxScroll = (speed: number = 0.5, offset: number = 0) => {
+  const [scrollY, setScrollY] = useState(0);
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const parallaxStyle = {
+    transform: `translateY(${(scrollY + offset) * speed}px)`,
+  };
+
+  return { ref: elementRef, parallaxStyle, scrollY };
+};
+
+/**
+ * Hook for section transitions with pixel effects
+ */
+export const useSectionTransition = (sectionId: string) => {
+  const [isInView, setIsInView] = useState(false);
+  const [transitionProgress, setTransitionProgress] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+        // Calculate transition progress based on intersection ratio
+        setTransitionProgress(entry.intersectionRatio);
+      },
+      {
+        threshold: Array.from({ length: 101 }, (_, i) => i / 100), // 0 to 1 in 0.01 increments
+        rootMargin: '-10% 0px -10% 0px'
+      }
+    );
+
+    observer.observe(element);
+
+    return () => observer.unobserve(element);
+  }, []);
+
+  // Generate pixel transition effects
+  const getTransitionClasses = useCallback(() => {
+    const opacity = Math.min(transitionProgress * 1.2, 1);
+    const scale = 0.95 + (transitionProgress * 0.05);
+    
+    return {
+      opacity,
+      transform: `scale(${scale})`,
+      filter: transitionProgress < 0.3 ? `blur(${(1 - transitionProgress * 3) * 2}px)` : 'none',
+    };
+  }, [transitionProgress]);
+
+  return { 
+    ref: sectionRef, 
+    isInView, 
+    transitionProgress, 
+    transitionStyle: getTransitionClasses() 
+  };
 };

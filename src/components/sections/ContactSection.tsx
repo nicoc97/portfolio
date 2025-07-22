@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PixelButton } from '../ui/PixelButton';
+import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 
 /**
  * ContactSection Component
@@ -13,6 +14,22 @@ import { PixelButton } from '../ui/PixelButton';
 export const ContactSection: React.FC = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+
+  // Animation hooks
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ 
+    threshold: 0.3, 
+    animationType: 'slide' 
+  });
+  const { triggerRef: contactDetailsRef, getStaggeredClasses } = useStaggeredAnimation(
+    3, // email, location, phone
+    150,
+    { threshold: 0.2 }
+  );
+  const { triggerRef: socialLinksRef, getStaggeredClasses: getSocialClasses } = useStaggeredAnimation(
+    3, // GitHub, LinkedIn, CV download
+    100,
+    { threshold: 0.2 }
+  );
 
   // Handle CV download with loading state
   const handleCVDownload = async () => {
@@ -52,10 +69,21 @@ export const ContactSection: React.FC = () => {
 
   return (
     <section id="contact" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
+      {/* Large background text */}
+      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
+        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro leading-none tracking-tight">05</span>
+      </div>
+
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         <div className="text-left space-y-8">
           {/* Section Header */}
-          <div className="space-y-4">
+          <div 
+            ref={headerRef}
+            className={`space-y-4 transition-all duration-700 ${headerVisible 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-8'
+            }`}
+          >
             <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
               CONTACT
             </h2>
@@ -69,14 +97,16 @@ export const ContactSection: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
 
             {/* Contact Details */}
-            <div className="space-y-6">
+            <div ref={contactDetailsRef} className="space-y-6">
               <h3 className="text-2xl font-bold text-text-primary font-tech">
                 GET IN TOUCH
               </h3>
 
               {/* Email */}
-              <div className="pixel-card group cursor-pointer"
-                onClick={() => handleCopyToClipboard('nico@example.com', 'Email')}>
+              <div 
+                className={`pixel-card group cursor-pointer ${getStaggeredClasses(0, 'slide')}`}
+                onClick={() => handleCopyToClipboard('nico@example.com', 'Email')}
+              >
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-accent-orange">
                     {/* Pixel Email Icon */}
@@ -92,7 +122,7 @@ export const ContactSection: React.FC = () => {
               </div>
 
               {/* Location */}
-              <div className="pixel-card">
+              <div className={`pixel-card ${getStaggeredClasses(1, 'slide')}`}>
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-accent-green">
                     {/* Pixel Location Icon */}
@@ -108,8 +138,10 @@ export const ContactSection: React.FC = () => {
               </div>
 
               {/* Phone */}
-              <div className="pixel-card group cursor-pointer"
-                onClick={() => handleCopyToClipboard('+44 7XXX XXXXXX', 'Phone')}>
+              <div 
+                className={`pixel-card group cursor-pointer ${getStaggeredClasses(2, 'slide')}`}
+                onClick={() => handleCopyToClipboard('+44 7XXX XXXXXX', 'Phone')}
+              >
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-accent-orange">
                     {/* Pixel Phone Icon */}
@@ -126,7 +158,7 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Social Links & Actions */}
-            <div className="space-y-6">
+            <div ref={socialLinksRef} className="space-y-6">
               <h3 className="text-2xl font-bold text-text-primary font-tech">
                 CONNECT & DOWNLOAD
               </h3>
@@ -138,7 +170,7 @@ export const ContactSection: React.FC = () => {
                   href="https://github.com/nicocruickshank"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="pixel-card-green group block hover:scale-105 transition-transform duration-200"
+                  className={`pixel-card-green group block hover:scale-105 transition-transform duration-200 ${getSocialClasses(0, 'slide')}`}
                 >
                   <div className="flex items-center space-x-4">
                     <div className="w-8 h-8 text-accent-green">
@@ -159,7 +191,7 @@ export const ContactSection: React.FC = () => {
                   href="https://linkedin.com/in/nicocruickshank"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="pixel-card group block hover:scale-105 transition-transform duration-200"
+                  className={`pixel-card group block hover:scale-105 transition-transform duration-200 ${getSocialClasses(1, 'slide')}`}
                 >
                   <div className="flex items-center space-x-4">
                     <div className="w-8 h-8 text-accent-orange">
@@ -177,7 +209,7 @@ export const ContactSection: React.FC = () => {
               </div>
 
               {/* CV Download */}
-              <div className="mt-8">
+              <div className={`mt-8 ${getSocialClasses(2, 'scale')}`}>
                 <PixelButton
                   variant="primary"
                   size="lg"

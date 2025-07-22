@@ -3,6 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ProjectCard } from '../ui/ProjectCard';
 import { VintageTVDial } from '../ui/VintageTVDial';
+import { ScrollReveal, StaggeredList, ParallaxText } from '../animations/ScrollAnimations';
+import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 import type { Project } from '../../types';
 import type { Swiper as SwiperType } from 'swiper';
 
@@ -103,6 +105,22 @@ export const ProjectsSection: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(true);
   const [playbackSpeed, setPlaybackSpeed] = useState(5000); // autoplay delay
 
+  // Animation hooks
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ 
+    threshold: 0.2, 
+    animationType: 'slide' 
+  });
+  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation({ 
+    threshold: 0.3, 
+    delay: 200,
+    animationType: 'pixel' 
+  });
+  const { ref: swiperRef, isVisible: swiperVisible } = useScrollAnimation({ 
+    threshold: 0.1, 
+    delay: 400,
+    animationType: 'fade' 
+  });
+
   // Filter projects
   const filteredProjects = selectedFilter === 'all'
     ? sampleProjects
@@ -143,16 +161,6 @@ export const ProjectsSection: React.FC = () => {
     }
   };
 
-  const handlePrevious = () => {
-    if (!swiperInstance) return;
-    swiperInstance.slidePrev();
-  };
-
-  const handleNext = () => {
-    if (!swiperInstance) return;
-    swiperInstance.slideNext();
-  };
-
   // 🔧 UPDATE: Modify filter categories here if you have different project types
   const filterButtons = [
     { key: 'all', label: 'ALL PROJECTS' },
@@ -163,70 +171,102 @@ export const ProjectsSection: React.FC = () => {
 
   return (
     <section id="projects" className="py-20 bg-primary-bg relative overflow-hidden">
-      {/* Large background text */}
-      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
-        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro tracking-tight leading-none">01</span>
+      {/* Parallax background text */}
+      <ParallaxText text="01" speed={0.15} opacity={0.05} />
+
+      {/* Pixel background effects */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-accent-green animate-pulse" style={{ animationDelay: '0s' }} />
+        <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-accent-orange animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-1/4 left-1/2 w-1.5 h-1.5 bg-accent-green animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-2/3 right-1/4 w-1 h-1 bg-accent-orange animate-pulse" style={{ animationDelay: '0.5s' }} />
       </div>
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
-        {/*  section header */}
+        {/* Section header with scroll animations */}
         <div className="relative mb-20">
-
-          {/*  header layout with vintage dial */}
-          <div className="flex items-start justify-between gap-8">
-            <div className="text-left space-y-6 flex-1">
-              <div className="relative">
-                <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro">
-                  PROJECTS
-                </h2>
-                {/* decorative line */}
-                <div className="mt-4 w-32 h-px bg-accent-orange"></div>
-              </div>
-
-              {/* description */}
-              <div className="max-w-2xl">
-                <p className="text-text-secondary text-sm leading-relaxed">
-                  A collection of web applications, data science projects, and creative experiments
-                  showcasing modern development practices.
-                </p>
-              </div>
-            </div>
-
-            {/* Vintage Radio Dial - positioned to the right of header */}
-            <div className="flex-shrink-0 mt-4">
-              <VintageTVDial
-                totalSlides={filteredProjects.length}
-                currentSlide={currentSlide}
-                onSlideChange={(index) => swiperInstance?.slideTo(index)}
-                swiperInstance={swiperInstance}
-              />
-            </div>
-          </div>
-
-          {/* filter buttons */}
-          <div className="mt-4 flex flex-wrap gap-3 justify-center">
-            {filterButtons.map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => setSelectedFilter(key)}
-                className={`
-                  pixel-button px-6 py-2 font-tech transition-all duration-200
-                  ${selectedFilter === key
-                    ? (key === 'data'
-                      ? 'bg-accent-green text-primary-bg border-accent-green'
-                      : 'bg-accent-orange text-primary-bg border-accent-orange')
-                    : 'bg-primary-bg-light text-text-primary border-accent-orange-dark hover:border-accent-orange'
-                  }
-                `}
+          <ScrollReveal threshold={0.2} effect="materialize">
+            {/*  header layout with vintage dial */}
+            <div className="flex items-start justify-between gap-8">
+              <div 
+                ref={headerRef}
+                className={`text-left space-y-6 flex-1 transition-all duration-700 ${headerVisible 
+                  ? 'opacity-100 translate-y-0' 
+                  : 'opacity-0 translate-y-8'
+                }`}
               >
-                {label}
-              </button>
-            ))}
+                <div className="relative">
+                  <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro">
+                    PROJECTS
+                  </h2>
+                  {/* decorative line */}
+                  <div className="mt-4 w-32 h-px bg-accent-orange"></div>
+                </div>
+
+                {/* description */}
+                <div className="max-w-2xl">
+                  <p className="text-text-secondary text-sm leading-relaxed">
+                    A collection of web applications, data science projects, and creative experiments
+                    showcasing modern development practices.
+                  </p>
+                </div>
+              </div>
+
+              {/* Vintage Radio Dial - positioned to the right of header */}
+              <ScrollReveal threshold={0.3} delay={300} effect="glitch">
+                <div className="flex-shrink-0 mt-4">
+                  <VintageTVDial
+                    totalSlides={filteredProjects.length}
+                    currentSlide={currentSlide}
+                    onSlideChange={(index) => swiperInstance?.slideTo(index)}
+                    swiperInstance={swiperInstance}
+                  />
+                </div>
+              </ScrollReveal>
+            </div>
+          </ScrollReveal>
+
+          {/* filter buttons with staggered animation */}
+          <div 
+            ref={filtersRef}
+            className={`mt-4 flex flex-wrap gap-3 justify-center transition-all duration-700 ${filtersVisible 
+              ? 'opacity-100 translate-y-0 scale-100 blur-none' 
+              : 'opacity-0 translate-y-4 scale-95 blur-sm'
+            }`}
+          >
+            <StaggeredList
+              items={filterButtons.map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedFilter(key)}
+                  className={`
+                    pixel-button px-6 py-2 font-tech transition-all duration-200
+                    ${selectedFilter === key
+                      ? (key === 'data'
+                        ? 'bg-accent-green text-primary-bg border-accent-green'
+                        : 'bg-accent-orange text-primary-bg border-accent-orange')
+                      : 'bg-primary-bg-light text-text-primary border-accent-orange-dark hover:border-accent-orange'
+                    }
+                  `}
+                >
+                  {label}
+                </button>
+              ))}
+              className="flex flex-wrap gap-3 justify-center"
+              staggerDelay={100}
+              animationType="pixel"
+            />
           </div>
         </div>
 
         {/* Projects Swiper */}
-        <div className="relative">
+        <div 
+          ref={swiperRef}
+          className={`relative transition-all duration-700 ${swiperVisible 
+            ? 'opacity-100' 
+            : 'opacity-0'
+          }`}
+        >
           <Swiper
             modules={[Navigation, Autoplay]}
             spaceBetween={32}
