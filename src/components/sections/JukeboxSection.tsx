@@ -146,7 +146,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             }`}
           >
             <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
-              GROOVE<br></br>COLLECTION
+              JUKEBOX
             </h2>
             <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>
             <p className="text-accent-orange font-tech text-lg">
