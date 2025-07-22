@@ -228,8 +228,27 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
 
                   {/* Mobile/Tablet Record Display - appears directly below selected item */}
                   {selectedAlbum.id === album.id && (
-                    <div className="lg:hidden flex justify-center items-center py-8">
-                      <div className="w-full max-w-sm">
+                    <div className="lg:hidden flex justify-center items-center py-8 relative">
+                      {/* Background repeated track names - mobile version */}
+                      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        <div className="relative h-full w-full flex flex-col justify-between py-4">
+                          {[...Array(3)].map((_, i) => (
+                            <div
+                              key={i}
+                              className="text-accent-orange font-retro font-bold opacity-[0.15] select-none text-center truncate px-2"
+                              style={{
+                                fontSize: 'clamp(1rem, 8vw, 2rem)',
+                                WebkitTextStroke: '1px currentColor',
+                                WebkitTextFillColor: 'transparent',
+                              }}
+                            >
+                              {selectedAlbum.title.toUpperCase()}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="w-full max-w-sm relative z-10">
                         <VinylRecord
                           album={selectedAlbum}
                           index={ALBUM_DATA.findIndex(a => a.id === selectedAlbum.id)}
@@ -245,12 +264,31 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             {/* Desktop Record Display - side panel */}
             <div 
               ref={recordDisplayRef}
-              className={`hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px] transition-all duration-700 ${recordDisplayVisible 
+              className={`hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible 
                 ? 'opacity-100 translate-y-0 scale-100 blur-none' 
                 : 'opacity-0 translate-y-4 scale-95 blur-sm'
               }`}
             >
-              <div className="w-full max-w-lg">
+              {/* Background repeated track names */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="relative h-full w-full flex flex-col justify-between py-8">
+                  {[...Array(8)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="text-accent-orange font-retro font-bold opacity-[0.3] select-none text-center truncate px-4"
+                      style={{
+                        fontSize: 'clamp(1.5rem, 6vw, 4rem)',
+                        WebkitTextStroke: '1px currentColor',
+                        WebkitTextFillColor: 'transparent',
+                      }}
+                    >
+                      {selectedAlbum.title.toUpperCase()}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="w-full max-w-lg relative z-10">
                 <VinylRecord
                   album={selectedAlbum}
                   index={ALBUM_DATA.findIndex(album => album.id === selectedAlbum.id)}
