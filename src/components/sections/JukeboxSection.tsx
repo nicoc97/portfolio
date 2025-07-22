@@ -94,16 +94,16 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
   const sectionRef = useRef<HTMLElement>(null);
 
   // Animation hooks
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ 
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
     animationType: 'slide' 
   });
-  const { triggerRef: albumListRef, getStaggeredClasses } = useStaggeredAnimation(
+  const { triggerRef: albumListRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     ALBUM_DATA.length,
     100,
     { threshold: 0.2 }
   );
-  const { ref: recordDisplayRef, isVisible: recordDisplayVisible } = useScrollAnimation({ 
+  const { ref: recordDisplayRef, isVisible: recordDisplayVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
     delay: 400,
     animationType: 'pixel' 

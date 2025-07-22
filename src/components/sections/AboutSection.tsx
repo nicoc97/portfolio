@@ -9,9 +9,9 @@ import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScroll
  */
 export const AboutSection: React.FC = () => {
   // Animation hooks
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation(5, 150);
-  const { ref: techStackRef, isVisible: techStackVisible } = useScrollAnimation({ threshold: 0.2 });
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.3 });
+  const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation<HTMLDivElement>(5, 150);
+  const { ref: techStackRef, isVisible: techStackVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.2 });
   return (
     <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
       {/* Large background text */}

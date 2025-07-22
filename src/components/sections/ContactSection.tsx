@@ -16,16 +16,16 @@ export const ContactSection: React.FC = () => {
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
 
   // Animation hooks
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ 
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
     animationType: 'slide' 
   });
-  const { triggerRef: contactDetailsRef, getStaggeredClasses } = useStaggeredAnimation(
+  const { triggerRef: contactDetailsRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     3, // email, location, phone
     150,
     { threshold: 0.2 }
   );
-  const { triggerRef: socialLinksRef, getStaggeredClasses: getSocialClasses } = useStaggeredAnimation(
+  const { triggerRef: socialLinksRef, getStaggeredClasses: getSocialClasses } = useStaggeredAnimation<HTMLDivElement>(
     3, // GitHub, LinkedIn, CV download
     100,
     { threshold: 0.2 }

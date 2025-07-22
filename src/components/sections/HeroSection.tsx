@@ -11,22 +11,22 @@ export const HeroSection: React.FC = () => {
   });
 
   // Animation hooks for staggered content appearance
-  const { ref: nameTagRef, isVisible: nameTagVisible } = useScrollAnimation({ 
+  const { ref: nameTagRef, isVisible: nameTagVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
     delay: 200,
     animationType: 'pixel'
   });
-  const { ref: headingRef, isVisible: headingVisible } = useScrollAnimation({ 
+  const { ref: headingRef, isVisible: headingVisible } = useScrollAnimation<HTMLHeadingElement>({ 
     threshold: 0.3, 
     delay: 400,
     animationType: 'slide'
   });
-  const { ref: subtitleRef, isVisible: subtitleVisible } = useScrollAnimation({ 
+  const { ref: subtitleRef, isVisible: subtitleVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
     delay: 600,
     animationType: 'fade'
   });
-  const { ref: buttonsRef, isVisible: buttonsVisible } = useScrollAnimation({ 
+  const { ref: buttonsRef, isVisible: buttonsVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
     delay: 800,
     animationType: 'scale'

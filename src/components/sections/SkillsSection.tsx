@@ -23,21 +23,21 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   }, [selectedCategory]);
 
   // Animation hooks
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.2,
     animationType: 'slide'
   });
-  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation({
+  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
     delay: 200,
     animationType: 'pixel'
   });
-  const { triggerRef: skillsGridRef, getStaggeredClasses } = useStaggeredAnimation(
+  const { triggerRef: skillsGridRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     filteredSkills.length,
     50,
     { threshold: 0.1 }
   );
-  const { triggerRef: summaryRef, getStaggeredClasses: getSummaryClasses } = useStaggeredAnimation(
+  const { triggerRef: summaryRef, getStaggeredClasses: getSummaryClasses } = useStaggeredAnimation<HTMLDivElement>(
     skillCategories.length,
     100,
     { threshold: 0.2 }
