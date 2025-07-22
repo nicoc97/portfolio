@@ -235,14 +235,23 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                           {[...Array(3)].map((_, i) => (
                             <div
                               key={i}
-                              className="text-accent-orange font-retro font-bold opacity-[0.15] select-none text-center truncate px-2"
+                              className="flex justify-between items-center px-2 opacity-[0.15]"
                               style={{
                                 fontSize: 'clamp(1rem, 8vw, 2rem)',
-                                WebkitTextStroke: '1px currentColor',
-                                WebkitTextFillColor: 'transparent',
                               }}
                             >
-                              {selectedAlbum.title.toUpperCase()}
+                              {selectedAlbum.title.toUpperCase().split('').map((letter, letterIndex) => (
+                                <span
+                                  key={letterIndex}
+                                  className="text-accent-orange font-retro font-bold select-none"
+                                  style={{
+                                    WebkitTextStroke: '1px currentColor',
+                                    WebkitTextFillColor: 'transparent',
+                                  }}
+                                >
+                                  {letter === ' ' ? '\u00A0' : letter}
+                                </span>
+                              ))}
                             </div>
                           ))}
                         </div>
@@ -271,18 +280,28 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             >
               {/* Background repeated track names */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="relative h-full w-full flex flex-col justify-between py-8">
+                <div className="relative h-full w-full flex flex-col justify-between">
                   {[...Array(8)].map((_, i) => (
                     <div
                       key={i}
-                      className="text-accent-orange font-retro font-bold opacity-[0.3] select-none text-center truncate px-4"
+                      className="flex justify-between items-center opacity-[0.3]"
                       style={{
-                        fontSize: 'clamp(1.5rem, 6vw, 4rem)',
-                        WebkitTextStroke: '1px currentColor',
-                        WebkitTextFillColor: 'transparent',
+                        fontSize: 'clamp(1.5rem, 4vw, 3rem)',
                       }}
                     >
-                      {selectedAlbum.title.toUpperCase()}
+                      {selectedAlbum.title.toUpperCase().split('').map((letter, letterIndex) => (
+                        <span
+                          key={letterIndex}
+                          className="text-accent-orange font-retro font-bold select-none"
+                          style={{
+                            WebkitTextStroke: '1px currentColor',
+                            WebkitTextFillColor: 'transparent',
+                
+                          }}
+                        >
+                          {letter === ' ' ? '\u00A0' : letter}
+                        </span>
+                      ))}
                     </div>
                   ))}
                 </div>
