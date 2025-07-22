@@ -181,7 +181,7 @@ export const useParallaxScroll = (speed: number = 0.5, offset: number = 0) => {
 /**
  * Hook for section transitions with pixel effects
  */
-export const useSectionTransition = (sectionId: string) => {
+export const useSectionTransition = () => {
   const [isInView, setIsInView] = useState(false);
   const [transitionProgress, setTransitionProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
