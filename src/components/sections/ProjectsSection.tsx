@@ -212,9 +212,9 @@ export const ProjectsSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Vintage Radio Dial - positioned to the right of header */}
+              {/* Vintage Radio Dial - positioned to the right of header (desktop only) */}
               <ScrollReveal threshold={0.3} delay={300} effect="glitch">
-                <div className="flex-shrink-0 mt-4">
+                <div className="flex-shrink-0 mt-4 hidden lg:block">
                   <VintageTVDial
                     totalSlides={filteredProjects.length}
                     currentSlide={currentSlide}
@@ -396,6 +396,18 @@ export const ProjectsSection: React.FC = () => {
 
 
           </div>
+          
+          {/* Vintage Radio Dial - positioned below controls (mobile/tablet only) */}
+          <ScrollReveal threshold={0.3} delay={300} effect="glitch">
+            <div className="mt-8 flex justify-center lg:hidden">
+              <VintageTVDial
+                totalSlides={filteredProjects.length}
+                currentSlide={currentSlide}
+                onSlideChange={(index) => swiperInstance?.slideTo(index)}
+                swiperInstance={swiperInstance}
+              />
+            </div>
+          </ScrollReveal>
         </div>
 
         {/* No projects message with unconventional styling */}

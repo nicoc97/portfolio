@@ -81,7 +81,13 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
   // Handle mouse/touch start
   const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
     if (isAnimating || !dialRef.current) return;
-    e.preventDefault();
+    
+    // Only preventDefault for mouse events
+    // Touch events are handled with passive: false in useEffect
+    if (e.type === 'mousedown') {
+      e.preventDefault();
+    }
+    
     setIsDragging(true);
     const rect = dialRef.current.getBoundingClientRect();
     const angle = getAngle(e.nativeEvent as any, rect);
@@ -112,6 +118,29 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
     snapToSlide(rotation);
   };
 
+  // Add non-passive touch event listeners directly to the element
+  useEffect(() => {
+    const element = dialRef.current;
+    if (!element) return;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (isAnimating) return;
+      e.preventDefault();
+      
+      setIsDragging(true);
+      const rect = element.getBoundingClientRect();
+      const angle = getAngle(e, rect);
+      setStartAngle(angle);
+      setStartRotation(rotation);
+    };
+
+    // Add non-passive touch listener
+    element.addEventListener('touchstart', handleTouchStart, { passive: false });
+
+    return () => {
+      element.removeEventListener('touchstart', handleTouchStart);
+    };
+  }, [isAnimating, rotation]);
 
   // Update dial when slide changes externally
   useEffect(() => {
@@ -152,7 +181,7 @@ export const VintageTVDial: React.FC<VintageTVDialProps> = ({
         ref={dialRef}
         className={`vintage-tv-dial ${isDragging ? 'dragging' : ''} ${isChangingChannel ? 'changing-channel' : ''}`}
         onMouseDown={handleStart}
-        onTouchStart={handleStart}
+        // Removed onTouchStart from here since we handle it in useEffect with passive: false
         style={{
           transform: `rotate(${rotation}deg)`,
           transition: isAnimating ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
