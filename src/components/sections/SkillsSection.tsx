@@ -150,7 +150,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 transition-all duration-300
                 ${isSkillHighlighted(skill) ? 'scale-105 z-10' : ''}
                 ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
-                ${getStaggeredClasses(index, 'pixel')}
+                ${getStaggeredClasses(index, 'slide')}
               `}
             >
               <TechBadge
@@ -235,7 +235,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
             return (
               <div
                 key={category.key}
-                className={`bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center hover:border-accent-green transition-colors duration-300 ${getSummaryClasses(index, 'pixel')}`}
+                className={`bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center hover:border-accent-green transition-colors duration-300 ${getSummaryClasses(index, 'slide')}`}
               >
                 <h3 className="font-tech text-accent-green text-sm mb-2">{category.label}</h3>
                 <div className="text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>

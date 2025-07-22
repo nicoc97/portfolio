@@ -12,7 +12,7 @@ interface UseScrollAnimationOptions {
  * Custom hook for scroll-triggered animations using Intersection Observer
  * Returns a ref to attach to the element and a boolean indicating if it's visible
  */
-export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
+export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options: UseScrollAnimationOptions = {}) => {
   const {
     threshold = 0.1,
     rootMargin = '0px 0px -50px 0px',
@@ -23,7 +23,7 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
 
   const [isVisible, setIsVisible] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
-  const elementRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<T>(null);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -65,48 +65,48 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
   // Generate CSS classes based on animation type and visibility
   const getAnimationClasses = useCallback(() => {
     const baseClasses = 'transition-all duration-700 ease-out';
-    
+
     switch (animationType) {
       case 'slide':
-        return `${baseClasses} ${isVisible 
-          ? 'opacity-100 translate-y-0' 
+        return `${baseClasses} ${isVisible
+          ? 'opacity-100 translate-y-0'
           : 'opacity-0 translate-y-8'
-        }`;
+          }`;
       case 'scale':
-        return `${baseClasses} ${isVisible 
-          ? 'opacity-100 scale-100' 
+        return `${baseClasses} ${isVisible
+          ? 'opacity-100 scale-100'
           : 'opacity-0 scale-95'
-        }`;
+          }`;
       case 'pixel':
-        return `${baseClasses} ${isVisible 
-          ? 'opacity-100 translate-y-0 scale-100' 
+        return `${baseClasses} ${isVisible
+          ? 'opacity-100 translate-y-0 scale-100'
           : 'opacity-0 translate-y-4 scale-98'
-        }`;
+          }`;
       default: // fade
-        return `${baseClasses} ${isVisible 
-          ? 'opacity-100' 
+        return `${baseClasses} ${isVisible
+          ? 'opacity-100'
           : 'opacity-0'
-        }`;
+          }`;
     }
   }, [isVisible, animationType]);
 
-  return { 
-    ref: elementRef, 
-    isVisible, 
-    animationClasses: getAnimationClasses() 
+  return {
+    ref: elementRef,
+    isVisible,
+    animationClasses: getAnimationClasses()
   };
 };
 
 /**
  * Hook for staggered animations - returns multiple refs with delayed visibility
  */
-export const useStaggeredAnimation = (
+export const useStaggeredAnimation = <T extends HTMLElement = HTMLElement>(
   count: number,
   staggerDelay: number = 100,
   options: UseScrollAnimationOptions = {}
 ) => {
   const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(count).fill(false));
-  const { ref: triggerRef, isVisible } = useScrollAnimation(options);
+  const { ref: triggerRef, isVisible } = useScrollAnimation<T>(options);
 
   useEffect(() => {
     if (isVisible) {
@@ -127,28 +127,28 @@ export const useStaggeredAnimation = (
   const getStaggeredClasses = useCallback((index: number, animationType: 'fade' | 'slide' | 'scale' | 'pixel' = 'slide') => {
     const baseClasses = 'transition-all duration-500 ease-out';
     const isItemVisible = visibleItems[index];
-    
+
     switch (animationType) {
       case 'slide':
-        return `${baseClasses} ${isItemVisible 
-          ? 'opacity-100 translate-y-0' 
+        return `${baseClasses} ${isItemVisible
+          ? 'opacity-100 translate-y-0'
           : 'opacity-0 translate-y-6'
-        }`;
+          }`;
       case 'scale':
-        return `${baseClasses} ${isItemVisible 
-          ? 'opacity-100 scale-100' 
+        return `${baseClasses} ${isItemVisible
+          ? 'opacity-100 scale-100'
           : 'opacity-0 scale-90'
-        }`;
+          }`;
       case 'pixel':
-        return `${baseClasses} ${isItemVisible 
-          ? 'opacity-100 translate-y-0 scale-100 filter-none' 
+        return `${baseClasses} ${isItemVisible
+          ? 'opacity-100 translate-y-0 scale-100 filter-none'
           : 'opacity-0 translate-y-3 scale-95 blur-sm'
-        }`;
+          }`;
       default: // fade
-        return `${baseClasses} ${isItemVisible 
-          ? 'opacity-100' 
+        return `${baseClasses} ${isItemVisible
+          ? 'opacity-100'
           : 'opacity-0'
-        }`;
+          }`;
     }
   }, [visibleItems]);
 
@@ -158,9 +158,9 @@ export const useStaggeredAnimation = (
 /**
  * Hook for parallax scroll effects
  */
-export const useParallaxScroll = (speed: number = 0.5, offset: number = 0) => {
+export const useParallaxScroll = <T extends HTMLElement = HTMLElement>(speed: number = 0.5, offset: number = 0) => {
   const [scrollY, setScrollY] = useState(0);
-  const elementRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<T>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -181,10 +181,10 @@ export const useParallaxScroll = (speed: number = 0.5, offset: number = 0) => {
 /**
  * Hook for section transitions with pixel effects
  */
-export const useSectionTransition = () => {
+export const useSectionTransition = <T extends HTMLElement = HTMLElement>() => {
   const [isInView, setIsInView] = useState(false);
   const [transitionProgress, setTransitionProgress] = useState(0);
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<T>(null);
 
   useEffect(() => {
     const element = sectionRef.current;
@@ -211,7 +211,7 @@ export const useSectionTransition = () => {
   const getTransitionClasses = useCallback(() => {
     const opacity = Math.min(transitionProgress * 1.2, 1);
     const scale = 0.95 + (transitionProgress * 0.05);
-    
+
     return {
       opacity,
       transform: `scale(${scale})`,
@@ -219,10 +219,10 @@ export const useSectionTransition = () => {
     };
   }, [transitionProgress]);
 
-  return { 
-    ref: sectionRef, 
-    isInView, 
-    transitionProgress, 
-    transitionStyle: getTransitionClasses() 
+  return {
+    ref: sectionRef,
+    isInView,
+    transitionProgress,
+    transitionStyle: getTransitionClasses()
   };
 };

@@ -19,18 +19,18 @@ export const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   animationType = 'slide',
   delay = 0
 }) => {
-  const { ref, isVisible, animationClasses } = useScrollAnimation({
+  const { ref, animationClasses } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.1,
     rootMargin: '0px 0px -100px 0px',
     animationType,
     delay
   });
 
-  const { ref: transitionRef, transitionStyle } = useSectionTransition(sectionId || '');
+  const { ref: transitionRef, transitionStyle } = useSectionTransition<HTMLDivElement>();
 
   return (
-    <div 
-      ref={sectionId ? transitionRef : ref} 
+    <div
+      ref={sectionId ? transitionRef : ref}
       className={`${animationClasses} ${className}`}
       style={sectionId ? transitionStyle : undefined}
     >
@@ -57,7 +57,7 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
   staggerDelay = 100,
   animationType = 'slide'
 }) => {
-  const { triggerRef, getStaggeredClasses } = useStaggeredAnimation(
+  const { triggerRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     items.length,
     staggerDelay,
     { threshold: 0.2 }
@@ -97,7 +97,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   effect = 'materialize',
   delay = 0
 }) => {
-  const { ref, isVisible } = useScrollAnimation({
+  const { ref, isVisible } = useScrollAnimation<HTMLDivElement>({
     threshold,
     rootMargin,
     delay
@@ -105,23 +105,23 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   const getEffectClasses = () => {
     const baseClasses = 'transition-all duration-700 ease-out';
-    
+
     switch (effect) {
       case 'glitch':
-        return `${baseClasses} ${isVisible 
-          ? 'opacity-100 translate-x-0 scale-100' 
+        return `${baseClasses} ${isVisible
+          ? 'opacity-100 translate-x-0 scale-100'
           : 'opacity-0 translate-x-1 scale-98'
-        }`;
+          }`;
       case 'fade':
-        return `${baseClasses} ${isVisible 
-          ? 'opacity-100' 
+        return `${baseClasses} ${isVisible
+          ? 'opacity-100'
           : 'opacity-0'
-        }`;
+          }`;
       default: // materialize
-        return `${baseClasses} ${isVisible 
-          ? 'opacity-100 translate-y-0 scale-100 blur-none' 
+        return `${baseClasses} ${isVisible
+          ? 'opacity-100 translate-y-0 scale-100 blur-none'
           : 'opacity-0 translate-y-4 scale-95 blur-sm'
-        }`;
+          }`;
     }
   };
 
@@ -159,7 +159,7 @@ export const ParallaxText: React.FC<ParallaxTextProps> = ({
   }, []);
 
   return (
-    <div 
+    <div
       className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
       style={{
         transform: `translateY(${scrollY * speed}px)`,
@@ -178,7 +178,6 @@ interface SectionTransitionProps {
   sectionId: string;
   className?: string;
   showDivider?: boolean;
-  dividerVariant?: 'dots' | 'lines' | 'pixels';
 }
 
 /**
@@ -188,10 +187,9 @@ export const SectionTransition: React.FC<SectionTransitionProps> = ({
   children,
   sectionId,
   className = '',
-  showDivider = false,
-  dividerVariant = 'pixels'
+  showDivider = false
 }) => {
-  const { ref, transitionStyle } = useSectionTransition(sectionId);
+  const { ref, transitionStyle } = useSectionTransition<HTMLElement>();
 
   return (
     <>

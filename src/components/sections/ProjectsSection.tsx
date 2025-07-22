@@ -106,16 +106,16 @@ export const ProjectsSection: React.FC = () => {
   const [playbackSpeed, setPlaybackSpeed] = useState(5000); // autoplay delay
 
   // Animation hooks
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ 
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.2, 
     animationType: 'slide' 
   });
-  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation({ 
+  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
     delay: 200,
     animationType: 'pixel' 
   });
-  const { ref: swiperRef, isVisible: swiperVisible } = useScrollAnimation({ 
+  const { ref: swiperRef, isVisible: swiperVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.1, 
     delay: 400,
     animationType: 'fade' 
