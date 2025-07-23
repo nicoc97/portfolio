@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ProjectCard } from '../ui/ProjectCard';
 import { VintageTVDial } from '../ui/VintageTVDial';
-import { ScrollReveal, StaggeredList, ParallaxText } from '../animations/ScrollAnimations';
+import { ScrollReveal, StaggeredList } from '../animations/ScrollAnimations';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 import type { Project } from '../../types';
 import type { Swiper as SwiperType } from 'swiper';
@@ -106,19 +106,19 @@ export const ProjectsSection: React.FC = () => {
   const [playbackSpeed, setPlaybackSpeed] = useState(5000); // autoplay delay
 
   // Animation hooks
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ 
-    threshold: 0.2, 
-    animationType: 'slide' 
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.2,
+    animationType: 'slide'
   });
-  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation<HTMLDivElement>({ 
-    threshold: 0.3, 
+  const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.3,
     delay: 200,
-    animationType: 'pixel' 
+    animationType: 'pixel'
   });
-  const { ref: swiperRef, isVisible: swiperVisible } = useScrollAnimation<HTMLDivElement>({ 
-    threshold: 0.1, 
+  const { ref: swiperRef, isVisible: swiperVisible } = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.1,
     delay: 400,
-    animationType: 'fade' 
+    animationType: 'fade'
   });
 
   // Filter projects
@@ -171,68 +171,41 @@ export const ProjectsSection: React.FC = () => {
 
   return (
     <section id="projects" className="py-20 bg-primary-bg relative overflow-hidden">
-      {/* Parallax background text */}
-      <ParallaxText text="01" speed={0.15} opacity={0.05} />
-
-      {/* Pixel background effects */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-accent-green animate-pulse" style={{ animationDelay: '0s' }} />
-        <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-accent-orange animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-1/4 left-1/2 w-1.5 h-1.5 bg-accent-green animate-pulse" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-2/3 right-1/4 w-1 h-1 bg-accent-orange animate-pulse" style={{ animationDelay: '0.5s' }} />
-      </div>
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+        {/* Large background text */}
+        <div className="section-bg-text">
+          <span>SEC01</span>
+        </div>
+
         {/* Section header with scroll animations */}
         <div className="relative mb-20">
           <ScrollReveal threshold={0.2} effect="materialize">
-            {/*  header layout with vintage dial */}
-            <div className="flex items-start justify-between gap-8">
-              <div 
-                ref={headerRef}
-                className={`text-left space-y-6 flex-1 transition-all duration-700 ${headerVisible 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-                }`}
-              >
-                <div className="relative">
-                  <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro">
-                    PROJECTS
-                  </h2>
-                  {/* decorative line */}
-                  <div className="mt-4 w-32 h-px bg-accent-orange"></div>
-                </div>
-
-                {/* description */}
-                <div className="max-w-2xl">
-                  <p className="text-text-secondary text-sm leading-relaxed">
-                    A collection of web applications, data science projects, and creative experiments
-                    showcasing modern development practices.
-                  </p>
-                </div>
+            {/* header layout */}
+            <div
+              ref={headerRef}
+              className={`text-left space-y-6 animate-slide-up ${headerVisible ? 'visible' : ''}`}
+            >
+              <div className="relative">
+                <h2 className="section-header">PROJECTS</h2>
+                {/* decorative line */}
+                <div className="section-divider w-32"></div>
               </div>
 
-              {/* Vintage Radio Dial - positioned to the right of header (desktop only) */}
-              <ScrollReveal threshold={0.3} delay={300} effect="glitch">
-                <div className="flex-shrink-0 mt-4 hidden lg:block">
-                  <VintageTVDial
-                    totalSlides={filteredProjects.length}
-                    currentSlide={currentSlide}
-                    onSlideChange={(index) => swiperInstance?.slideTo(index)}
-                    swiperInstance={swiperInstance}
-                  />
-                </div>
-              </ScrollReveal>
+              {/* description */}
+              <div className="max-w-2xl">
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  A collection of web applications, data science projects, and creative experiments
+                  showcasing modern development practices.
+                </p>
+              </div>
             </div>
           </ScrollReveal>
 
           {/* filter buttons with staggered animation */}
-          <div 
+          <div
             ref={filtersRef}
-            className={`mt-12 flex flex-wrap gap-3 justify-center transition-all duration-700 ${filtersVisible 
-              ? 'opacity-100 translate-y-0 scale-100 blur-none' 
-              : 'opacity-0 translate-y-4 scale-95 blur-sm'
-            }`}
+            className={`mt-12 flex flex-wrap gap-3 justify-center animate-pixel ${filtersVisible ? 'visible' : ''}`}
           >
             <StaggeredList
               items={filterButtons.map(({ key, label }) => (
@@ -240,12 +213,10 @@ export const ProjectsSection: React.FC = () => {
                   key={key}
                   onClick={() => setSelectedFilter(key)}
                   className={`
-                    pixel-button px-6 pt-2 font-tech transition-all duration-200
+                    filter-button
                     ${selectedFilter === key
-                      ? (key === 'data'
-                        ? 'bg-accent-green text-primary-bg border-accent-green'
-                        : 'bg-accent-orange text-primary-bg border-accent-orange')
-                      : 'bg-primary-bg-light text-text-primary border-accent-orange-dark hover:border-accent-orange'
+                      ? (key === 'data' ? 'filter-button-active-green' : 'filter-button-active-orange')
+                      : 'filter-button-inactive'
                     }
                   `}
                 >
@@ -260,12 +231,9 @@ export const ProjectsSection: React.FC = () => {
         </div>
 
         {/* Projects Swiper */}
-        <div 
+        <div
           ref={swiperRef}
-          className={`relative transition-all duration-700 ${swiperVisible 
-            ? 'opacity-100' 
-            : 'opacity-0'
-          }`}
+          className={`relative animate-fade ${swiperVisible ? 'visible' : ''}`}
         >
           <Swiper
             modules={[Navigation, Autoplay]}
@@ -310,104 +278,105 @@ export const ProjectsSection: React.FC = () => {
             ))}
           </Swiper>
 
-          {/* Hi-Fi Style Controls */}
-          <div className="flex justify-center items-center mt-4">
-            {/* Left Side: Transport Controls */}
-            <div className="flex items-center gap-3">
-              {/* Rewind */}
-              <button
-                onClick={handleRewind}
-                className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                title="Rewind to start"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polygon points="11,19 2,12 11,5" />
-                  <polygon points="22,19 13,12 22,5" />
-                </svg>
-              </button>
-
-              {/* Previous (Skip Back) */}
-              <button
-                className="swiper-button-prev-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                title="Previous track"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polygon points="19,20 9,12 19,4" />
-                  <line x1="5" y1="19" x2="5" y2="5" />
-                </svg>
-              </button>
-
-              {/* Play/Pause */}
-              <button
-                onClick={handlePlayPause}
-                className="p-4 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                title={isPlaying ? "Pause" : "Play"}
-              >
-                {isPlaying ? (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="6" y="4" width="4" height="16" />
-                    <rect x="14" y="4" width="4" height="16" />
-                  </svg>
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="5,3 19,12 5,21" />
-                  </svg>
-                )}
-              </button>
-
-              {/* Next (Skip Forward) */}
-              <button
-                className="swiper-button-next-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                title="Next track"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polygon points="5,4 15,12 5,20" />
-                  <line x1="19" y1="5" x2="19" y2="19" />
-                </svg>
-              </button>
-
-              {/* Fast Forward */}
-              <button
-                onClick={handleFastForward}
-                className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                title="Fast forward to end"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polygon points="13,19 22,12 13,5" />
-                  <polygon points="2,19 11,12 2,5" />
-                </svg>
-              </button>
-
-              {/* Speed Control */}
-              <div className="flex items-center gap-2 ml-4">
-                <span className="text-xs text-text-secondary font-tech">SPEED</span>
-                <select
-                  value={playbackSpeed}
-                  onChange={(e) => handleSpeedChange(Number(e.target.value))}
-                  className="text-xs bg-transparent text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-pointer"
+          {/* Controls and Dial Layout */}
+          <div className="mt-4 flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
+            {/* Hi-Fi Style Controls */}
+            <div className="flex justify-center lg:justify-start items-center">
+              {/* Transport Controls */}
+              <div className="flex items-center gap-3">
+                {/* Rewind */}
+                <button
+                  onClick={handleRewind}
+                  className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                  title="Rewind to start"
                 >
-                  <option value={2000}>2x</option>
-                  <option value={3000}>1.5x</option>
-                  <option value={5000}>1x</option>
-                  <option value={8000}>0.5x</option>
-                </select>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="11,19 2,12 11,5" />
+                    <polygon points="22,19 13,12 22,5" />
+                  </svg>
+                </button>
+
+                {/* Previous (Skip Back) */}
+                <button
+                  className="swiper-button-prev-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                  title="Previous track"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="19,20 9,12 19,4" />
+                    <line x1="5" y1="19" x2="5" y2="5" />
+                  </svg>
+                </button>
+
+                {/* Play/Pause */}
+                <button
+                  onClick={handlePlayPause}
+                  className="p-4 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                  title={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="6" y="4" width="4" height="16" />
+                      <rect x="14" y="4" width="4" height="16" />
+                    </svg>
+                  ) : (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="5,3 19,12 5,21" />
+                    </svg>
+                  )}
+                </button>
+
+                {/* Next (Skip Forward) */}
+                <button
+                  className="swiper-button-next-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                  title="Next track"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="5,4 15,12 5,20" />
+                    <line x1="19" y1="5" x2="19" y2="19" />
+                  </svg>
+                </button>
+
+                {/* Fast Forward */}
+                <button
+                  onClick={handleFastForward}
+                  className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                  title="Fast forward to end"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="13,19 22,12 13,5" />
+                    <polygon points="2,19 11,12 2,5" />
+                  </svg>
+                </button>
+
+                {/* Speed Control */}
+                <div className="flex items-center gap-2 ml-4">
+                  <span className="text-xs text-text-secondary font-tech">SPEED</span>
+                  <select
+                    value={playbackSpeed}
+                    onChange={(e) => handleSpeedChange(Number(e.target.value))}
+                    className="text-xs bg-transparent text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-pointer"
+                  >
+                    <option value={2000}>2x</option>
+                    <option value={3000}>1.5x</option>
+                    <option value={5000}>1x</option>
+                    <option value={8000}>0.5x</option>
+                  </select>
+                </div>
               </div>
             </div>
 
-
+            {/* Vintage Radio Dial */}
+            <ScrollReveal threshold={0.3} delay={300} effect="glitch">
+              <div className="flex justify-center lg:justify-end">
+                <VintageTVDial
+                  totalSlides={filteredProjects.length}
+                  currentSlide={currentSlide}
+                  onSlideChange={(index) => swiperInstance?.slideTo(index)}
+                  swiperInstance={swiperInstance}
+                />
+              </div>
+            </ScrollReveal>
           </div>
-          
-          {/* Vintage Radio Dial - positioned below controls (mobile/tablet only) */}
-          <ScrollReveal threshold={0.3} delay={300} effect="glitch">
-            <div className="mt-8 flex justify-center lg:hidden">
-              <VintageTVDial
-                totalSlides={filteredProjects.length}
-                currentSlide={currentSlide}
-                onSlideChange={(index) => swiperInstance?.slideTo(index)}
-                swiperInstance={swiperInstance}
-              />
-            </div>
-          </ScrollReveal>
         </div>
 
         {/* No projects message with unconventional styling */}

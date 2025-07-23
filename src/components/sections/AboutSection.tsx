@@ -14,38 +14,30 @@ export const AboutSection: React.FC = () => {
   const { ref: techStackRef, isVisible: techStackVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.2 });
   return (
     <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
-      {/* Large background text */}
-      <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
-        <span className="text-[6rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro tracking-tight leading-none">SEC02</span>
-      </div>
+
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+        {/* Large background text */}
+        <div className="section-bg-text">
+          <span>SEC02</span>
+        </div>
+
         <div className="max-w-4xl">
           {/* Section Header */}
           <div
             ref={headerRef}
-            className={`text-center mb-16 transition-all duration-700 ${headerVisible
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-8'
-              }`}
+            className={`text-center mb-16 animate-slide-up ${headerVisible ? 'visible' : ''}`}
           >
-            <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
-              ABOUT
-            </h2>
-            <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>
-            <p className="text-accent-orange text-left font-tech text-lg">
-              Collaborative Web Developer
-            </p>
+            <h2 className="section-header">ABOUT</h2>
+            <div className="section-divider mb-6"></div>
+            <p className="section-subtitle">Collaborative Web Developer</p>
           </div>
 
           {/* Main Content Grid */}
           <div ref={contentTriggerRef} className="grid md:grid-cols-2 gap-12 items-start">
             {/* Left Column - Introduction */}
             <div className="space-y-6">
-              <div className={`pixel-card transition-all duration-700 ${contentVisible[0]
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-                }`}>
+              <div className={`pixel-card animate-slide-up ${contentVisible[0] ? 'visible' : ''}`}>
                 <h3 className="text-2xl font-bold text-accent-orange font-retro mb-4">
                   Hello, I'm Nico
                 </h3>
@@ -63,10 +55,7 @@ export const AboutSection: React.FC = () => {
               </div>
 
               {/* Location & Contact */}
-              <div className={`pixel-card-green transition-all duration-700 ${contentVisible[1]
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-                }`}>
+              <div className={`pixel-card-green animate-slide-up ${contentVisible[1] ? 'visible' : ''}`}>
                 <h4 className="text-lg font-bold text-accent-green font-tech mb-3">
                   Based in Glasgow, UK
                 </h4>
@@ -79,10 +68,7 @@ export const AboutSection: React.FC = () => {
             {/* Right Column - Experience Highlights */}
             <div className="space-y-6">
               {/* Current Role */}
-              <div className={`pixel-card transition-all duration-700 ${contentVisible[2]
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-                }`}>
+              <div className={`pixel-card animate-slide-up ${contentVisible[2] ? 'visible' : ''}`}>
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="text-lg font-bold text-accent-orange font-tech">
                     WordPress Developer
@@ -101,10 +87,7 @@ export const AboutSection: React.FC = () => {
               </div>
 
               {/* Key Experience */}
-              <div className={`pixel-card-green transition-all duration-700 ${contentVisible[3]
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-                }`}>
+              <div className={`pixel-card-green animate-slide-up ${contentVisible[3] ? 'visible' : ''}`}>
                 <h4 className="text-lg font-bold text-accent-green font-tech mb-3">
                   Experience Highlights
                 </h4>
@@ -129,10 +112,7 @@ export const AboutSection: React.FC = () => {
               </div>
 
               {/* Personal Interests */}
-              <div className={`pixel-card transition-all duration-700 ${contentVisible[4]
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-                }`}>
+              <div className={`pixel-card animate-slide-up ${contentVisible[4] ? 'visible' : ''}`}>
                 <h4 className="text-lg font-bold text-accent-orange font-tech mb-3">
                   Beyond Code
                 </h4>
@@ -148,10 +128,7 @@ export const AboutSection: React.FC = () => {
           {/* Tech Stack Preview */}
           <div
             ref={techStackRef}
-            className={`mt-16 text-center transition-all duration-700 ${techStackVisible
-              ? 'opacity-100 translate-y-0'
-              : 'opacity-0 translate-y-8'
-              }`}
+            className={`mt-16 text-center animate-slide-up ${techStackVisible ? 'visible' : ''}`}
           >
             <h3 className="text-2xl font-bold text-accent-orange font-retro mb-6">
               Core Technologies
@@ -167,10 +144,7 @@ export const AboutSection: React.FC = () => {
               ].map((tech, index) => (
                 <span
                   key={tech}
-                  className={`bg-accent-orange/20 border border-accent-orange/30 text-accent-orange px-3 py-1 rounded-lg font-tech text-sm hover:bg-accent-orange/30 transition-all duration-300 relative ${techStackVisible
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-4'
-                    }`}
+                  className={`tech-badge-orange relative ${techStackVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                   style={{
                     transitionDelay: techStackVisible ? `${index * 100}ms` : '0ms'
                   }}

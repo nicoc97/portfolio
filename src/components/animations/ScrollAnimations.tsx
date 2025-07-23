@@ -134,45 +134,6 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   );
 };
 
-interface ParallaxTextProps {
-  text: string;
-  className?: string;
-  speed?: number;
-  opacity?: number;
-}
-
-/**
- * Large parallax background text
- */
-export const ParallaxText: React.FC<ParallaxTextProps> = ({
-  text,
-  className = '',
-  speed = 0.2,
-  opacity = 0.05
-}) => {
-  const [scrollY, setScrollY] = React.useState(0);
-
-  React.useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <div
-      className={`absolute inset-0 flex items-center justify-center pointer-events-none ${className}`}
-      style={{
-        transform: `translateY(${scrollY * speed}px)`,
-        opacity
-      }}
-    >
-      <span className="text-[12rem] md:text-[15rem] lg:text-[20rem] font-bold text-accent-orange font-retro leading-none select-none">
-        {text}
-      </span>
-    </div>
-  );
-};
-
 interface SectionTransitionProps {
   children: React.ReactNode;
   sectionId: string;

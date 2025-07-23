@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { TechBadge } from '../ui/TechBadge';
 import { techSkills, skillCategories, getSkillsByCategory } from '../../constants/skills';
-import { ParallaxText } from '../animations/ScrollAnimations';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 import type { TechSkill } from '../../types';
 
@@ -75,25 +74,21 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
   return (
     <section className={`py-16 ${className} relative overflow-hidden`} id="skills">
-      {/* Parallax background text */}
-      <ParallaxText text="04" speed={0.15} opacity={0.05} />
-
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+        
+        {/* Large background text */}
+        <div className="section-bg-text">
+          <span>SEC04</span>
+        </div>
+
         {/* Section Header */}
         <div
           ref={headerRef}
-          className={`mb-16 transition-all duration-700 ${headerVisible
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-8'
-            }`}
+          className={`mb-16 animate-slide-up ${headerVisible ? 'visible' : ''}`}
         >
-          <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
-            SKILLS
-          </h2>
-          <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>
-          <p className="text-accent-orange font-tech text-left text-lg mb-4">
-            Interactive Tech Stack
-          </p>
+          <h2 className="section-header">SKILLS</h2>
+          <div className="section-divider mb-6"></div>
+          <p className="section-subtitle mb-4">Interactive Tech Stack</p>
           <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
             Explore my technical skills and expertise across web development and data science
           </p>
@@ -102,10 +97,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
         {/* Category Filter */}
         <div
           ref={filtersRef}
-          className={`flex flex-wrap justify-center gap-3 mb-8 transition-all duration-700 ${filtersVisible
-            ? 'opacity-100 translate-y-0 scale-100 blur-none'
-            : 'opacity-0 translate-y-4 scale-95 blur-sm'
-            }`}
+          className={`flex flex-wrap justify-center gap-3 mb-8 animate-pixel ${filtersVisible ? 'visible' : ''}`}
         >
           <button
             onClick={() => setSelectedCategory('all')}
@@ -113,7 +105,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
               px-4 py-2 rounded-lg font-tech border-2 transition-all duration-200
               ${selectedCategory === 'all'
                 ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg'
-                : 'bg-transparent text-text-secondary border-text-secondary/30 hover:border-accent-orange hover:text-accent-orange'
+                : 'tech-badge-secondary'
               }
             `}
           >
@@ -129,7 +121,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                   px-4 py-2 rounded-lg font-tech text-sm border-2 transition-all duration-200
                   ${selectedCategory === category.key
                     ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg`
-                    : `bg-transparent text-text-secondary border-text-secondary/30 hover:border-${category.color} hover:text-${category.color}`
+                    : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color}`
                   }
                 `}
               >
@@ -214,7 +206,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                       <button
                         key={relatedSkillName}
                         onClick={() => setSelectedSkill(relatedSkill)}
-                        className="px-3 py-1 bg-transparent border border-text-secondary/30 rounded text-xs font-tech text-text-secondary hover:border-accent-green hover:text-accent-green transition-colors duration-200"
+                        className="tech-badge-secondary text-xs hover:border-accent-green hover:text-accent-green"
                       >
                         {relatedSkillName}
                       </button>

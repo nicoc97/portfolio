@@ -57,10 +57,7 @@ export const HeroSection: React.FC = () => {
               {/* Name tag with typing animation */}
               <div 
                 ref={nameTagRef}
-                className={`flex justify-center mb-2 transition-all duration-700 ${nameTagVisible 
-                  ? 'opacity-100 translate-y-0 scale-100 blur-none' 
-                  : 'opacity-0 translate-y-4 scale-95 blur-sm'
-                }`}
+                className={`flex justify-center mb-2 animate-pixel ${nameTagVisible ? 'visible' : ''}`}
               >
                 <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-lg uppercase tracking-wider border border-accent-orange hover:scale-102 transition-all duration-200">
                   Nico Cruickshank ✦ {displayedText}
@@ -70,10 +67,7 @@ export const HeroSection: React.FC = () => {
 
               <h1 
                 ref={headingRef}
-                className={`text-5xl md:text-6xl lg:text-7xl xl:text-[10rem] font-bold font-retro tracking-tight text-center transition-all duration-700 ${headingVisible 
-                  ? 'opacity-100 translate-y-0' 
-                  : 'opacity-0 translate-y-8'
-                }`}
+                className={`text-5xl md:text-6xl lg:text-7xl xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
               >
                 <span>{HERO_CONSTANTS.MAIN_HEADING}</span>
               </h1>
@@ -84,10 +78,7 @@ export const HeroSection: React.FC = () => {
               {/* Subtitle - centered */}
               <div 
                 ref={subtitleRef}
-                className={`text-center mb-8 transition-all duration-700 ${subtitleVisible 
-                  ? 'opacity-100' 
-                  : 'opacity-0'
-                }`}
+                className={`text-center mb-8 animate-fade ${subtitleVisible ? 'visible' : ''}`}
               >
                 <p className="text-md md:text-xl lg:text-2xl text-text-secondary">
                   {HERO_CONSTANTS.SUBTITLE}
@@ -102,10 +93,7 @@ export const HeroSection: React.FC = () => {
               {/* Buttons - centered */}
               <div 
                 ref={buttonsRef}
-                className={`flex flex-col sm:flex-row gap-4 justify-center items-center transition-all duration-700 ${buttonsVisible 
-                  ? 'opacity-100 scale-100' 
-                  : 'opacity-0 scale-95'
-                }`}
+                className={`flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale ${buttonsVisible ? 'visible' : ''}`}
               >
                 <PixelButton
                   variant="primary"
