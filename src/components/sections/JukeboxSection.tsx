@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { VinylRecord } from '../ui/VinylRecord.tsx';
 import { VinylLightbox } from '../ui/VinylLightbox.tsx';
+import { InteractiveText } from '../ui/InteractiveText.tsx';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 
 /**
@@ -94,19 +95,19 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
   const sectionRef = useRef<HTMLElement>(null);
 
   // Animation hooks
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ 
-    threshold: 0.3, 
-    animationType: 'slide' 
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.3,
+    animationType: 'slide'
   });
   const { triggerRef: albumListRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     ALBUM_DATA.length,
     100,
     { threshold: 0.2 }
   );
-  const { ref: recordDisplayRef, isVisible: recordDisplayVisible } = useScrollAnimation<HTMLDivElement>({ 
-    threshold: 0.3, 
+  const { ref: recordDisplayRef, isVisible: recordDisplayVisible } = useScrollAnimation<HTMLDivElement>({
+    threshold: 0.3,
     delay: 400,
-    animationType: 'pixel' 
+    animationType: 'pixel'
   });
 
   const handleRecordClick = (album: AlbumData) => {
@@ -138,12 +139,12 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
 
         <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
           {/* Section Header */}
-          <div 
+          <div
             ref={headerRef}
-            className={`text-left mb-16 transition-all duration-700 ${headerVisible 
-              ? 'opacity-100 translate-y-0' 
+            className={`text-left mb-16 transition-all duration-700 ${headerVisible
+              ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-8'
-            }`}
+              }`}
           >
             <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
               JUKEBOX
@@ -230,28 +231,23 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                   {selectedAlbum.id === album.id && (
                     <div className="lg:hidden flex justify-center items-center py-8 relative">
                       {/* Background repeated track names - mobile version */}
-                      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      <div className="absolute inset-0 overflow-hidden">
                         <div className="relative h-full w-full flex flex-col justify-between py-4">
                           {[...Array(3)].map((_, i) => (
                             <div
                               key={i}
                               className="flex justify-between items-center px-2 opacity-[0.15]"
-                              style={{
-                                fontSize: 'clamp(1rem, 8vw, 2rem)',
-                              }}
                             >
-                              {selectedAlbum.title.toUpperCase().split('').map((letter, letterIndex) => (
-                                <span
-                                  key={letterIndex}
-                                  className="text-accent-orange font-retro font-bold select-none"
-                                  style={{
-                                    WebkitTextStroke: '1px currentColor',
-                                    WebkitTextFillColor: 'transparent',
-                                  }}
-                                >
-                                  {letter === ' ' ? '\u00A0' : letter}
-                                </span>
-                              ))}
+                              <InteractiveText
+                                text={selectedAlbum.title.toUpperCase()}
+                                className="text-accent-orange font-retro font-bold select-none"
+                                style={{
+                                  fontSize: 'clamp(1rem, 8vw, 2rem)',
+                                  WebkitTextStroke: '1px currentColor',
+                                  WebkitTextFillColor: 'transparent',
+                                }}
+                                magnetStrength={25}
+                              />
                             </div>
                           ))}
                         </div>
@@ -271,37 +267,31 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             </div>
 
             {/* Desktop Record Display - side panel */}
-            <div 
+            <div
               ref={recordDisplayRef}
-              className={`hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible 
-                ? 'opacity-100 translate-y-0 scale-100 blur-none' 
+              className={`hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible
+                ? 'opacity-100 translate-y-0 scale-100 blur-none'
                 : 'opacity-0 translate-y-4 scale-95 blur-sm'
-              }`}
+                }`}
             >
               {/* Background repeated track names */}
-              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute inset-0 overflow-hidden">
                 <div className="relative h-full w-full flex flex-col justify-between">
                   {[...Array(8)].map((_, i) => (
                     <div
                       key={i}
                       className="flex justify-between items-center opacity-[0.3]"
-                      style={{
-                        fontSize: 'clamp(1.5rem, 4vw, 3rem)',
-                      }}
                     >
-                      {selectedAlbum.title.toUpperCase().split('').map((letter, letterIndex) => (
-                        <span
-                          key={letterIndex}
-                          className="text-accent-orange font-retro font-bold select-none"
-                          style={{
-                            WebkitTextStroke: '1px currentColor',
-                            WebkitTextFillColor: 'transparent',
-                
-                          }}
-                        >
-                          {letter === ' ' ? '\u00A0' : letter}
-                        </span>
-                      ))}
+                      <InteractiveText
+                        text={selectedAlbum.title.toUpperCase()}
+                        className="text-accent-orange font-retro font-bold select-none"
+                        style={{
+                          fontSize: 'clamp(1.5rem, 4vw, 3rem)',
+                          WebkitTextStroke: '1px currentColor',
+                          WebkitTextFillColor: 'transparent',
+                        }}
+                        magnetStrength={40}
+                      />
                     </div>
                   ))}
                 </div>

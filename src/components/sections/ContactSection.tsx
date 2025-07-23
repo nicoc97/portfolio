@@ -232,7 +232,7 @@ export const ContactSection: React.FC = () => {
 
           {/* Copy Feedback */}
           {copyFeedback && (
-            <div className="fixed bottom-8 right-8 bg-accent-green text-primary-bg px-4 py-2 rounded-lg font-tech text-sm animate-pixel-pulse z-50">
+            <div className="fixed bottom-8 right-8 bg-accent-green text-primary-bg px-4 py-2 rounded-lg font-tech text-sm z-50">
               {copyFeedback}
             </div>
           )}

@@ -165,7 +165,6 @@ interface TechBadgeProps {
 
 **Styling:**
 - `font-tech` - Typing cursor and tech stack text
-- `animate-pixel-pulse` - Particle animations
 
 ### ProjectsSection (`src/components/sections/ProjectsSection.tsx`)
 **Purpose:** Showcase projects with filtering

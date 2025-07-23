@@ -295,7 +295,7 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
       />
 
       {/* Click hint */}
-      <p className="text-center mt-4 text-accent-orange font-tech text-lg animate-pixel-pulse">
+      <p className="text-center mt-4 text-accent-green font-tech text-lg">
         ► Click to Play ◄
       </p>
     </div>

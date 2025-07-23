@@ -44,7 +44,6 @@ export default {
       },
       // 🔧 UPDATE: Custom animations - add new animations here
       animation: {
-        'pixel-pulse': 'pixelPulse 2s ease-in-out infinite',           // Pulsing opacity effect
         'pixel-glow': 'pixelGlow 1.5s ease-in-out infinite alternate',  // Glowing border effect
         'wave-1': 'wave1 20s ease-in-out infinite',                     // Wave animation 1
         'wave-2': 'wave2 18s ease-in-out infinite reverse',             // Wave animation 2
@@ -52,10 +51,6 @@ export default {
       },
       // 🔧 UPDATE: Animation keyframes - define the actual animation sequences
       keyframes: {
-        pixelPulse: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.5' },
-        },
         pixelGlow: {
           '0%': { boxShadow: '0 0 5px #ff8c42' },
           '100%': { boxShadow: '0 0 20px #ff8c42, 0 0 30px #ff8c42' },
