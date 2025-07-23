@@ -16,7 +16,7 @@ export const AboutSection: React.FC = () => {
     <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
       {/* Large background text */}
       <div className="absolute inset-0 flex items-start pt-[2rem] pr-[2rem] justify-end opacity-5 pointer-events-none">
-        <span className="text-[12rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro tracking-tight leading-none">02</span>
+        <span className="text-[6rem] md:text-[15rem] lg:text-[18rem] font-bold text-accent-orange font-retro tracking-tight leading-none">SEC02</span>
       </div>
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">

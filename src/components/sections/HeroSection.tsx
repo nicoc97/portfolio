@@ -49,14 +49,15 @@ export const HeroSection: React.FC = () => {
       <WaveBackground />
 
       <div className="relative z-10 pt-20 md:pt-0 mobile-padding">
-        <div className="w-full lg:w-4/5 mx-auto">
-          <div className="flex flex-col min-h-[80vh] lg:min-h-[100vh]">
-            {/* Main heading - truly centered */}
-            <div className="flex-1 flex flex-col justify-center">
+        <div className="flex flex-col justify-center min-h-[80vh] lg:min-h-[100vh]">
+          {/* All content centered vertically */}
+          <div>
+            {/* Main heading container - 80% width */}
+            <div className="w-full lg:w-4/5 mx-auto">
               {/* Name tag with typing animation */}
               <div 
                 ref={nameTagRef}
-                className={`flex justify-center lg:justify-start mb-2 transition-all duration-700 ${nameTagVisible 
+                className={`flex justify-center mb-2 transition-all duration-700 ${nameTagVisible 
                   ? 'opacity-100 translate-y-0 scale-100 blur-none' 
                   : 'opacity-0 translate-y-4 scale-95 blur-sm'
                 }`}
@@ -69,7 +70,7 @@ export const HeroSection: React.FC = () => {
 
               <h1 
                 ref={headingRef}
-                className={`text-5xl md:text-6xl lg:text-7xl xl:text-[11rem] font-bold font-retro tracking-tight text-center lg:text-left transition-all duration-700 ${headingVisible 
+                className={`text-5xl md:text-6xl lg:text-7xl xl:text-[10rem] font-bold font-retro tracking-tight text-center transition-all duration-700 ${headingVisible 
                   ? 'opacity-100 translate-y-0' 
                   : 'opacity-0 translate-y-8'
                 }`}
@@ -78,30 +79,30 @@ export const HeroSection: React.FC = () => {
               </h1>
             </div>
 
-            {/* Subtitle and buttons - aligned at bottom */}
-            <div className="grid grid-cols-12 gap-4 md:gap-8 items-center pb-8">
-              {/* Subtitle - positioned asymmetrically */}
+            {/* Subtitle and buttons container - 60% width, centered under header */}
+            <div className="w-full lg:w-1/2 mx-auto mt-8 lg:mt-12">
+              {/* Subtitle - centered */}
               <div 
                 ref={subtitleRef}
-                className={`col-span-12 lg:col-span-6 lg:col-start-1 transition-all duration-700 ${subtitleVisible 
+                className={`text-center mb-8 transition-all duration-700 ${subtitleVisible 
                   ? 'opacity-100' 
                   : 'opacity-0'
                 }`}
               >
-                <p className="text-md md:text-xl lg:text-2xl text-text-secondary text-center lg:text-left">
+                <p className="text-md md:text-xl lg:text-2xl text-text-secondary">
                   {HERO_CONSTANTS.SUBTITLE}
                 </p>
-                <div className="mt-4 text-center lg:text-left">
+                <div className="mt-4">
                   <span className="font-tech text-sm md:text-base">
-                    <span className="text-accent-orange">{HERO_CONSTANTS.TECH_STACK}</span>
+                    <span className="text-accent-green">{HERO_CONSTANTS.TECH_STACK}</span>
                   </span>
                 </div>
               </div>
 
-              {/* Buttons - positioned on the right */}
+              {/* Buttons - centered */}
               <div 
                 ref={buttonsRef}
-                className={`col-span-12 lg:col-span-4 lg:col-start-9 flex flex-col sm:flex-row lg:flex-col gap-4 justify-center lg:justify-start transition-all duration-700 ${buttonsVisible 
+                className={`flex flex-col sm:flex-row gap-4 justify-center items-center transition-all duration-700 ${buttonsVisible 
                   ? 'opacity-100 scale-100' 
                   : 'opacity-0 scale-95'
                 }`}

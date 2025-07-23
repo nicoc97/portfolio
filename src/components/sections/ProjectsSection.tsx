@@ -229,7 +229,7 @@ export const ProjectsSection: React.FC = () => {
           {/* filter buttons with staggered animation */}
           <div 
             ref={filtersRef}
-            className={`mt-4 flex flex-wrap gap-3 justify-center transition-all duration-700 ${filtersVisible 
+            className={`mt-12 flex flex-wrap gap-3 justify-center transition-all duration-700 ${filtersVisible 
               ? 'opacity-100 translate-y-0 scale-100 blur-none' 
               : 'opacity-0 translate-y-4 scale-95 blur-sm'
             }`}
@@ -240,7 +240,7 @@ export const ProjectsSection: React.FC = () => {
                   key={key}
                   onClick={() => setSelectedFilter(key)}
                   className={`
-                    pixel-button px-6 py-2 font-tech transition-all duration-200
+                    pixel-button px-6 pt-2 font-tech transition-all duration-200
                     ${selectedFilter === key
                       ? (key === 'data'
                         ? 'bg-accent-green text-primary-bg border-accent-green'

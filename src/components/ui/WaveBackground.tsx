@@ -4,47 +4,142 @@ import { motion } from 'framer-motion';
 /**
  * WaveBackground Component
  * 
- * Creates an animated wave background effect using Framer Motion and SVG
- * with smooth, organic wave animations with matching patterns on top and bottom edges.
- * Features narrower waves with more undulation in the middle layer and smooth curves throughout.
+ * Creates a smooth, groovy wave background with a 70s soul/funk vibe
+ * featuring deep, symmetrical waves that flow horizontally across the screen
  */
 export const WaveBackground = () => {
   // Generate unique IDs to avoid conflicts when component remounts
   const uniqueId = React.useId();
   
+  // Detect if we're on mobile/tablet
+  const [isMobile, setIsMobile] = React.useState(false);
+  
+  React.useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 1024); // Tablets and below
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+  
+  // Wave paths for mobile (2 peaks) vs desktop (multiple peaks)
+  const getWavePaths = (waveNumber: number): { initial: string; animate: string[] } => {
+    if (isMobile) {
+      // Simplified waves for mobile - only 2 peaks
+      switch(waveNumber) {
+        case 1:
+          return {
+            initial: "M0,130 Q360,90 720,130 T1440,130 L1440,320 Q1080,350 720,320 T0,320 Z",
+            animate: [
+              "M0,130 Q360,90 720,130 T1440,130 L1440,320 Q1080,350 720,320 T0,320 Z",
+              "M0,160 Q360,120 720,160 T1440,160 L1440,300 Q1080,330 720,300 T0,300 Z",
+              "M0,130 Q360,170 720,130 T1440,130 L1440,320 Q1080,290 720,320 T0,320 Z",
+              "M0,110 Q360,150 720,110 T1440,110 L1440,340 Q1080,310 720,340 T0,340 Z",
+              "M0,130 Q360,90 720,130 T1440,130 L1440,320 Q1080,350 720,320 T0,320 Z"
+            ]
+          };
+        case 2:
+          return {
+            initial: "M0,140 Q480,100 960,140 T1440,140 L1440,350 Q960,380 480,350 T0,350 Z",
+            animate: [
+              "M0,140 Q480,100 960,140 T1440,140 L1440,350 Q960,380 480,350 T0,350 Z",
+              "M0,120 Q480,160 960,120 T1440,120 L1440,330 Q960,300 480,330 T0,330 Z",
+              "M0,160 Q480,120 960,160 T1440,160 L1440,370 Q960,340 480,370 T0,370 Z",
+              "M0,130 Q480,170 960,130 T1440,130 L1440,340 Q960,310 480,340 T0,340 Z",
+              "M0,140 Q480,100 960,140 T1440,140 L1440,350 Q960,380 480,350 T0,350 Z"
+            ]
+          };
+        case 3:
+          return {
+            initial: "M0,170 Q720,140 1440,170 L1440,370 Q720,400 0,370 Z",
+            animate: [
+              "M0,170 Q720,140 1440,170 L1440,370 Q720,400 0,370 Z",
+              "M0,185 Q720,155 1440,185 L1440,355 Q720,385 0,355 Z",
+              "M0,160 Q720,190 1440,160 L1440,380 Q720,350 0,380 Z",
+              "M0,175 Q720,205 1440,175 L1440,365 Q720,335 0,365 Z",
+              "M0,170 Q720,140 1440,170 L1440,370 Q720,400 0,370 Z"
+            ]
+          };
+      }
+    } else {
+      // Desktop waves - multiple peaks as before
+      switch(waveNumber) {
+        case 1:
+          return {
+            initial: "M0,100 Q120,50 240,100 T480,100 T720,100 T960,100 T1200,100 T1440,100 L1440,320 Q1320,350 1200,320 T960,320 T720,320 T480,320 T240,320 T0,320 Z",
+            animate: [
+              "M0,100 Q120,50 240,100 T480,100 T720,100 T960,100 T1200,100 T1440,100 L1440,320 Q1320,350 1200,320 T960,320 T720,320 T480,320 T240,320 T0,320 Z",
+              "M0,140 Q120,90 240,140 T480,140 T720,140 T960,140 T1200,140 T1440,140 L1440,300 Q1320,330 1200,300 T960,300 T720,300 T480,300 T240,300 T0,300 Z",
+              "M0,100 Q120,150 240,100 T480,100 T720,100 T960,100 T1200,100 T1440,100 L1440,320 Q1320,290 1200,320 T960,320 T720,320 T480,320 T240,320 T0,320 Z",
+              "M0,80 Q120,130 240,80 T480,80 T720,80 T960,80 T1200,80 T1440,80 L1440,340 Q1320,310 1200,340 T960,340 T720,340 T480,340 T240,340 T0,340 Z",
+              "M0,100 Q120,50 240,100 T480,100 T720,100 T960,100 T1200,100 T1440,100 L1440,320 Q1320,350 1200,320 T960,320 T720,320 T480,320 T240,320 T0,320 Z"
+            ]
+          };
+        case 2:
+          return {
+            initial: "M0,120 Q180,70 360,120 T720,120 T1080,120 T1440,120 L1440,350 Q1260,380 1080,350 T720,350 T360,350 T0,350 Z",
+            animate: [
+              "M0,120 Q180,70 360,120 T720,120 T1080,120 T1440,120 L1440,350 Q1260,380 1080,350 T720,350 T360,350 T0,350 Z",
+              "M0,100 Q180,150 360,100 T720,100 T1080,100 T1440,100 L1440,330 Q1260,300 1080,330 T720,330 T360,330 T0,330 Z",
+              "M0,140 Q180,90 360,140 T720,140 T1080,140 T1440,140 L1440,370 Q1260,340 1080,370 T720,370 T360,370 T0,370 Z",
+              "M0,110 Q180,160 360,110 T720,110 T1080,110 T1440,110 L1440,340 Q1260,310 1080,340 T720,340 T360,340 T0,340 Z",
+              "M0,120 Q180,70 360,120 T720,120 T1080,120 T1440,120 L1440,350 Q1260,380 1080,350 T720,350 T360,350 T0,350 Z"
+            ]
+          };
+        case 3:
+          return {
+            initial: "M0,160 Q360,110 720,160 T1440,160 L1440,380 Q1080,410 720,380 T0,380 Z",
+            animate: [
+              "M0,160 Q360,110 720,160 T1440,160 L1440,380 Q1080,410 720,380 T0,380 Z",
+              "M0,180 Q360,130 720,180 T1440,180 L1440,360 Q1080,390 720,360 T0,360 Z",
+              "M0,140 Q360,190 720,140 T1440,140 L1440,400 Q1080,370 720,400 T0,400 Z",
+              "M0,160 Q360,210 720,160 T1440,160 L1440,380 Q1080,350 720,380 T0,380 Z",
+              "M0,160 Q360,110 720,160 T1440,160 L1440,380 Q1080,410 720,380 T0,380 Z"
+            ]
+          };
+      }
+    }
+    
+    // Fallback to ensure function always returns a valid object
+    return {
+      initial: "M0,100 Q720,50 1440,100 L1440,320 Q720,350 0,320 Z",
+      animate: [
+        "M0,100 Q720,50 1440,100 L1440,320 Q720,350 0,320 Z",
+        "M0,100 Q720,50 1440,100 L1440,320 Q720,350 0,320 Z",
+        "M0,100 Q720,50 1440,100 L1440,320 Q720,350 0,320 Z",
+        "M0,100 Q720,50 1440,100 L1440,320 Q720,350 0,320 Z",
+        "M0,100 Q720,50 1440,100 L1440,320 Q720,350 0,320 Z"
+      ]
+    };
+  };
+  
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Wave layers with different gradients and animations */}
       <div className="absolute inset-0">
-        {/* Wave 1 - Primary gradient */}
-        <div className="absolute inset-0 opacity-40">
+        {/* Wave 1 - Bottom layer, deepest grooves */}
+        <div className={`absolute inset-x-0 opacity-60 ${isMobile ? 'h-64 bottom-10' : 'h-96 bottom-20'}`}>
           <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox="0 0 1440 320"
+            className="absolute bottom-0 w-full h-full"
+            viewBox="0 0 1440 400"
             preserveAspectRatio="none"
           >
             <defs>
               <linearGradient id={`wave1-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#b85c00" />
-                <stop offset="50%" stopColor="#ff8c42" />
-                <stop offset="100%" stopColor="#ffb380" />
+                <stop offset="0%" stopColor="#b85c00" stopOpacity="0.8" />
+                <stop offset="50%" stopColor="#ff8c42" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#ffb380" stopOpacity="0.4" />
               </linearGradient>
             </defs>
             <motion.path
               fill={`url(#wave1-${uniqueId})`}
-              initial={{
-                d: "M0,160 C240,180,480,140,720,150 C960,160,1200,170,1440,160 L1440,210 C1200,200,960,190,720,200 C480,210,240,220,0,210 Z"
-              }}
-              animate={{
-                d: [
-                  "M0,160 C240,180,480,140,720,150 C960,160,1200,170,1440,160 L1440,210 C1200,200,960,190,720,200 C480,210,240,220,0,210 Z",
-                  "M0,170 C240,150,480,190,720,170 C960,150,1200,160,1440,170 L1440,200 C1200,220,960,180,720,200 C480,220,240,210,0,200 Z",
-                  "M0,150 C240,170,480,130,720,160 C960,190,1200,150,1440,150 L1440,220 C1200,200,960,240,720,210 C480,180,240,220,0,220 Z",
-                  "M0,160 C240,180,480,140,720,150 C960,160,1200,170,1440,160 L1440,210 C1200,200,960,190,720,200 C480,210,240,220,0,210 Z"
-                ]
-              }}
+              initial={{ d: getWavePaths(1).initial }}
+              animate={{ d: getWavePaths(1).animate }}
               transition={{
-                duration: 20,
+                duration: 10,
                 repeat: Infinity,
                 ease: "easeInOut",
                 repeatType: "loop"
@@ -53,35 +148,26 @@ export const WaveBackground = () => {
           </svg>
         </div>
 
-        {/* Wave 2 - Secondary gradient - More wavy! */}
-        <div className="absolute inset-0 opacity-30">
+        {/* Wave 2 - Middle layer, flowing rhythm */}
+        <div className={`absolute inset-x-0 opacity-50 ${isMobile ? 'h-56 bottom-10' : 'h-80 bottom-20'}`}>
           <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox="0 0 1440 320"
+            className="absolute bottom-0 w-full h-full"
+            viewBox="0 0 1440 400"
             preserveAspectRatio="none"
           >
             <defs>
               <linearGradient id={`wave2-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ff8c42" />
-                <stop offset="50%" stopColor="#ffb380" />
-                <stop offset="100%" stopColor="#b85c00" />
+                <stop offset="0%" stopColor="#ff8c42" stopOpacity="0.7" />
+                <stop offset="50%" stopColor="#ffb380" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#b85c00" stopOpacity="0.3" />
               </linearGradient>
             </defs>
             <motion.path
               fill={`url(#wave2-${uniqueId})`}
-              initial={{
-                d: "M0,140 C180,170,360,110,540,150 C720,190,900,120,1080,140 C1260,160,1350,130,1440,140 L1440,220 C1350,190,1260,250,1080,210 C900,170,720,240,540,200 C360,160,180,230,0,220 Z"
-              }}
-              animate={{
-                d: [
-                  "M0,140 C180,170,360,110,540,150 C720,190,900,120,1080,140 C1260,160,1350,130,1440,140 L1440,220 C1350,190,1260,250,1080,210 C900,170,720,240,540,200 C360,160,180,230,0,220 Z",
-                  "M0,150 C180,120,360,180,540,140 C720,100,900,170,1080,150 C1260,130,1350,160,1440,150 L1440,210 C1350,240,1260,180,1080,220 C900,260,720,190,540,230 C360,270,180,200,0,210 Z",
-                  "M0,130 C180,160,360,100,540,130 C720,160,900,110,1080,130 C1260,150,1350,120,1440,130 L1440,230 C1350,200,1260,260,1080,230 C900,200,720,250,540,220 C360,190,180,240,0,230 Z",
-                  "M0,140 C180,170,360,110,540,150 C720,190,900,120,1080,140 C1260,160,1350,130,1440,140 L1440,220 C1350,190,1260,250,1080,210 C900,170,720,240,540,200 C360,160,180,230,0,220 Z"
-                ]
-              }}
+              initial={{ d: getWavePaths(2).initial }}
+              animate={{ d: getWavePaths(2).animate }}
               transition={{
-                duration: 15,
+                duration: 12,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 0.5,
@@ -91,35 +177,26 @@ export const WaveBackground = () => {
           </svg>
         </div>
 
-        {/* Wave 3 - Tertiary gradient - Smooth curves only */}
-        <div className="absolute inset-0 opacity-20">
+        {/* Wave 3 - Top layer, smooth groove */}
+        <div className={`absolute inset-x-0 opacity-30 ${isMobile ? 'h-44 bottom-10' : 'h-64 bottom-20'}`}>
           <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox="0 0 1440 320"
+            className="absolute bottom-0 w-full h-full"
+            viewBox="0 0 1440 400"
             preserveAspectRatio="none"
           >
             <defs>
               <linearGradient id={`wave3-${uniqueId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#ffb380" />
-                <stop offset="50%" stopColor="#b85c00" />
-                <stop offset="100%" stopColor="#ff8c42" />
+                <stop offset="0%" stopColor="#ffb380" stopOpacity="0.6" />
+                <stop offset="50%" stopColor="#b85c00" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#ff8c42" stopOpacity="0.2" />
               </linearGradient>
             </defs>
             <motion.path
               fill={`url(#wave3-${uniqueId})`}
-              initial={{
-                d: "M0,170 C240,185,480,165,720,175 C960,185,1200,165,1440,170 L1440,190 C1200,175,960,195,720,185 C480,175,240,195,0,190 Z"
-              }}
-              animate={{
-                d: [
-                  "M0,170 C240,185,480,165,720,175 C960,185,1200,165,1440,170 L1440,190 C1200,175,960,195,720,185 C480,175,240,195,0,190 Z",
-                  "M0,175 C240,165,480,185,720,180 C960,175,1200,185,1440,175 L1440,195 C1200,205,960,185,720,190 C480,195,240,185,0,195 Z",
-                  "M0,165 C240,180,480,160,720,170 C960,180,1200,160,1440,165 L1440,185 C1200,170,960,190,720,180 C480,170,240,190,0,185 Z",
-                  "M0,170 C240,185,480,165,720,175 C960,185,1200,165,1440,170 L1440,190 C1200,175,960,195,720,185 C480,175,240,195,0,190 Z"
-                ]
-              }}
+              initial={{ d: getWavePaths(3).initial }}
+              animate={{ d: getWavePaths(3).animate }}
               transition={{
-                duration: 25,
+                duration: 14,
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 1,
@@ -129,6 +206,8 @@ export const WaveBackground = () => {
           </svg>
         </div>
 
+        {/* Gradient overlay to blend waves with background */}
+        <div className={`absolute inset-x-0 h-32 bg-gradient-to-t from-primary-bg/50 to-transparent pointer-events-none ${isMobile ? 'bottom-10' : 'bottom-20'}`} />
       </div>
     </div>
   );
