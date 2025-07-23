@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { HeroSection } from './components/sections/HeroSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { AboutSection } from './components/sections/AboutSection';
@@ -21,23 +21,130 @@ import { ContactSection } from './components/sections/ContactSection';
 function App() {
   const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'jukebox' | 'skills' | 'contact'>('hero');
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<number | null>(null);
+  const lastScrollTime = useRef(0);
 
-  // Smooth scroll to section
+  const sections = ['hero', 'projects', 'about', 'jukebox', 'skills', 'contact'];
+
+  // Get current section index
+  const getCurrentSectionIndex = () => {
+    return sections.indexOf(activeSection);
+  };
+
+  // Smooth scroll to section with enhanced easing
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
+      setIsScrolling(true);
       element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
+
+      // Reset scrolling state after animation
+      setTimeout(() => {
+        setIsScrolling(false);
+      }, 1000);
     }
   };
 
-  // Track active section based on scroll position
+  // Navigate to next/previous section
+  const navigateToSection = (direction: 'up' | 'down') => {
+    if (isScrolling) return;
+
+    const currentIndex = getCurrentSectionIndex();
+    let nextIndex;
+
+    if (direction === 'down') {
+      nextIndex = Math.min(currentIndex + 1, sections.length - 1);
+    } else {
+      nextIndex = Math.max(currentIndex - 1, 0);
+    }
+
+    if (nextIndex !== currentIndex) {
+      const nextSection = sections[nextIndex];
+      setActiveSection(nextSection as typeof activeSection);
+      scrollToSection(nextSection);
+    }
+  };
+
+  // Enhanced scroll hijacking
   useEffect(() => {
+    let ticking = false;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (isScrolling) {
+        e.preventDefault();
+        return;
+      }
+
+      const now = Date.now();
+      const timeDiff = now - lastScrollTime.current;
+
+      // Throttle scroll events to prevent too rapid firing
+      if (timeDiff < 100) {
+        e.preventDefault();
+        return;
+      }
+
+      lastScrollTime.current = now;
+
+      // Clear existing timeout
+      if (scrollTimeoutRef.current !== null) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      // Determine scroll direction
+      const direction = e.deltaY > 0 ? 'down' : 'up';
+
+      // Prevent default scrolling
+      e.preventDefault();
+
+      // Navigate to next section
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          navigateToSection(direction);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    // Handle keyboard navigation
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isScrolling) return;
+
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'PageDown':
+        case ' ':
+          e.preventDefault();
+          navigateToSection('down');
+          break;
+        case 'ArrowUp':
+        case 'PageUp':
+          e.preventDefault();
+          navigateToSection('up');
+          break;
+        case 'Home':
+          e.preventDefault();
+          setActiveSection('hero');
+          scrollToSection('hero');
+          break;
+        case 'End':
+          e.preventDefault();
+          setActiveSection('contact');
+          scrollToSection('contact');
+          break;
+      }
+    };
+
+    // Track active section based on scroll position (for manual scrolling)
     const handleScroll = () => {
-      const sections = ['hero', 'projects', 'about', 'jukebox', 'skills', 'contact'];
-      const scrollPosition = window.scrollY + 100; // Offset for better detection
+      if (isScrolling) return;
+
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
 
       for (const sectionId of sections) {
         const element = document.getElementById(sectionId);
@@ -51,11 +158,23 @@ function App() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial position
+    // Add event listeners
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Initial section detection
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current !== null) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [activeSection, isScrolling]);
 
   return (
     <div className="min-h-screen bg-primary-bg">

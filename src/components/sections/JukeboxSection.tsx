@@ -130,7 +130,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
       <section
         id="jukebox"
         ref={sectionRef}
-        className="py-20 bg-primary-bg relative overflow-hidden min-h-screen"
+        className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden"
       >
         <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
           {/* Large background text */}

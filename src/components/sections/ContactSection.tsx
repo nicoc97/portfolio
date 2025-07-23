@@ -68,7 +68,7 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
+    <section id="contact" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         <div className="text-left space-y-8">
           {/* Large background text */}

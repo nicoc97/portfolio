@@ -13,7 +13,7 @@ export const AboutSection: React.FC = () => {
   const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation<HTMLDivElement>(5, 150);
   const { ref: techStackRef, isVisible: techStackVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.2 });
   return (
-    <section id="about" className="py-20 bg-primary-bg relative overflow-hidden min-h-screen">
+    <section id="about" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
 
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">

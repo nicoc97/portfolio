@@ -44,7 +44,7 @@ export const HeroSection: React.FC = () => {
   };
 
   return (
-    <section id="hero" className="min-h-screen relative bg-primary-bg overflow-hidden">
+    <section id="hero" className="section-fullscreen relative bg-primary-bg overflow-hidden">
       {/* Wave background */}
       <WaveBackground />
 

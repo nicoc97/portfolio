@@ -32,6 +32,33 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Hide scrollbar while keeping scroll functionality */
+  html {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+    scroll-behavior: smooth;
+    /* Enhanced smooth scrolling */
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+    /* WebKit browsers (Chrome, Safari, Edge) */
+  }
+
+  body {
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
+  }
+
+  /* Full viewport height sections for scroll hijacking */
+  .section-fullscreen {
+    height: 100vh;
+    min-height: 100vh;
+    scroll-snap-align: start;
+  }
 }
 
 /* 🔧 UPDATE: Custom component classes - modify these for global component styling */
