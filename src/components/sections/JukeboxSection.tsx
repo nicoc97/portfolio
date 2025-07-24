@@ -158,16 +158,16 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
           {/* Accordion Layout */}
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Record List (Accordion) - Modern borderless design */}
-            <div ref={albumListRef} className="lg:w-1/2 space-y-6">
+            <div ref={albumListRef} className="lg:w-2/5 space-y-6">
               {ALBUM_DATA.map((album, index) => (
                 <div key={album.id} className="space-y-6">
                   <div
                     onClick={() => handleAccordionItemClick(album)}
                     className={`
-                      cursor-pointer p-6 rounded-3xl transition-all duration-500 group
+                      cursor-pointer p-6 transition-all duration-500 group relative
                       ${selectedAlbum.id === album.id
-                        ? 'bg-white/10 backdrop-blur-sm shadow-2xl shadow-accent-orange/20 scale-[1.02]'
-                        : 'hover:bg-white/5 hover:backdrop-blur-sm hover:shadow-xl hover:shadow-black/20 hover:scale-[1.01]'
+                        ? 'border-b-2 border-accent-orange'
+                        : 'hover:bg-white/5 hover:backdrop-blur-sm hover:shadow-xl hover:shadow-black/20'
                       }
                       ${getStaggeredClasses(index, 'slide')}
                     `}
@@ -211,8 +211,8 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                         <h3 className={`
                           font-retro text-xl font-bold transition-all duration-300
                           ${selectedAlbum.id === album.id 
-                            ? 'text-accent-orange transform translate-x-1' 
-                            : 'text-text-primary group-hover:text-accent-orange group-hover:transform group-hover:translate-x-1'
+                            ? 'text-accent-orange' 
+                            : 'text-text-primary group-hover:text-accent-orange'
                           }
                         `}>
                           {album.title}
@@ -225,24 +225,13 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                         </p>
                       </div>
 
-                      {/* Play/Pause Indicator - Enhanced */}
+                      {/* Active Indicator - Minimal */}
                       <div className={`
-                        transition-all duration-300 flex items-center gap-2
-                        ${selectedAlbum.id === album.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'}
+                        transition-all duration-300 flex items-center
+                        ${selectedAlbum.id === album.id ? 'opacity-100' : 'opacity-0'}
                       `}>
-                        {selectedAlbum.id === album.id ? (
-                          <div className="flex items-center gap-2 text-accent-orange">
-                            <div className="w-2 h-2 bg-accent-orange rounded-full animate-pulse"></div>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </div>
-                        ) : (
-                          <div className="text-text-secondary/60">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
-                          </div>
+                        {selectedAlbum.id === album.id && (
+                          <div className="w-2 h-2 bg-accent-orange rounded-full animate-pulse"></div>
                         )}
                       </div>
                     </div>
@@ -290,7 +279,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             {/* Desktop Record Display - side panel */}
             <div
               ref={recordDisplayRef}
-              className={`hidden lg:flex lg:w-1/2 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible
+              className={`hidden lg:flex lg:w-3/5 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible
                 ? 'opacity-100 translate-y-0 scale-100 blur-none'
                 : 'opacity-0 translate-y-4 scale-95 blur-sm'
                 }`}
