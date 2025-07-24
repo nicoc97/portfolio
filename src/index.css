@@ -292,4 +292,86 @@
   .animate-scanline {
     animation: scanline 2s linear infinite;
   }
+}/* 
+Skills Section - Contemporary Asymmetrical Styling */
+.skills-filter-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.skills-filter-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.skills-filter-button:hover::before {
+  left: 100%;
+}
+
+/* Staggered skill cards with subtle animations */
+.skill-card-stagger {
+  animation: skillCardFloat 6s ease-in-out infinite;
+}
+
+.skill-card-stagger:nth-child(even) {
+  animation-delay: -3s;
+}
+
+@keyframes skillCardFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Contemporary grid lines */
+.skills-grid-lines {
+  position: relative;
+}
+
+.skills-grid-lines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 25%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(var(--accent-green-rgb), 0.1), transparent);
+  z-index: 0;
+}
+
+.skills-grid-lines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 25%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(var(--accent-orange-rgb), 0.1), transparent);
+  z-index: 0;
+}
+
+/* Asymmetrical decorative elements */
+.skills-decoration {
+  position: relative;
+}
+
+.skills-decoration::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: -10px;
+  width: 2px;
+  height: 60%;
+  background: linear-gradient(to bottom, var(--accent-green), transparent);
+  opacity: 0.3;
+  transform: rotate(15deg);
 }

@@ -4,30 +4,30 @@ import type { TechSkill } from '../types';
  * Technical Skills Data
  * 
  * This file contains all the technical skills data for the portfolio.
- * Each skill includes category, proficiency level, pixel icon, and description.
+ * Each skill includes category, pixel icon, and description based on real experience.
  * 
  * 🔧 UPDATE LOCATIONS:
  * - Add new skills to the appropriate category
- * - Update proficiency levels as skills improve
  * - Modify descriptions to reflect current experience
  * - Add new pixel icons for new technologies
+ * - Update skill relationships for better UX
  */
 
 export const techSkills: TechSkill[] = [
   // Frontend Skills
   {
-    name: 'React',
+    name: 'HTML',
     category: 'frontend',
     proficiency: 5,
-    pixelIcon: '⚛',
-    description: 'Advanced React development with hooks, context, and modern patterns'
+    pixelIcon: '🏗',
+    description: 'Semantic HTML, accessibility, and modern web standards'
   },
   {
-    name: 'TypeScript',
+    name: 'CSS',
     category: 'frontend',
     proficiency: 5,
-    pixelIcon: 'TS',
-    description: 'Strong typing, interfaces, generics, and advanced TypeScript features'
+    pixelIcon: '🎨',
+    description: 'Advanced CSS, animations, flexbox, grid, and responsive design'
   },
   {
     name: 'JavaScript',
@@ -37,119 +37,91 @@ export const techSkills: TechSkill[] = [
     description: 'ES6+, async/await, functional programming, and modern JavaScript'
   },
   {
-    name: 'HTML5',
+    name: 'React',
     category: 'frontend',
     proficiency: 5,
-    pixelIcon: '🏗',
-    description: 'Semantic HTML, accessibility, and modern web standards'
+    pixelIcon: '⚛',
+    description: 'Modern React development with hooks, context, and Next.js'
   },
   {
-    name: 'CSS3',
+    name: 'Next.js',
     category: 'frontend',
     proficiency: 5,
-    pixelIcon: '🎨',
-    description: 'Advanced CSS, animations, flexbox, grid, and responsive design'
+    pixelIcon: '▲',
+    description: 'Full-stack React framework with SSR and static generation'
   },
   {
-    name: 'Tailwind',
+    name: 'TypeScript',
     category: 'frontend',
-    proficiency: 4,
-    pixelIcon: '🌊',
-    description: 'Utility-first CSS framework for rapid UI development'
-  },
-  {
-    name: 'Vue.js',
-    category: 'frontend',
-    proficiency: 3,
-    pixelIcon: '🟢',
-    description: 'Component-based frontend framework with composition API'
+    proficiency: 5,
+    pixelIcon: 'TS',
+    description: 'Strong typing, interfaces, generics, and advanced TypeScript features'
   },
 
-  // Backend Skills
+  // Backend & CMS Skills
   {
-    name: 'Node.js',
-    category: 'backend',
-    proficiency: 4,
-    pixelIcon: '🟢',
-    description: 'Server-side JavaScript, Express.js, and API development'
-  },
-  {
-    name: 'Python',
+    name: 'PHP',
     category: 'backend',
     proficiency: 5,
-    pixelIcon: '🐍',
-    description: 'Full-stack Python development, Django, Flask, and automation'
-  },
-  {
-    name: 'PostgreSQL',
-    category: 'backend',
-    proficiency: 4,
     pixelIcon: '🐘',
-    description: 'Advanced SQL, database design, and query optimization'
+    description: 'Server-side development with Symfony framework and modern PHP practices'
   },
   {
-    name: 'MongoDB',
-    category: 'backend',
-    proficiency: 3,
-    pixelIcon: '🍃',
-    description: 'NoSQL database design and aggregation pipelines'
-  },
-  {
-    name: 'REST APIs',
+    name: 'Symfony',
     category: 'backend',
     proficiency: 5,
-    pixelIcon: '🔗',
-    description: 'RESTful API design, authentication, and best practices'
+    pixelIcon: '🎼',
+    description: 'PHP framework for building robust web applications and APIs'
   },
   {
-    name: 'GraphQL',
+    name: 'WordPress',
     category: 'backend',
-    proficiency: 3,
-    pixelIcon: '📊',
-    description: 'Query language for APIs with Apollo and schema design'
+    proficiency: 5,
+    pixelIcon: 'WP',
+    description: 'Custom theme development, plugin creation, and content management'
+  },
+  {
+    name: 'ACF',
+    category: 'backend',
+    proficiency: 5,
+    pixelIcon: '🔧',
+    description: 'Advanced Custom Fields for flexible WordPress content management'
+  },
+  {
+    name: 'Timber',
+    category: 'backend',
+    proficiency: 5,
+    pixelIcon: '🌲',
+    description: 'Twig templating for WordPress theme development'
+  },
+  {
+    name: 'C#',
+    category: 'backend',
+    proficiency: 4,
+    pixelIcon: 'C#',
+    description: 'Object-oriented programming with .NET Core for web applications'
+  },
+  {
+    name: '.NET Core',
+    category: 'backend',
+    proficiency: 4,
+    pixelIcon: '🔷',
+    description: 'Cross-platform framework for building modern web applications'
   },
 
-  // Data Science Skills
+  // Database Skills
   {
-    name: 'Pandas',
-    category: 'data',
-    proficiency: 5,
-    pixelIcon: '🐼',
-    description: 'Data manipulation, analysis, and transformation with Python'
-  },
-  {
-    name: 'NumPy',
-    category: 'data',
+    name: 'SQL Server',
+    category: 'database',
     proficiency: 4,
-    pixelIcon: '🔢',
-    description: 'Numerical computing and array operations'
-  },
-  {
-    name: 'Matplotlib',
-    category: 'data',
-    proficiency: 4,
-    pixelIcon: '📈',
-    description: 'Data visualization and statistical plotting'
-  },
-  {
-    name: 'Scikit-learn',
-    category: 'data',
-    proficiency: 4,
-    pixelIcon: '🤖',
-    description: 'Machine learning algorithms and model evaluation'
-  },
-  {
-    name: 'Jupyter',
-    category: 'data',
-    proficiency: 5,
-    pixelIcon: '📓',
-    description: 'Interactive data analysis and research notebooks'
+    pixelIcon: '💾',
+    description: 'Database design, queries, and management with SQL Server Management Studio'
   },
   {
     name: 'SQL',
-    category: 'data',
+    category: 'database',
     proficiency: 5,
-    pixelIcon: '💾',
+    pixelIcon: '🗃',
     description: 'Complex queries, data analysis, and database optimization'
   },
 
@@ -159,28 +131,7 @@ export const techSkills: TechSkill[] = [
     category: 'tools',
     proficiency: 5,
     pixelIcon: '🌳',
-    description: 'Version control, branching strategies, and collaboration'
-  },
-  {
-    name: 'Docker',
-    category: 'tools',
-    proficiency: 4,
-    pixelIcon: '🐳',
-    description: 'Containerization, multi-stage builds, and orchestration'
-  },
-  {
-    name: 'AWS',
-    category: 'tools',
-    proficiency: 3,
-    pixelIcon: '☁️',
-    description: 'Cloud services, S3, EC2, Lambda, and serverless architecture'
-  },
-  {
-    name: 'Linux',
-    category: 'tools',
-    proficiency: 4,
-    pixelIcon: '🐧',
-    description: 'Command line, shell scripting, and system administration'
+    description: 'Version control, branching strategies, and collaboration workflows'
   },
   {
     name: 'Vite',
@@ -190,11 +141,11 @@ export const techSkills: TechSkill[] = [
     description: 'Fast build tool and development server for modern web apps'
   },
   {
-    name: 'Webpack',
+    name: 'Hardware Troubleshooting',
     category: 'tools',
-    proficiency: 3,
-    pixelIcon: '📦',
-    description: 'Module bundling, optimization, and build configuration'
+    proficiency: 4,
+    pixelIcon: '🔧',
+    description: 'Diagnosing and repairing computer hardware and mobility equipment'
   }
 ];
 
@@ -204,7 +155,9 @@ export const getSkillsByCategory = (category: TechSkill['category']): TechSkill[
 };
 
 export const getFeaturedSkills = (): TechSkill[] => {
-  return techSkills.filter(skill => skill.proficiency >= 4);
+  // Return core skills that are most relevant
+  const featuredSkillNames = ['JavaScript', 'React', 'PHP', 'WordPress', 'HTML', 'CSS'];
+  return techSkills.filter(skill => featuredSkillNames.includes(skill.name));
 };
 
 export const getSkillByName = (name: string): TechSkill | undefined => {
@@ -213,7 +166,7 @@ export const getSkillByName = (name: string): TechSkill | undefined => {
 
 export const skillCategories = [
   { key: 'frontend' as const, label: 'Frontend', color: 'accent-orange' },
-  { key: 'backend' as const, label: 'Backend', color: 'accent-green' },
-  { key: 'data' as const, label: 'Data Science', color: 'accent-green' },
-  { key: 'tools' as const, label: 'Tools & DevOps', color: 'accent-green' }
+  { key: 'backend' as const, label: 'Backend & CMS', color: 'accent-green' },
+  { key: 'database' as const, label: 'Database', color: 'accent-green' },
+  { key: 'tools' as const, label: 'Tools', color: 'accent-green' }
 ];

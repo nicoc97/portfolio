@@ -59,13 +59,21 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   // Simplified skill relationships
   const getRelatedSkills = (skill: TechSkill): string[] => {
     const relationships: Record<string, string[]> = {
-      'React': ['TypeScript', 'JavaScript', 'Tailwind'],
-      'TypeScript': ['React', 'JavaScript', 'Node.js'],
-      'JavaScript': ['React', 'TypeScript', 'Node.js'],
-      'Node.js': ['JavaScript', 'TypeScript', 'MongoDB'],
-      'Python': ['Pandas', 'NumPy', 'Scikit-learn'],
-      'Docker': ['Linux', 'AWS'],
-      'Tailwind': ['CSS3', 'React'],
+      'React': ['TypeScript', 'JavaScript', 'Next.js'],
+      'Next.js': ['React', 'TypeScript', 'JavaScript'],
+      'TypeScript': ['React', 'JavaScript', 'Next.js'],
+      'JavaScript': ['React', 'TypeScript', 'HTML', 'CSS'],
+      'HTML': ['CSS', 'JavaScript'],
+      'CSS': ['HTML', 'JavaScript'],
+      'PHP': ['Symfony', 'WordPress', 'SQL'],
+      'Symfony': ['PHP', 'SQL Server'],
+      'WordPress': ['PHP', 'ACF', 'Timber'],
+      'ACF': ['WordPress', 'Timber'],
+      'Timber': ['WordPress', 'ACF'],
+      'C#': ['.NET Core', 'SQL Server'],
+      '.NET Core': ['C#', 'SQL Server'],
+      'SQL': ['SQL Server'],
+      'SQL Server': ['SQL', 'C#', '.NET Core'],
     };
     return relationships[skill.name] || [];
   };
@@ -108,149 +116,207 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           </p>
         </div>
 
-        {/* Category Filter */}
-        <div
-          ref={filtersRef}
-          className={`flex flex-wrap justify-center gap-3 mb-8 animate-pixel ${filtersVisible ? 'visible' : ''}`}
-        >
-          <button
-            onClick={() => setSelectedCategory('all')}
-            className={`
-              px-4 py-2 rounded-lg font-tech border-2 transition-all duration-200
-              ${selectedCategory === 'all'
-                ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg'
-                : 'tech-badge-secondary'
-              }
-            `}
-          >
-            All Skills ({techSkills.length})
-          </button>
-          {skillCategories.map((category) => {
-            const categorySkills = getSkillsByCategory(category.key);
-            return (
-              <button
-                key={category.key}
-                onClick={() => setSelectedCategory(category.key)}
-                className={`
-                  px-4 py-2 rounded-lg font-tech text-sm border-2 transition-all duration-200
-                  ${selectedCategory === category.key
-                    ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg`
-                    : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color}`
-                  }
-                `}
-              >
-                {category.label} ({categorySkills.length})
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Skills Grid */}
-        <div ref={skillsGridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
-          {filteredSkills.map((skill, index) => (
+        {/* Main Content Grid - Asymmetrical Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+          
+          {/* Left Column - Filters (Staggered) */}
+          <div className="lg:col-span-1 space-y-6 skills-decoration">
             <div
-              key={skill.name}
-              onMouseEnter={() => handleSkillHover(skill)}
-              onMouseLeave={() => handleSkillHover(null)}
-              className={`
-                transition-all duration-300
-                ${isSkillHighlighted(skill) ? 'scale-102 z-10' : ''}
-                ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
-                ${getStaggeredClasses(index, 'slide')}
-              `}
-            >
-              <TechBadge
-                skill={skill}
-                onClick={() => handleSkillClick(skill)}
-                className={`
-                  w-full transition-all duration-300
-                  ${selectedSkill?.name === skill.name ? 'ring-2 ring-offset-2 ring-offset-primary-bg ring-accent-orange' : ''}
-                `}
-                showTooltip={!selectedSkill}
-              />
+              ref={filtersRef}
+              className={`animate-pixel ${filtersVisible ? 'visible' : ''}`}
+            >              
+              {/* filter buttons */}
+              <div className="space-y-3">
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className={`
+                    w-full px-4 py-3 rounded-lg font-tech border-2 transition-all duration-200 text-left skills-filter-button
+                    ${selectedCategory === 'all'
+                      ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
+                      : 'tech-badge-secondary hover:translate-x-1'
+                    }
+                  `}
+                >
+                  <div className="flex justify-between items-center">
+                    <span>All Skills</span>
+                    <span className="text-lg opacity-70">({techSkills.length})</span>
+                  </div>
+                </button>
+                
+                {skillCategories.map((category) => {
+                  const categorySkills = getSkillsByCategory(category.key);
+                  return (
+                    <button
+                      key={category.key}
+                      onClick={() => setSelectedCategory(category.key)}
+                      className={`
+                        w-full px-4 py-3 rounded-lg font-tech text-lg border-2 transition-all duration-200 text-left skills-filter-button
+                        ${selectedCategory === category.key
+                          ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg transform translate-x-2`
+                          : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color} hover:translate-x-1`
+                        }
+                      `}
+                    >
+                      <div className="flex justify-between items-center">
+                        <span>{category.label}</span>
+                        <span className="text-lg opacity-70">({categorySkills.length})</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          ))}
+
+            {/* Decorative Elements */}
+            <div className="hidden lg:block space-y-4 mt-8">
+              <div className="w-16 h-1 bg-accent-green/30 rounded"></div>
+              <div className="w-12 h-1 bg-accent-orange/30 rounded ml-4"></div>
+              <div className="w-8 h-1 bg-accent-green/20 rounded ml-8"></div>
+            </div>
+          </div>
+
+          {/* Right Column - Skills Grid (Asymmetrical) */}
+          <div className="lg:col-span-3 skills-grid-lines">
+            <div ref={skillsGridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 relative z-10">
+              {filteredSkills.map((skill, index) => {
+                // Create asymmetrical staggered positioning
+                const isEven = index % 2 === 0;
+                const colIndex = index % 4;
+                
+                return (
+                  <div
+                    key={skill.name}
+                    onMouseEnter={() => handleSkillHover(skill)}
+                    onMouseLeave={() => handleSkillHover(null)}
+                    className={`
+                      transition-all duration-300 skill-card-stagger
+                      ${isSkillHighlighted(skill) ? 'scale-102 z-20' : ''}
+                      ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
+                      ${getStaggeredClasses(index, 'slide')}
+                    `}
+                    style={{
+                      marginTop: `${isEven ? 0 : 12}px`,
+                      marginLeft: `${colIndex * 2}px`,
+                      animationDelay: `${index * 80}ms`
+                    }}
+                  >
+                    <TechBadge
+                      skill={skill}
+                      onClick={() => handleSkillClick(skill)}
+                      className={`
+                        w-full transition-all duration-300
+                        ${selectedSkill?.name === skill.name ? 'ring-2 ring-offset-2 ring-offset-primary-bg ring-accent-orange' : ''}
+                        ${isEven ? 'hover:rotate-1' : 'hover:-rotate-1'}
+                      `}
+                      showTooltip={!selectedSkill}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* Progressive Disclosure - Detailed Skill Information */}
         {selectedSkill && (
-          <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-accent-green text-primary-bg rounded-lg flex items-center justify-center text-xl font-bold border-2 border-accent-green-soft">
-                  {selectedSkill.pixelIcon}
-                </div>
-                <div>
-                  <h3 className="text-2xl font-retro text-accent-green mb-1">
-                    {selectedSkill.name}
-                  </h3>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-accent-green text-lg">
-                      {'★'.repeat(selectedSkill.proficiency)}{'☆'.repeat(5 - selectedSkill.proficiency)}
-                    </span>
-                    <span className="px-2 py-1 bg-accent-green/20 border border-accent-green rounded text-xs font-tech text-accent-green">
-                      {selectedSkill.category.toUpperCase()}
-                    </span>
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+            <div className="lg:col-span-1"></div>
+            <div className="lg:col-span-3">
+              <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6 transform translate-x-4">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-accent-green text-primary-bg rounded-lg flex items-center justify-center text-xl font-bold border-2 border-accent-green-soft">
+                      {selectedSkill.pixelIcon}
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-retro text-accent-green mb-1">
+                        {selectedSkill.name}
+                      </h3>
+                      <span className="px-2 py-1 bg-accent-green/20 border border-accent-green rounded text-xs font-tech text-accent-green">
+                        {selectedSkill.category.toUpperCase()}
+                      </span>
+                    </div>
                   </div>
+                  <button
+                    onClick={() => setSelectedSkill(null)}
+                    className="text-text-secondary hover:text-accent-orange transition-colors duration-200 text-xl"
+                    aria-label="Close skill details"
+                  >
+                    ×
+                  </button>
                 </div>
+
+                {selectedSkill.description && (
+                  <p className="text-text-secondary font-mono text-sm leading-relaxed mb-4">
+                    {selectedSkill.description}
+                  </p>
+                )}
+
+                {/* Related Skills */}
+                {getRelatedSkills(selectedSkill).length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-tech text-accent-green mb-2">Related Technologies:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {getRelatedSkills(selectedSkill).map((relatedSkillName) => {
+                        const relatedSkill = techSkills.find(s => s.name === relatedSkillName);
+                        return relatedSkill ? (
+                          <button
+                            key={relatedSkillName}
+                            onClick={() => setSelectedSkill(relatedSkill)}
+                            className="tech-badge-secondary text-xs hover:border-accent-green hover:text-accent-green"
+                          >
+                            {relatedSkillName}
+                          </button>
+                        ) : null;
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
-              <button
-                onClick={() => setSelectedSkill(null)}
-                className="text-text-secondary hover:text-accent-orange transition-colors duration-200 text-xl"
-                aria-label="Close skill details"
-              >
-                ×
-              </button>
             </div>
-
-            {selectedSkill.description && (
-              <p className="text-text-secondary font-mono text-sm leading-relaxed mb-4">
-                {selectedSkill.description}
-              </p>
-            )}
-
-            {/* Related Skills */}
-            {getRelatedSkills(selectedSkill).length > 0 && (
-              <div>
-                <h4 className="text-sm font-tech text-accent-green mb-2">Related Technologies:</h4>
-                <div className="flex flex-wrap gap-2">
-                  {getRelatedSkills(selectedSkill).map((relatedSkillName) => {
-                    const relatedSkill = techSkills.find(s => s.name === relatedSkillName);
-                    return relatedSkill ? (
-                      <button
-                        key={relatedSkillName}
-                        onClick={() => setSelectedSkill(relatedSkill)}
-                        className="tech-badge-secondary text-xs hover:border-accent-green hover:text-accent-green"
-                      >
-                        {relatedSkillName}
-                      </button>
-                    ) : null;
-                  })}
-                </div>
-              </div>
-            )}
           </div>
         )}
 
-        {/* Skills Summary */}
-        <div ref={summaryRef} className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
-          {skillCategories.map((category, index) => {
-            const categorySkills = getSkillsByCategory(category.key);
-            const avgProficiency = categorySkills.reduce((sum, skill) => sum + skill.proficiency, 0) / categorySkills.length;
+        {/* Skills Summary - Asymmetrical Grid */}
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-1">
+            <div className="text-right lg:text-left">
+              <h3 className="text-lg font-tech text-accent-orange mb-2">Tech Overview</h3>
+              <div className="w-16 h-1 bg-accent-orange rounded ml-auto lg:ml-0"></div>
+            </div>
+          </div>
+          
+          <div className="lg:col-span-3">
+            <div ref={summaryRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {skillCategories.map((category, index) => {
+                const categorySkills = getSkillsByCategory(category.key);
+                const isEven = index % 2 === 0;
 
-            return (
-              <div
-                key={category.key}
-                className={`bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center hover:border-accent-green transition-colors duration-300 ${getSummaryClasses(index, 'slide')}`}
-              >
-                <h3 className="font-tech text-accent-green text-sm mb-2">{category.label}</h3>
-                <div className="text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
-                <div className="text-xs text-text-secondary font-mono">
-                  Avg: {avgProficiency.toFixed(1)}/5.0
-                </div>
-              </div>
-            );
-          })}
+                return (
+                  <div
+                    key={category.key}
+                    className={`
+                      bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center 
+                      hover:border-accent-green transition-all duration-300 
+                      ${getSummaryClasses(index, 'slide')}
+                      ${isEven ? 'hover:rotate-1' : 'hover:-rotate-1'}
+                    `}
+                    style={{
+                      marginTop: `${isEven ? 0 : 16}px`,
+                      marginLeft: `${index * 4}px`,
+                      animationDelay: `${index * 150}ms`
+                    }}
+                  >
+                    <h3 className="font-tech text-accent-green text-sm mb-2">{category.label}</h3>
+                    <div className="text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
+                    <div className="text-xs text-text-secondary font-mono">
+                      Technologies
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>

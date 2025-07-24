@@ -34,7 +34,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
     return () => observer.disconnect();
   }, [animated, isVisible]);
 
-  const proficiencyStars = '★'.repeat(skill.proficiency) + '☆'.repeat(5 - skill.proficiency);
+
   const showTooltipState = showTooltip && (isHovered || isFocused);
 
   // Category-based styling with pixel aesthetic
@@ -52,7 +52,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
           tooltipText: 'text-accent-orange'
         };
       case 'backend':
-      case 'data':
+      case 'database':
       case 'tools':
       default:
         return {
@@ -114,7 +114,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
       onKeyDown={handleKeyDown}
       tabIndex={onClick ? 0 : -1}
       role={onClick ? 'button' : 'presentation'}
-      aria-label={`${skill.name} - ${skill.category} skill, proficiency ${skill.proficiency} out of 5`}
+      aria-label={`${skill.name} - ${skill.category} skill`}
       aria-describedby={showTooltipState ? `tooltip-${skill.name.replace(/\s+/g, '-').toLowerCase()}` : undefined}
     >
       {/* Pixel art icon and skill name */}
@@ -159,11 +159,6 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
               {skill.name}
             </div>
             
-            {/* Proficiency stars with pixel styling */}
-            <div className={`mb-2 ${styles.tooltipText} text-lg tracking-wider`}>
-              {proficiencyStars}
-            </div>
-            
             {/* Category badge */}
             <div className="mb-2">
               <span className={`
@@ -176,7 +171,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
             
             {/* Description */}
             {skill.description && (
-              <div className="text-text-secondary text-xs leading-relaxed">
+              <div className="text-text-secondary text-base leading-relaxed">
                 {skill.description}
               </div>
             )}

@@ -14,7 +14,7 @@ export interface Project {
 
 export interface TechSkill {
   name: string;
-  category: 'frontend' | 'backend' | 'data' | 'tools';
+  category: 'frontend' | 'backend' | 'database' | 'tools';
   proficiency: 1 | 2 | 3 | 4 | 5;
   pixelIcon: string;
   description?: string;

@@ -28,7 +28,7 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
   const [isVisible, setIsVisible] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
   const elementRef = useRef<T>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -128,7 +128,7 @@ export const useStaggeredAnimation = <T extends HTMLElement = HTMLElement>(
 ) => {
   const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(count).fill(false));
   const { ref: triggerRef, isVisible } = useScrollAnimation<T>(options);
-  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
     // Clear any existing timeouts
