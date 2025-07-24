@@ -146,7 +146,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
               : 'opacity-0 translate-y-8'
               }`}
           >
-            <h2 className="text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left">
+            <h2 className="section-header">
               JUKEBOX
             </h2>
             <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>

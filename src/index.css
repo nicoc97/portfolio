@@ -133,7 +133,7 @@
 
   /* Section header pattern - consistent across all sections */
   .section-header {
-    @apply text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left;
+    @apply text-5xl md:text-[10rem] font-bold tracking-wide font-retro text-left;
   }
 
   .section-divider {
