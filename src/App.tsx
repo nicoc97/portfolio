@@ -51,6 +51,12 @@ function App() {
     }
   };
 
+  // Handle section click from pagination/menu - updates active section and scrolls
+  const handleSectionClick = (sectionId: string) => {
+    setActiveSection(sectionId as typeof activeSection);
+    scrollToSection(sectionId);
+  };
+
   // Navigate to next/previous section
   const navigateToSection = (direction: 'up' | 'down') => {
     if (isScrolling) return;
@@ -272,7 +278,7 @@ function App() {
       <DotPagination
         sections={sections}
         activeSection={activeSection}
-        onSectionClick={scrollToSection}
+        onSectionClick={handleSectionClick}
         isLightboxOpen={isLightboxOpen}
       />
 
@@ -280,7 +286,7 @@ function App() {
       <MobileMenu
         sections={sections}
         activeSection={activeSection}
-        onSectionClick={scrollToSection}
+        onSectionClick={handleSectionClick}
         isLightboxOpen={isLightboxOpen}
       />
     </div>

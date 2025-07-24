@@ -151,7 +151,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             </h2>
             <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>
             <p className="text-accent-orange font-tech text-lg">
-              Click to Play
+              You'll Love This One
             </p>
           </div>
 
@@ -166,7 +166,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                     className={`
                       cursor-pointer p-6 transition-all duration-500 group relative
                       ${selectedAlbum.id === album.id
-                        ? 'border-b-2 border-accent-orange'
+                        ? 'border-l-2 border-accent-orange'
                         : 'hover:bg-white/5 hover:backdrop-blur-sm hover:shadow-xl hover:shadow-black/20'
                       }
                       ${getStaggeredClasses(index, 'slide')}
@@ -178,8 +178,8 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                         className={`
                           w-20 h-20 rounded-full flex-shrink-0 relative
                           transition-all duration-500 pixel-art bg-black
-                          ${selectedAlbum.id === album.id 
-                            ? 'animate-spin shadow-lg shadow-accent-orange/30' 
+                          ${selectedAlbum.id === album.id
+                            ? 'animate-spin shadow-lg shadow-accent-orange/30'
                             : 'group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-black/30'
                           }
                         `}
@@ -210,8 +210,8 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                       <div className="flex-1 space-y-1">
                         <h3 className={`
                           font-retro text-xl font-bold transition-all duration-300
-                          ${selectedAlbum.id === album.id 
-                            ? 'text-accent-orange' 
+                          ${selectedAlbum.id === album.id
+                            ? 'text-accent-orange'
                             : 'text-text-primary group-hover:text-accent-orange'
                           }
                         `}>

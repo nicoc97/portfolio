@@ -261,11 +261,6 @@ export const ProjectsSection: React.FC = () => {
                 slidesPerGroup: 1,
                 spaceBetween: 36,
               },
-              1024: {
-                slidesPerView: 3,
-                slidesPerGroup: 1,
-                spaceBetween: 40,
-              },
             }}
             className="projects-swiper pb-8"
           >
@@ -347,21 +342,6 @@ export const ProjectsSection: React.FC = () => {
                     <polygon points="2,19 11,12 2,5" />
                   </svg>
                 </button>
-
-                {/* Speed Control */}
-                <div className="flex items-center gap-2 ml-4">
-                  <span className="text-xs text-text-secondary font-tech">SPEED</span>
-                  <select
-                    value={playbackSpeed}
-                    onChange={(e) => handleSpeedChange(Number(e.target.value))}
-                    className="text-xs bg-transparent text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-pointer"
-                  >
-                    <option value={2000}>2x</option>
-                    <option value={3000}>1.5x</option>
-                    <option value={5000}>1x</option>
-                    <option value={8000}>0.5x</option>
-                  </select>
-                </div>
               </div>
             </div>
 
