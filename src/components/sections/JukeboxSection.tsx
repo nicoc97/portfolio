@@ -177,7 +177,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                       cursor-pointer p-6 transition-all duration-500 group relative
                       ${selectedAlbum.id === album.id
                         ? 'border-l-2 border-accent-orange'
-                        : 'hover:bg-white/5 hover:backdrop-blur-sm hover:shadow-xl hover:shadow-black/20'
+                        : 'hover:bg-accent-green/5 hover:backdrop-blur-sm hover:rounded-r-full'
                       }
                       ${getStaggeredClasses(index, 'slide')}
                     `}

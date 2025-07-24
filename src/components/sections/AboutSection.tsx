@@ -150,11 +150,11 @@ export const AboutSection: React.FC = () => {
                   <h3 className="text-xl font-bold text-accent-orange font-tech mb-6 uppercase tracking-wide">
                     Core Stack
                   </h3>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex gap-3">
                     {['React', 'WordPress', 'PHP', 'JavaScript', 'C#', '.NET'].map((tech) => (
                       <span
                         key={tech}
-                        className="px-4 py-2 text-sm font-tech border border-text-secondary/20 text-text-secondary hover:border-accent-orange hover:text-accent-orange transition-all duration-200 rounded-full"
+                        className="px-4 py-2 text-base font-tech border border-text-secondary/20 text-text-secondary hover:border-accent-orange hover:text-accent-orange transition-all duration-200 rounded-full"
                       >
                         {tech}
                       </span>

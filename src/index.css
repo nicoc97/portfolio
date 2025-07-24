@@ -128,7 +128,7 @@
   }
 
   .section-bg-text span {
-    @apply text-[4rem] md:text-[8rem] lg:text-[10rem] font-bold text-accent-orange font-retro tracking-tight leading-none -mt-[0.15em];
+    @apply text-[2rem] md:text-[4rem] lg:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
   }
 
   /* Section header pattern - consistent across all sections */
@@ -223,13 +223,19 @@
     @apply tech-badge bg-transparent border-text-secondary/30 text-text-secondary hover:border-accent-orange hover:text-accent-orange;
   }
 
-  /* Contact card pattern */
+  /* Contact card pattern - Clean modern design */
   .contact-card {
-    @apply pixel-card cursor-pointer flex items-center space-x-4;
+    @apply bg-primary-bg-light/50 border border-accent-orange/20 p-6 rounded-lg;
+    @apply hover:border-accent-orange/60 hover:bg-primary-bg-light/80 hover:shadow-lg hover:shadow-accent-orange/10;
+    @apply transition-all duration-300 cursor-pointer;
+    @apply flex items-center space-x-4;
   }
 
   .contact-card-green {
-    @apply pixel-card-green cursor-pointer flex items-center space-x-4;
+    @apply bg-primary-bg-light/50 border border-accent-green/20 p-6 rounded-lg;
+    @apply hover:border-accent-green/60 hover:bg-primary-bg-light/80 hover:shadow-lg hover:shadow-accent-green/10;
+    @apply transition-all duration-300 cursor-pointer;
+    @apply flex items-center space-x-4;
   }
 
   /* Filter button pattern */
