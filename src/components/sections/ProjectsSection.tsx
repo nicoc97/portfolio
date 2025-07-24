@@ -172,7 +172,7 @@ export const ProjectsSection: React.FC = () => {
   return (
     <section id="projects" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
 
-      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-4/5 mx-auto mobile-padding relative z-10">
         {/* Large background text */}
         <div className="section-bg-text">
           <span>SEC01</span>
