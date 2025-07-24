@@ -5,6 +5,8 @@ import { AboutSection } from './components/sections/AboutSection';
 import { JukeboxSection } from './components/sections/JukeboxSection';
 import { SkillsSection } from './components/sections/SkillsSection';
 import { ContactSection } from './components/sections/ContactSection';
+import { DotPagination } from './components/ui/DotPagination';
+import { MobileMenu } from './components/ui/MobileMenu';
 
 /**
  * Main App Component
@@ -42,10 +44,10 @@ function App() {
         block: 'start'
       });
 
-      // Reset scrolling state after animation - reduced timeout for better responsiveness
+      // Reset scrolling state after animation - optimized timeout for smooth hijacking
       setTimeout(() => {
         setIsScrolling(false);
-      }, 800);
+      }, 1000);
     }
   };
 
@@ -69,55 +71,60 @@ function App() {
     }
   };
 
-  // Enhanced scroll hijacking - Desktop only
+  // Enhanced scroll hijacking - Desktop only, but always track scroll position
   useEffect(() => {
-    let ticking = false;
+    let scrollAccumulator = 0;
+    let lastWheelTime = 0;
 
-    // Cache mobile detection - only check once per effect
-    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                          window.innerWidth <= 768 ||
-                          ('ontouchstart' in window);
+    // More precise mobile detection - exclude tablets from scroll hijacking
+    const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                          (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    // Skip all scroll hijacking setup on mobile
-    if (isMobileDevice) {
-      return;
-    }
+    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth);
 
     const handleWheel = (e: WheelEvent) => {
+      // Don't hijack if it's a mobile device - let natural scrolling happen
+      if (isMobileDevice) {
+        return;
+      }
+
+      // Always prevent default on desktop to ensure consistent hijacking
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Don't process if we're already in a scrolling animation
       if (isScrolling) {
-        e.preventDefault();
         return;
       }
 
       const now = Date.now();
-      const timeDiff = now - lastScrollTime.current;
+      const timeSinceLastWheel = now - lastWheelTime;
 
-      // Throttle scroll events to prevent too rapid firing
-      if (timeDiff < 50) { // Reduced from 100ms to 50ms for smoother response
-        e.preventDefault();
-        return;
+      // Reset accumulator if it's been too long since last wheel event (new gesture)
+      if (timeSinceLastWheel > 150) {
+        scrollAccumulator = 0;
       }
 
-      lastScrollTime.current = now;
+      lastWheelTime = now;
+      scrollAccumulator += e.deltaY;
 
-      // Clear existing timeout
-      if (scrollTimeoutRef.current !== null) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
+      // Only trigger navigation when we have enough accumulated scroll
+      const threshold = 50; // Balanced threshold for reliable hijacking
+      
+      if (Math.abs(scrollAccumulator) >= threshold) {
+        const direction = scrollAccumulator > 0 ? 'down' : 'up';
+        
+        // Reset accumulator
+        scrollAccumulator = 0;
+        lastScrollTime.current = now;
 
-      // Determine scroll direction
-      const direction = e.deltaY > 0 ? 'down' : 'up';
+        // Clear existing timeout
+        if (scrollTimeoutRef.current !== null) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
 
-      // Prevent default scrolling
-      e.preventDefault();
-
-      // Navigate to next section with optimized animation frame
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => {
-          navigateToSection(direction);
-          ticking = false;
-        });
+        // Navigate to next section
+        navigateToSection(direction);
       }
     };
 
@@ -150,41 +157,106 @@ function App() {
       }
     };
 
-    // Track active section based on scroll position (for manual scrolling)
+    // Track active section based on scroll position (mobile only)
     const handleScroll = () => {
-      if (isScrolling) return;
+      // Only track scroll position on mobile devices
+      if (!isMobileDevice || isScrolling) return;
 
       const scrollPosition = window.scrollY + window.innerHeight / 2;
+      let closestSection = sections[0];
+      let closestDistance = Infinity;
 
       for (const sectionId of sections) {
         const element = document.getElementById(sectionId);
         if (element) {
           const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(sectionId as typeof activeSection);
-            break;
+          const sectionCenter = offsetTop + offsetHeight / 2;
+          const distance = Math.abs(scrollPosition - sectionCenter);
+          
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestSection = sectionId;
           }
         }
       }
+
+      if (closestSection !== activeSection) {
+        console.log('Mobile scroll: Updating active section from', activeSection, 'to', closestSection);
+        setActiveSection(closestSection as typeof activeSection);
+      }
     };
 
-    // Add event listeners only for desktop
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Initial section detection
-    handleScroll();
+    // Add wheel listener with proper passive setting
+    window.addEventListener('wheel', handleWheel, { passive: isMobileDevice });
+    
+    // Add keyboard navigation only for desktop
+    if (!isMobileDevice) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    
+    // Add scroll tracking only for mobile
+    if (isMobileDevice) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      setTimeout(handleScroll, 100);
+    }
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('scroll', handleScroll);
+      if (!isMobileDevice) {
+        window.removeEventListener('keydown', handleKeyDown);
+      }
+      if (isMobileDevice) {
+        window.removeEventListener('scroll', handleScroll);
+      }
       if (scrollTimeoutRef.current !== null) {
         clearTimeout(scrollTimeoutRef.current);
       }
     };
   }, [activeSection, isScrolling]);
+
+  // Simplified section detection - only use intersection observer for mobile
+  useEffect(() => {
+    const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                          (window.innerWidth <= 768 && 'ontouchstart' in window);
+
+    if (!isMobileDevice) return; // Skip intersection observer on desktop
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -30% 0px',
+      threshold: 0.3
+    };
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      if (isScrolling) return;
+
+      let mostVisible = entries[0];
+      for (const entry of entries) {
+        if (entry.intersectionRatio > mostVisible.intersectionRatio) {
+          mostVisible = entry;
+        }
+      }
+
+      if (mostVisible && mostVisible.isIntersecting) {
+        const sectionId = mostVisible.target.id;
+        if (sections.includes(sectionId) && sectionId !== activeSection) {
+          console.log('Mobile Intersection Observer: Updating active section to', sectionId);
+          setActiveSection(sectionId as typeof activeSection);
+        }
+      }
+    }, observerOptions);
+
+    sections.forEach(sectionId => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        sectionObserver.observe(element);
+      }
+    });
+
+    return () => {
+      sectionObserver.disconnect();
+    };
+  }, [activeSection, isScrolling, sections]);
 
   return (
     <div className="min-h-screen bg-primary-bg">
@@ -196,47 +268,21 @@ function App() {
       <SkillsSection />
       <ContactSection />
 
-      {/* Navigation bar - Full width on mobile, Top Left on desktop */}
-      <nav className={`fixed top-4 left-8 right-8 md:left-8 md:right-auto md:translate-x-0 z-50 transition-opacity duration-300 ${isLightboxOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-        <div className="flex gap-1 md:gap-2 justify-evenly md:justify-start overflow-x-auto">
-          <button
-            onClick={() => scrollToSection('hero')}
-            className={`${activeSection === 'hero' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
-          >
-            HOME
-          </button>
-          <button
-            onClick={() => scrollToSection('projects')}
-            className={`${activeSection === 'projects' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
-          >
-            PROJECTS
-          </button>
-          <button
-            onClick={() => scrollToSection('about')}
-            className={`${activeSection === 'about' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
-          >
-            ABOUT
-          </button>
-          <button
-            onClick={() => scrollToSection('jukebox')}
-            className={`${activeSection === 'jukebox' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
-          >
-            JUKEBOX
-          </button>
-          <button
-            onClick={() => scrollToSection('skills')}
-            className={`${activeSection === 'skills' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
-          >
-            SKILLS
-          </button>
-          <button
-            onClick={() => scrollToSection('contact')}
-            className={`${activeSection === 'contact' ? 'bg-accent-orange/30 border-accent-orange/50' : 'bg-white/10 border-white/20 hover:bg-accent-green/20 hover:border-accent-green/30'} backdrop-blur-md text-text-primary px-2 py-1.5 md:px-4 md:py-2 border-2 font-tech text-sm md:text-xl rounded-xl transition-all duration-200 whitespace-nowrap flex-shrink-0`}
-          >
-            CONTACT
-          </button>
-        </div>
-      </nav>
+      {/* Desktop Dot Pagination - Right side */}
+      <DotPagination
+        sections={sections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+        isLightboxOpen={isLightboxOpen}
+      />
+
+      {/* Mobile Menu Overlay - Mobile/Tablet only */}
+      <MobileMenu
+        sections={sections}
+        activeSection={activeSection}
+        onSectionClick={scrollToSection}
+        isLightboxOpen={isLightboxOpen}
+      />
     </div>
   );
 }

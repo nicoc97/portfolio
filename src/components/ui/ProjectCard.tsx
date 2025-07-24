@@ -1,45 +1,36 @@
 import React, { useState } from 'react';
 import type { ProjectCardProps } from '../../types';
-import { ExternalLink, Github, Calendar, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const formattedIndex = String(index + 1).padStart(2, '0');
+
 
   return (
     <div
       className={`
-        group relative h-full min-h-[520px] flex flex-col
+        group relative h-full min-h-[400px] overflow-hidden rounded-2xl cursor-pointer
         transform transition-all duration-500 ease-out
-        ${isHovered ? '-translate-y-3' : 'translate-y-0'}
+        ${isHovered ? '-translate-y-2' : 'translate-y-0 shadow-lg shadow-black/20'}
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Project number - modern floating badge */}
-      <div className="absolute -top-3 -right-3 z-20">
-        <div className="bg-gradient-to-br from-accent-orange to-accent-orange-dark text-white font-tech font-bold text-sm w-8 h-8 rounded-full flex items-center justify-center shadow-lg">
-          {formattedIndex}
-        </div>
-      </div>
 
-      {/* Featured badge */}
+
+      {/* Featured badge - always visible */}
       {project.featured && (
-        <div className="absolute top-4 left-4 z-20">
-          <div className="bg-accent-green text-white text-xs font-tech font-bold px-2 py-1 rounded-full">
+        <div className="absolute top-4 left-4 z-30">
+          <div className="bg-accent-green text-white text-xs font-tech font-bold px-2 py-1 rounded-full backdrop-blur-sm">
             FEATURED
           </div>
         </div>
       )}
 
-      {/* Image preview with modern overlay */}
-      <div className={`
-        relative mb-8 h-64 overflow-hidden rounded-3xl
-        transition-all duration-700 ease-out
-        ${isHovered ? 'shadow-2xl shadow-accent-orange/20 scale-[1.02]' : 'shadow-lg shadow-black/20'}
-      `}>
+      {/* Background Image - fills entire card */}
+      <div className="absolute inset-0 w-full h-full">
         {project.imageUrl ? (
           <img
             src={project.imageUrl}
@@ -47,142 +38,195 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             className={`
               w-full h-full object-cover transition-all duration-700
               ${imageLoaded ? 'opacity-100' : 'opacity-0'}
-              ${isHovered ? 'scale-105' : 'scale-100'}
+              ${isHovered ? 'scale-110' : 'scale-100'}
             `}
             onLoad={() => setImageLoaded(true)}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-bg-light to-primary-bg">
-            <div className="text-text-secondary/60 font-tech text-sm">
+            <div className="text-text-secondary/60 font-tech text-lg">
               [PREVIEW_LOADING...]
             </div>
           </div>
         )}
-        
-        {/* Modern gradient overlay */}
+      </div>
+
+      {/* Minimal overlay for readability - always present but subtle */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+      {/* Scanline effect - only visible on hover */}
+      <div className={`
+        absolute inset-0 z-15 pointer-events-none
+        transition-opacity duration-300
+        ${isHovered ? 'opacity-100' : 'opacity-0'}
+      `}>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-orange/5 to-transparent animate-pulse" 
+             style={{
+               backgroundImage: `repeating-linear-gradient(
+                 0deg,
+                 transparent,
+                 transparent 2px,
+                 rgba(255, 165, 0, 0.03) 2px,
+                 rgba(255, 165, 0, 0.03) 4px
+               )`
+             }}>
+        </div>
+        {/* Moving scanline */}
         <div className={`
-          absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent
-          transition-opacity duration-500
-          ${isHovered ? 'opacity-100' : 'opacity-60'}
-        `} />
-        
-        {/* Action buttons overlay */}
-        <div className={`
-          absolute bottom-6 right-6 flex gap-3
-          transition-all duration-500 transform
-          ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-80'}
+          absolute inset-x-0 h-0.5 bg-accent-orange/30 shadow-lg shadow-accent-orange/50
+          ${isHovered ? 'animate-scanline' : ''}
         `}>
-          {project.liveUrl && (
-            <button
-              onClick={() => window.open(project.liveUrl, '_blank')}
-              className="bg-accent-orange hover:bg-accent-orange-dark text-white p-3 rounded-2xl transition-all duration-200 hover:scale-110 font-tech text-xs font-bold"
-              title="View Live Demo"
-            >
-              <ExternalLink className="w-4 h-4" />
-            </button>
-          )}
-          
-          <button
-            onClick={() => window.open(project.githubUrl, '_blank')}
-            className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white p-3 rounded-2xl transition-all duration-200 hover:scale-110"
-            title="View Source Code"
-          >
-            <Github className="w-4 h-4" />
-          </button>
         </div>
       </div>
 
-      {/* Content section - completely open layout */}
-      <div className="flex-1 flex flex-col space-y-4">
-        {/* Category and date */}
-        <div className="flex items-center justify-between">
-          <span className={`
-            text-xs font-tech font-bold px-4 py-2 rounded-2xl uppercase tracking-wide
-            ${project.category === 'data' ? 'bg-accent-green/15 text-accent-green border border-accent-green/30' : 
-              project.category === 'fullstack' ? 'bg-purple-500/15 text-purple-400 border border-purple-500/30' :
-              'bg-accent-orange/15 text-accent-orange border border-accent-orange/30'}
-          `}>
-            {project.category === 'data' ? 'DATA_SCI' : 
-             project.category === 'fullstack' ? 'FULL_STK' : 'WEB_APP'}
-          </span>
-          
-          <div className="flex items-center text-text-secondary/70 text-xs font-tech">
-            <Calendar className="w-3 h-3 mr-1" />
-            {project.completedDate.toLocaleDateString('en-US', { 
-              month: 'short', 
-              year: 'numeric' 
-            })}
-          </div>
-        </div>
-
-        {/* Project title with pixel typography */}
-        <h3 className={`
-          text-2xl font-retro font-bold text-text-primary leading-tight 
+      {/* Category badge - floating on image */}
+      <div className="absolute top-4 right-4 z-20">
+        <span className={`
+          text-xs font-tech font-bold px-3 py-1 rounded-xl uppercase tracking-wide backdrop-blur-sm
           transition-all duration-300
-          ${isHovered ? 'text-accent-orange transform translate-x-1' : ''}
+          ${project.category === 'data' ? 'bg-accent-green/20 text-accent-green border border-accent-green/50' : 
+            project.category === 'fullstack' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50' :
+            'bg-accent-orange/20 text-accent-orange border border-accent-orange/50'}
+          ${isHovered ? 'scale-105 bg-opacity-90' : ''}
         `}>
+          {project.category === 'data' ? 'DATA_SCI' : 
+           project.category === 'fullstack' ? 'FULL_STK' : 'WEB_APP'}
+        </span>
+      </div>
+
+      {/* Quick action buttons - top right, always visible but subtle */}
+      <div className="absolute top-16 right-4 flex flex-col gap-2 z-20">
+        {project.liveUrl && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(project.liveUrl, '_blank');
+            }}
+            className={`
+              bg-white/10 hover:bg-accent-orange text-white p-2 rounded-lg backdrop-blur-sm
+              transition-all duration-300 hover:scale-110
+              ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
+            `}
+            title="View Live Demo"
+          >
+            <ExternalLink className="w-4 h-4" />
+          </button>
+        )}
+        
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(project.githubUrl, '_blank');
+          }}
+          className={`
+            bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg backdrop-blur-sm
+            transition-all duration-300 hover:scale-110
+            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
+          `}
+          title="View Source Code"
+        >
+          <Github className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Content overlay - slides up from bottom on hover */}
+      <div className={`
+        absolute inset-x-0 bottom-0 p-6 z-20
+        bg-gradient-to-t from-black/95 via-black/80 to-transparent backdrop-blur-sm
+        transform transition-all duration-500 ease-out
+        ${isHovered ? 'translate-y-0' : 'translate-y-full'}
+      `}>
+
+
+        {/* Project title */}
+        <h3 className="text-2xl font-retro font-bold text-white leading-tight mb-3">
           {project.title}
         </h3>
 
-        {/* Description with better spacing */}
-        <p className="text-text-secondary text-sm leading-relaxed flex-grow font-mono opacity-90">
+        {/* Description */}
+        <p className="text-white/90 text-sm leading-relaxed font-mono mb-4 line-clamp-3">
           {project.description}
         </p>
 
-        {/* Tech stack with floating pills */}
-        <div className="flex flex-wrap gap-2">
+        {/* Tech stack with staggered animation */}
+        <div className="flex flex-wrap gap-2 mb-4">
           {project.techStack.slice(0, 5).map((tech, techIndex) => (
             <span
               key={techIndex}
               className={`
-                text-xs px-3 py-1.5 rounded-xl font-tech
-                bg-transparent border transition-all duration-200
-                hover:scale-105 hover:shadow-lg
-                ${techIndex % 2 === 0 
-                  ? 'border-accent-orange/40 text-accent-orange hover:bg-accent-orange/10 hover:border-accent-orange' 
-                  : 'border-accent-green/40 text-accent-green hover:bg-accent-green/10 hover:border-accent-green'
-                }
+                text-xs px-2 py-1 rounded-lg font-tech
+                bg-white/10 border border-white/20 text-white backdrop-blur-sm
+                transition-all duration-200 transform hover:scale-105
+                ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
               `}
+              style={{ 
+                transitionDelay: isHovered ? `${techIndex * 50 + 200}ms` : '0ms' 
+              }}
             >
               {tech}
             </span>
           ))}
           {project.techStack.length > 5 && (
-            <span className="text-text-secondary/60 text-xs px-3 py-1.5 font-tech">
+            <span className={`
+              text-white/60 text-xs px-2 py-1 font-tech
+              transition-all duration-200 transform
+              ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
+            `}
+            style={{ 
+              transitionDelay: isHovered ? '450ms' : '0ms' 
+            }}>
               +{project.techStack.length - 5}
             </span>
           )}
         </div>
 
-        {/* Bottom action area - minimal and clean */}
-        <div className="flex items-center justify-between pt-2">
-          <div className="flex gap-6">
-            {project.liveUrl && (
-              <button
-                onClick={() => window.open(project.liveUrl, '_blank')}
-                className={`
-                  text-accent-orange text-sm font-tech font-bold flex items-center gap-2 
-                  transition-all duration-200 hover:gap-3
-                  ${isHovered ? 'transform translate-x-1' : ''}
-                `}
-              >
-                LIVE_DEMO
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
-            )}
-            
+        {/* Action buttons */}
+        <div className={`
+          flex gap-4
+          transition-all duration-300 transform
+          ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+        `}
+        style={{ 
+          transitionDelay: isHovered ? '300ms' : '0ms' 
+        }}>
+          {project.liveUrl && (
             <button
-              onClick={() => window.open(project.githubUrl, '_blank')}
-              className={`
-                text-text-secondary hover:text-accent-green text-sm font-tech font-bold 
-                flex items-center gap-2 transition-all duration-200 hover:gap-3
-                ${isHovered ? 'transform translate-x-1' : ''}
-              `}
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(project.liveUrl, '_blank');
+              }}
+              className="text-accent-orange hover:text-white text-sm font-tech font-bold flex items-center gap-2 transition-all duration-200 hover:gap-3"
             >
-              SOURCE
-              <Github className="w-4 h-4" />
+              LIVE_DEMO
+              <ArrowUpRight className="w-4 h-4" />
             </button>
-          </div>
+          )}
+          
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              window.open(project.githubUrl, '_blank');
+            }}
+            className="text-white/70 hover:text-accent-green text-sm font-tech font-bold flex items-center gap-2 transition-all duration-200 hover:gap-3"
+          >
+            SOURCE
+            <Github className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Minimal title overlay - always visible at bottom */}
+      <div className={`
+        absolute inset-x-0 bottom-0 p-4 z-10
+        bg-gradient-to-t from-black/60 to-transparent
+        transition-all duration-500
+        ${isHovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}
+      `}>
+        <h3 className="text-lg font-retro font-bold text-white leading-tight">
+          {project.title}
+        </h3>
+        <div className="text-white/60 text-xs font-tech mt-1">
+          [HOVER_FOR_DETAILS]
         </div>
       </div>
     </div>
