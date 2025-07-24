@@ -103,22 +103,31 @@ export const ProjectsSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [playbackSpeed, setPlaybackSpeed] = useState(5000); // autoplay delay
+  const [playbackSpeed] = useState(5000); // autoplay delay
 
-  // Animation hooks
+  // Animation hooks with reverse animations
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.2,
-    animationType: 'slide'
+    animationType: 'slide',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 100
   });
   const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
     delay: 200,
-    animationType: 'pixel'
+    animationType: 'pixel',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 150
   });
   const { ref: swiperRef, isVisible: swiperVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.1,
     delay: 400,
-    animationType: 'fade'
+    animationType: 'fade',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 200
   });
 
   // Filter projects
@@ -149,18 +158,6 @@ export const ProjectsSection: React.FC = () => {
     swiperInstance.slideTo(filteredProjects.length - 1);
   };
 
-  const handleSpeedChange = (newSpeed: number) => {
-    setPlaybackSpeed(newSpeed);
-    if (swiperInstance && isPlaying) {
-      swiperInstance.autoplay.stop();
-      // Update autoplay delay
-      if (swiperInstance.params.autoplay && typeof swiperInstance.params.autoplay === 'object') {
-        swiperInstance.params.autoplay.delay = newSpeed;
-      }
-      swiperInstance.autoplay.start();
-    }
-  };
-
   // 🔧 UPDATE: Modify filter categories here if you have different project types
   const filterButtons = [
     { key: 'all', label: 'ALL PROJECTS' },
@@ -180,7 +177,7 @@ export const ProjectsSection: React.FC = () => {
 
         {/* Section header with scroll animations */}
         <div className="relative mb-20">
-          <ScrollReveal threshold={0.2} effect="materialize">
+          <ScrollReveal threshold={0.2} effect="materialize" reverseOnExit={true}>
             {/* header layout */}
             <div
               ref={headerRef}
@@ -226,6 +223,7 @@ export const ProjectsSection: React.FC = () => {
               className="flex flex-wrap gap-3 justify-center"
               staggerDelay={100}
               animationType="pixel"
+              reverseOnExit={true}
             />
           </div>
         </div>
@@ -346,7 +344,7 @@ export const ProjectsSection: React.FC = () => {
             </div>
 
             {/* Vintage Radio Dial */}
-            <ScrollReveal threshold={0.3} delay={300} effect="glitch">
+            <ScrollReveal threshold={0.3} delay={300} effect="glitch" reverseOnExit={true}>
               <div className="flex justify-center lg:justify-end">
                 <VintageTVDial
                   totalSlides={filteredProjects.length}

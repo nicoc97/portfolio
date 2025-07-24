@@ -45,6 +45,7 @@ interface StaggeredListProps {
   itemClassName?: string;
   staggerDelay?: number;
   animationType?: 'fade' | 'slide' | 'scale' | 'pixel';
+  reverseOnExit?: boolean;
 }
 
 /**
@@ -55,12 +56,17 @@ export const StaggeredList: React.FC<StaggeredListProps> = ({
   className = '',
   itemClassName = '',
   staggerDelay = 100,
-  animationType = 'slide'
+  animationType = 'slide',
+  reverseOnExit = false
 }) => {
   const { triggerRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     items.length,
     staggerDelay,
-    { threshold: 0.2 }
+    { 
+      threshold: 0.2,
+      triggerOnce: false,
+      reverseOnExit
+    }
   );
 
   return (
@@ -84,6 +90,7 @@ interface ScrollRevealProps {
   rootMargin?: string;
   effect?: 'materialize' | 'glitch' | 'fade';
   delay?: number;
+  reverseOnExit?: boolean;
 }
 
 /**
@@ -95,12 +102,15 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   threshold = 0.1,
   rootMargin = '0px 0px -50px 0px',
   effect = 'materialize',
-  delay = 0
+  delay = 0,
+  reverseOnExit = false
 }) => {
   const { ref, isVisible } = useScrollAnimation<HTMLDivElement>({
     threshold,
     rootMargin,
-    delay
+    delay,
+    triggerOnce: !reverseOnExit,
+    reverseOnExit
   });
 
   const getEffectClasses = () => {

@@ -15,20 +15,31 @@ export const ContactSection: React.FC = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
 
-  // Animation hooks
+  // Animation hooks with reverse animations
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
-    animationType: 'slide'
+    animationType: 'slide',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 100
   });
   const { triggerRef: contactDetailsRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     3, // email, location, phone
     150,
-    { threshold: 0.2 }
+    { 
+      threshold: 0.2,
+      triggerOnce: false,
+      reverseOnExit: true
+    }
   );
   const { triggerRef: socialLinksRef, getStaggeredClasses: getSocialClasses } = useStaggeredAnimation<HTMLDivElement>(
     3, // GitHub, LinkedIn, CV download
     100,
-    { threshold: 0.2 }
+    { 
+      threshold: 0.2,
+      triggerOnce: false,
+      reverseOnExit: true
+    }
   );
 
   // Handle CV download with loading state

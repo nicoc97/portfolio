@@ -6,6 +6,8 @@ interface UseScrollAnimationOptions {
   triggerOnce?: boolean;
   delay?: number;
   animationType?: 'fade' | 'slide' | 'scale' | 'pixel';
+  reverseOnExit?: boolean;
+  exitDelay?: number;
 }
 
 /**
@@ -18,12 +20,15 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
     rootMargin = '0px 0px -50px 0px',
     triggerOnce = true,
     delay = 0,
-    animationType = 'fade'
+    animationType = 'fade',
+    reverseOnExit = false,
+    exitDelay = 0
   } = options;
 
   const [isVisible, setIsVisible] = useState(false);
   const [hasTriggered, setHasTriggered] = useState(false);
   const elementRef = useRef<T>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const element = elementRef.current;
@@ -31,9 +36,15 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        // Clear any pending timeout
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+
         if (entry.isIntersecting) {
           if (delay > 0) {
-            setTimeout(() => {
+            timeoutRef.current = setTimeout(() => {
               setIsVisible(true);
               if (triggerOnce) {
                 setHasTriggered(true);
@@ -46,7 +57,14 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
             }
           }
         } else if (!triggerOnce && !hasTriggered) {
-          setIsVisible(false);
+          // Handle exit animation
+          if (reverseOnExit && exitDelay > 0) {
+            timeoutRef.current = setTimeout(() => {
+              setIsVisible(false);
+            }, exitDelay);
+          } else if (reverseOnExit) {
+            setIsVisible(false);
+          }
         }
       },
       {
@@ -59,8 +77,11 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
 
     return () => {
       observer.unobserve(element);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
     };
-  }, [threshold, rootMargin, triggerOnce, hasTriggered, delay]);
+  }, [threshold, rootMargin, triggerOnce, hasTriggered, delay, reverseOnExit, exitDelay]);
 
   // Generate CSS classes based on animation type and visibility
   const getAnimationClasses = useCallback(() => {
@@ -107,21 +128,43 @@ export const useStaggeredAnimation = <T extends HTMLElement = HTMLElement>(
 ) => {
   const [visibleItems, setVisibleItems] = useState<boolean[]>(new Array(count).fill(false));
   const { ref: triggerRef, isVisible } = useScrollAnimation<T>(options);
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
+    // Clear any existing timeouts
+    timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    timeoutsRef.current = [];
+
     if (isVisible) {
       // Stagger the appearance of items
       for (let i = 0; i < count; i++) {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           setVisibleItems(prev => {
             const newState = [...prev];
             newState[i] = true;
             return newState;
           });
         }, i * staggerDelay);
+        timeoutsRef.current.push(timeout);
+      }
+    } else if (options.reverseOnExit) {
+      // Reverse stagger - hide items in reverse order for "unbuilding" effect
+      for (let i = count - 1; i >= 0; i--) {
+        const timeout = setTimeout(() => {
+          setVisibleItems(prev => {
+            const newState = [...prev];
+            newState[i] = false;
+            return newState;
+          });
+        }, (count - 1 - i) * (staggerDelay / 2)); // Faster reverse animation
+        timeoutsRef.current.push(timeout);
       }
     }
-  }, [isVisible, count, staggerDelay]);
+
+    return () => {
+      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    };
+  }, [isVisible, count, staggerDelay, options.reverseOnExit]);
 
   // Generate staggered animation classes
   const getStaggeredClasses = useCallback((index: number, animationType: 'fade' | 'slide' | 'scale' | 'pixel' = 'slide') => {

@@ -21,25 +21,39 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
     return getSkillsByCategory(selectedCategory);
   }, [selectedCategory]);
 
-  // Animation hooks
+  // Animation hooks with reverse animations
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.2,
-    animationType: 'slide'
+    animationType: 'slide',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 100
   });
   const { ref: filtersRef, isVisible: filtersVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
     delay: 200,
-    animationType: 'pixel'
+    animationType: 'pixel',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 150
   });
   const { triggerRef: skillsGridRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     filteredSkills.length,
     50,
-    { threshold: 0.1 }
+    { 
+      threshold: 0.1,
+      triggerOnce: false,
+      reverseOnExit: true
+    }
   );
   const { triggerRef: summaryRef, getStaggeredClasses: getSummaryClasses } = useStaggeredAnimation<HTMLDivElement>(
     skillCategories.length,
     100,
-    { threshold: 0.2 }
+    { 
+      threshold: 0.2,
+      triggerOnce: false,
+      reverseOnExit: true
+    }
   );
 
   // Simplified skill relationships

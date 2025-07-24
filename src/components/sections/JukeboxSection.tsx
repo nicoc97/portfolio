@@ -94,20 +94,30 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Animation hooks
+  // Animation hooks with reverse animations
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
-    animationType: 'slide'
+    animationType: 'slide',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 100
   });
   const { triggerRef: albumListRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     ALBUM_DATA.length,
     100,
-    { threshold: 0.2 }
+    { 
+      threshold: 0.2,
+      triggerOnce: false,
+      reverseOnExit: true
+    }
   );
   const { ref: recordDisplayRef, isVisible: recordDisplayVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
     delay: 400,
-    animationType: 'pixel'
+    animationType: 'pixel',
+    triggerOnce: false,
+    reverseOnExit: true,
+    exitDelay: 200
   });
 
   const handleRecordClick = (album: AlbumData) => {
