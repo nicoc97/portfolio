@@ -11,10 +11,10 @@ export const AboutSection: React.FC = () => {
   // Animation hooks
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.3 });
   const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation<HTMLDivElement>(6, 150);
-  
+
   return (
     <section id="about" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
-      <div className="w-full lg:w-4/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         {/* Large background text */}
         <div className="section-bg-text">
           <span>SEC02</span>
@@ -32,7 +32,7 @@ export const AboutSection: React.FC = () => {
 
         {/* Main Content - Full Width Layout */}
         <div ref={contentTriggerRef} className="space-y-16">
-          
+
           {/* Introduction */}
           <div className={`animate-slide-up ${contentVisible[0] ? 'visible' : ''}`}>
             <div className="grid lg:grid-cols-12 gap-8 lg:gap-20 items-start">

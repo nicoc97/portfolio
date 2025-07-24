@@ -172,7 +172,7 @@ export const ProjectsSection: React.FC = () => {
   return (
     <section id="projects" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
 
-      <div className="w-full lg:w-4/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         {/* Large background text */}
         <div className="section-bg-text">
           <span>SEC01</span>
@@ -237,7 +237,7 @@ export const ProjectsSection: React.FC = () => {
         >
           <Swiper
             modules={[Navigation, Autoplay]}
-            spaceBetween={32}
+            spaceBetween={40}
             slidesPerView={1}
             slidesPerGroup={1}
             onSwiper={setSwiperInstance}
@@ -254,20 +254,20 @@ export const ProjectsSection: React.FC = () => {
               640: {
                 slidesPerView: 1,
                 slidesPerGroup: 1,
-                spaceBetween: 24,
+                spaceBetween: 32,
               },
               768: {
                 slidesPerView: 2,
                 slidesPerGroup: 1,
-                spaceBetween: 32,
+                spaceBetween: 36,
               },
               1024: {
                 slidesPerView: 3,
                 slidesPerGroup: 1,
-                spaceBetween: 32,
+                spaceBetween: 40,
               },
             }}
-            className="projects-swiper"
+            className="projects-swiper pb-8"
           >
             {filteredProjects.map((project, index) => (
               <SwiperSlide key={project.id} className="h-auto">

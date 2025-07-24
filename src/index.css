@@ -53,11 +53,30 @@
     /* Prevent horizontal scrolling */
   }
 
+  /* Mobile scroll improvements */
+  @media (max-width: 768px) {
+    body {
+      /* Enable momentum scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
+      /* Improve scroll performance */
+      overscroll-behavior-y: contain;
+    }
+  }
+
   /* Full viewport height sections for scroll hijacking */
   .section-fullscreen {
+    /* Desktop: Full viewport height for scroll hijacking */
     height: 100vh;
     min-height: 100vh;
     scroll-snap-align: start;
+  }
+
+  /* Mobile: Allow natural content height */
+  @media (max-width: 768px) {
+    .section-fullscreen {
+      height: auto;
+      min-height: 100vh;
+    }
   }
 }
 
@@ -95,6 +114,8 @@
     image-rendering: pixelated;
     /* Crisp pixel rendering */
   }
+
+
 
   /* Large background section text - shared across all sections */
   .section-bg-text {

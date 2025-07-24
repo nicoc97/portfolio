@@ -74,7 +74,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
   return (
     <section className={`section-fullscreen py-16 ${className} relative overflow-hidden`} id="skills">
-      <div className="w-full lg:w-4/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         
         {/* Large background text */}
         <div className="section-bg-text">

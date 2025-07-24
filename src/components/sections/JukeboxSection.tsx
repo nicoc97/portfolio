@@ -132,7 +132,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
         ref={sectionRef}
         className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden"
       >
-        <div className="w-full lg:w-4/5 mx-auto mobile-padding relative z-10">
+        <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
           {/* Large background text */}
           <div className="section-bg-text">
             <span>SEC03</span>
@@ -157,73 +157,94 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
 
           {/* Accordion Layout */}
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Record List (Accordion) */}
-            <div ref={albumListRef} className="lg:w-1/2 space-y-4">
+            {/* Record List (Accordion) - Modern borderless design */}
+            <div ref={albumListRef} className="lg:w-1/2 space-y-6">
               {ALBUM_DATA.map((album, index) => (
-                <div key={album.id} className="space-y-4">
+                <div key={album.id} className="space-y-6">
                   <div
                     onClick={() => handleAccordionItemClick(album)}
                     className={`
-                      cursor-pointer p-4 rounded-lg border-2 transition-all duration-300
+                      cursor-pointer p-6 rounded-3xl transition-all duration-500 group
                       ${selectedAlbum.id === album.id
-                        ? 'border-accent-orange bg-primary-bg-light shadow-lg'
-                        : 'border-accent-orange-dark hover:border-accent-orange bg-primary-bg-light/50'
+                        ? 'bg-white/10 backdrop-blur-sm shadow-2xl shadow-accent-orange/20 scale-[1.02]'
+                        : 'hover:bg-white/5 hover:backdrop-blur-sm hover:shadow-xl hover:shadow-black/20 hover:scale-[1.01]'
                       }
                       ${getStaggeredClasses(index, 'slide')}
                     `}
                   >
-                    <div className="flex items-center gap-4">
-                      {/* Mini Record Icon */}
+                    <div className="flex items-center gap-6">
+                      {/* Mini Record Icon - Enhanced */}
                       <div
                         className={`
-                          w-[68px] h-[68px] rounded-full flex-shrink-0 relative
-                          transition-all duration-300 pixel-art bg-black
-                          ${selectedAlbum.id === album.id ? 'animate-spin' : ''}
+                          w-20 h-20 rounded-full flex-shrink-0 relative
+                          transition-all duration-500 pixel-art bg-black
+                          ${selectedAlbum.id === album.id 
+                            ? 'animate-spin shadow-lg shadow-accent-orange/30' 
+                            : 'group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-black/30'
+                          }
                         `}
                         style={{
                           filter: 'contrast(1.2) saturate(1.1)'
                         }}
                       >
-                        {/* Subtle record grooves */}
+                        {/* Enhanced record grooves */}
                         <div className="absolute inset-[2px] rounded-full border border-gray-700/70"></div>
-                        <div className="absolute inset-[8px] rounded-full border border-gray-600/60"></div>
-                        <div className="absolute inset-[14px] rounded-full border border-gray-500/50"></div>
+                        <div className="absolute inset-[6px] rounded-full border border-gray-600/60"></div>
+                        <div className="absolute inset-[10px] rounded-full border border-gray-500/50"></div>
+                        <div className="absolute inset-[14px] rounded-full border border-gray-400/40"></div>
 
-                        {/* Center colored label */}
+                        {/* Center colored label - larger */}
                         <div
-                          className="absolute inset-[22px] rounded-full"
+                          className="absolute inset-[24px] rounded-full shadow-inner"
                           style={{
                             backgroundColor: album.labelColor,
+                            boxShadow: `inset 0 2px 4px rgba(0,0,0,0.3)`
                           }}
                         >
                           {/* Center hole */}
-                          <div
-                            className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-bg/50 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-                          ></div>
+                          <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-primary-bg/70 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-sm"></div>
                         </div>
                       </div>
 
-                      {/* Album Info */}
-                      <div className="flex-1">
-                        <h3 className="text-accent-orange font-retro text-lg font-bold">
+                      {/* Album Info - Enhanced typography */}
+                      <div className="flex-1 space-y-1">
+                        <h3 className={`
+                          font-retro text-xl font-bold transition-all duration-300
+                          ${selectedAlbum.id === album.id 
+                            ? 'text-accent-orange transform translate-x-1' 
+                            : 'text-text-primary group-hover:text-accent-orange group-hover:transform group-hover:translate-x-1'
+                          }
+                        `}>
                           {album.title}
                         </h3>
-                        <p className="text-accent-orange-dark font-tech text-sm">
+                        <p className="text-text-secondary font-tech text-sm opacity-90">
                           {album.artist}
                         </p>
-                        <p className="text-accent-orange-dark font-tech text-xs">
+                        <p className="text-text-secondary/70 font-tech text-xs">
                           {album.year}
                         </p>
                       </div>
 
-                      {/* Play/Pause Indicator */}
-                      {selectedAlbum.id === album.id && (
-                        <div className="text-accent-orange">
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M8 5v14l11-7z" />
-                          </svg>
-                        </div>
-                      )}
+                      {/* Play/Pause Indicator - Enhanced */}
+                      <div className={`
+                        transition-all duration-300 flex items-center gap-2
+                        ${selectedAlbum.id === album.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'}
+                      `}>
+                        {selectedAlbum.id === album.id ? (
+                          <div className="flex items-center gap-2 text-accent-orange">
+                            <div className="w-2 h-2 bg-accent-orange rounded-full animate-pulse"></div>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                        ) : (
+                          <div className="text-text-secondary/60">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 

@@ -1,11 +1,11 @@
 /* Custom Swiper Styles */
 .projects-swiper {
   padding: 0 1rem;
-  overflow: hidden;
+  overflow: hidden; /* Hide overflow to show only intended number of slides */
 }
 
 .projects-swiper .swiper-wrapper {
-  padding: 2rem 0;
+  padding: 3rem 0 2rem 0; /* Extra top padding for floating badges */
 }
 
 .projects-swiper .swiper-slide {

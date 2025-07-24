@@ -42,10 +42,10 @@ function App() {
         block: 'start'
       });
 
-      // Reset scrolling state after animation
+      // Reset scrolling state after animation - reduced timeout for better responsiveness
       setTimeout(() => {
         setIsScrolling(false);
-      }, 1000);
+      }, 800);
     }
   };
 
@@ -69,9 +69,19 @@ function App() {
     }
   };
 
-  // Enhanced scroll hijacking
+  // Enhanced scroll hijacking - Desktop only
   useEffect(() => {
     let ticking = false;
+
+    // Cache mobile detection - only check once per effect
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                          window.innerWidth <= 768 ||
+                          ('ontouchstart' in window);
+
+    // Skip all scroll hijacking setup on mobile
+    if (isMobileDevice) {
+      return;
+    }
 
     const handleWheel = (e: WheelEvent) => {
       if (isScrolling) {
@@ -83,7 +93,7 @@ function App() {
       const timeDiff = now - lastScrollTime.current;
 
       // Throttle scroll events to prevent too rapid firing
-      if (timeDiff < 100) {
+      if (timeDiff < 50) { // Reduced from 100ms to 50ms for smoother response
         e.preventDefault();
         return;
       }
@@ -101,17 +111,17 @@ function App() {
       // Prevent default scrolling
       e.preventDefault();
 
-      // Navigate to next section
+      // Navigate to next section with optimized animation frame
       if (!ticking) {
+        ticking = true;
         requestAnimationFrame(() => {
           navigateToSection(direction);
           ticking = false;
         });
-        ticking = true;
       }
     };
 
-    // Handle keyboard navigation
+    // Handle keyboard navigation - Desktop only
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isScrolling) return;
 
@@ -158,7 +168,7 @@ function App() {
       }
     };
 
-    // Add event listeners
+    // Add event listeners only for desktop
     window.addEventListener('wheel', handleWheel, { passive: false });
     window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('scroll', handleScroll, { passive: true });
