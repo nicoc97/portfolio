@@ -7,6 +7,7 @@ import { SkillsSection } from './components/sections/SkillsSection';
 import { ContactSection } from './components/sections/ContactSection';
 import { DotPagination } from './components/ui/DotPagination';
 import { MobileMenu } from './components/ui/MobileMenu';
+import { ToastProvider } from './hooks/useToast';
 
 /**
  * Main App Component
@@ -265,31 +266,33 @@ function App() {
   }, [activeSection, isScrolling, sections]);
 
   return (
-    <div className="min-h-screen bg-primary-bg">
-      {/* All sections rendered at once for scrolling */}
-      <HeroSection />
-      <ProjectsSection />
-      <AboutSection />
-      <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
-      <SkillsSection />
-      <ContactSection />
+    <ToastProvider>
+      <div className="min-h-screen bg-primary-bg">
+        {/* All sections rendered at once for scrolling */}
+        <HeroSection />
+        <ProjectsSection />
+        <AboutSection />
+        <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
+        <SkillsSection />
+        <ContactSection />
 
-      {/* Desktop Dot Pagination - Right side */}
-      <DotPagination
-        sections={sections}
-        activeSection={activeSection}
-        onSectionClick={handleSectionClick}
-        isLightboxOpen={isLightboxOpen}
-      />
+        {/* Desktop Dot Pagination - Right side */}
+        <DotPagination
+          sections={sections}
+          activeSection={activeSection}
+          onSectionClick={handleSectionClick}
+          isLightboxOpen={isLightboxOpen}
+        />
 
-      {/* Mobile Menu Overlay - Mobile/Tablet only */}
-      <MobileMenu
-        sections={sections}
-        activeSection={activeSection}
-        onSectionClick={handleSectionClick}
-        isLightboxOpen={isLightboxOpen}
-      />
-    </div>
+        {/* Mobile Menu Overlay - Mobile/Tablet only */}
+        <MobileMenu
+          sections={sections}
+          activeSection={activeSection}
+          onSectionClick={handleSectionClick}
+          isLightboxOpen={isLightboxOpen}
+        />
+      </div>
+    </ToastProvider>
   );
 }
 

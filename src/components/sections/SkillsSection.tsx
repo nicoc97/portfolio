@@ -167,12 +167,6 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
               </div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="hidden lg:block space-y-4 mt-8">
-              <div className="w-16 h-1 bg-accent-green/30 rounded"></div>
-              <div className="w-12 h-1 bg-accent-orange/30 rounded ml-4"></div>
-              <div className="w-8 h-1 bg-accent-green/20 rounded ml-8"></div>
-            </div>
           </div>
 
           {/* Right Column - Skills Grid (Asymmetrical) */}
@@ -277,45 +271,32 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           </div>
         )}
 
-        {/* Skills Summary - Asymmetrical Grid */}
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-1">
-            <div className="text-right lg:text-left">
-              <h3 className="text-lg font-tech text-accent-orange mb-2">Tech Overview</h3>
-              <div className="w-16 h-1 bg-accent-orange rounded ml-auto lg:ml-0"></div>
-            </div>
-          </div>
-          
-          <div className="lg:col-span-3">
-            <div ref={summaryRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {skillCategories.map((category, index) => {
-                const categorySkills = getSkillsByCategory(category.key);
-                const isEven = index % 2 === 0;
+        {/* Skills Summary - Symmetrical Full Width Grid */}
+        <div className="mt-12">
+          <div ref={summaryRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {skillCategories.map((category, index) => {
+              const categorySkills = getSkillsByCategory(category.key);
 
-                return (
-                  <div
-                    key={category.key}
-                    className={`
-                      bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center 
-                      hover:border-accent-green transition-all duration-300 
-                      ${getSummaryClasses(index, 'slide')}
-                      ${isEven ? 'hover:rotate-1' : 'hover:-rotate-1'}
-                    `}
-                    style={{
-                      marginTop: `${isEven ? 0 : 16}px`,
-                      marginLeft: `${index * 4}px`,
-                      animationDelay: `${index * 150}ms`
-                    }}
-                  >
-                    <h3 className="font-tech text-accent-green text-sm mb-2">{category.label}</h3>
-                    <div className="text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
-                    <div className="text-xs text-text-secondary font-mono">
-                      Technologies
-                    </div>
+              return (
+                <div
+                  key={category.key}
+                  className={`
+                    bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center 
+                    hover:border-accent-green hover:scale-105 transition-all duration-300 
+                    ${getSummaryClasses(index, 'slide')}
+                  `}
+                  style={{
+                    animationDelay: `${index * 150}ms`
+                  }}
+                >
+                  <h3 className="font-tech text-accent-green text-sm mb-2">{category.label}</h3>
+                  <div className="text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
+                  <div className="text-xs text-text-secondary font-mono">
+                    Technologies
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

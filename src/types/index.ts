@@ -8,7 +8,7 @@ export interface Project {
   liveUrl?: string;
   githubUrl: string;
   category: 'web' | 'data' | 'fullstack';
-  featured: boolean;
+  status: 'wip' | 'completed';
   completedDate: Date;
 }
 

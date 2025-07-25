@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
 import type { ProjectCardProps } from '../../types';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
+import { useToast } from '../../hooks/useToast';
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { showToast } = useToast();
+
+  const handleLinkClick = (e: React.MouseEvent, url?: string) => {
+    e.stopPropagation();
+    
+    if (project.status === 'wip') {
+      showToast('This project is currently in development', 'warning', 4000);
+      return;
+    }
+    
+    if (url) {
+      window.open(url, '_blank');
+    }
+  };
 
 
 
@@ -20,14 +35,18 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     >
 
 
-      {/* Featured badge - always visible */}
-      {project.featured && (
-        <div className="absolute top-4 left-4 z-30">
-          <div className="bg-accent-green text-white text-xs font-tech font-bold px-2 py-1 rounded-full backdrop-blur-sm">
-            FEATURED
-          </div>
+      {/* Status badge - always visible */}
+      <div className="absolute top-4 left-4 z-30">
+        <div className={`
+          text-white text-xs font-tech font-bold px-2 py-1 rounded-full backdrop-blur-sm
+          ${project.status === 'completed' 
+            ? 'bg-accent-green' 
+            : 'bg-yellow-500'
+          }
+        `}>
+          {project.status === 'completed' ? 'COMPLETED' : 'WIP'}
         </div>
-      )}
+      </div>
 
       {/* Background Image - fills entire card */}
       <div className="absolute inset-0 w-full h-full">
@@ -45,7 +64,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-bg-light to-primary-bg">
             <div className="text-text-secondary/60 font-tech text-lg">
-              [PREVIEW_LOADING...]
+              [WIP_CONTENT_NOT_READY]
             </div>
           </div>
         )}
@@ -60,16 +79,16 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         transition-opacity duration-300
         ${isHovered ? 'opacity-100' : 'opacity-0'}
       `}>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-orange/5 to-transparent animate-pulse" 
-             style={{
-               backgroundImage: `repeating-linear-gradient(
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-orange/5 to-transparent animate-pulse"
+          style={{
+            backgroundImage: `repeating-linear-gradient(
                  0deg,
                  transparent,
                  transparent 2px,
                  rgba(255, 165, 0, 0.03) 2px,
                  rgba(255, 165, 0, 0.03) 4px
                )`
-             }}>
+          }}>
         </div>
         {/* Moving scanline */}
         <div className={`
@@ -84,13 +103,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <span className={`
           text-xs font-tech font-bold px-3 py-1 rounded-xl uppercase tracking-wide backdrop-blur-sm
           transition-all duration-300
-          ${project.category === 'data' ? 'bg-accent-green/20 text-accent-green border border-accent-green/50' : 
+          ${project.category === 'data' ? 'bg-accent-green/20 text-accent-green border border-accent-green/50' :
             project.category === 'fullstack' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50' :
-            'bg-accent-orange/20 text-accent-orange border border-accent-orange/50'}
+              'bg-accent-orange/20 text-accent-orange border border-accent-orange/50'}
           ${isHovered ? 'scale-105 bg-opacity-90' : ''}
         `}>
-          {project.category === 'data' ? 'DATA_SCI' : 
-           project.category === 'fullstack' ? 'FULL_STK' : 'WEB_APP'}
+          {project.category === 'data' ? 'DATA_SCI' :
+            project.category === 'fullstack' ? 'FULL_STK' : 'WEB_APP'}
         </span>
       </div>
 
@@ -98,10 +117,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       <div className="absolute top-16 right-4 flex flex-col gap-2 z-20">
         {project.liveUrl && (
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(project.liveUrl, '_blank');
-            }}
+            onClick={(e) => handleLinkClick(e, project.liveUrl)}
             className={`
               bg-white/10 hover:bg-accent-orange text-white p-2 rounded-lg backdrop-blur-sm
               transition-all duration-300 hover:scale-110
@@ -112,12 +128,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             <ExternalLink className="w-4 h-4" />
           </button>
         )}
-        
+
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            window.open(project.githubUrl, '_blank');
-          }}
+          onClick={(e) => handleLinkClick(e, project.githubUrl)}
           className={`
             bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg backdrop-blur-sm
             transition-all duration-300 hover:scale-110
@@ -159,8 +172,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 transition-all duration-200 transform hover:scale-105
                 ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
               `}
-              style={{ 
-                transitionDelay: isHovered ? `${techIndex * 50 + 200}ms` : '0ms' 
+              style={{
+                transitionDelay: isHovered ? `${techIndex * 50 + 200}ms` : '0ms'
               }}
             >
               {tech}
@@ -172,9 +185,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
               transition-all duration-200 transform
               ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
             `}
-            style={{ 
-              transitionDelay: isHovered ? '450ms' : '0ms' 
-            }}>
+              style={{
+                transitionDelay: isHovered ? '450ms' : '0ms'
+              }}>
               +{project.techStack.length - 5}
             </span>
           )}
@@ -186,27 +199,21 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           transition-all duration-300 transform
           ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
         `}
-        style={{ 
-          transitionDelay: isHovered ? '300ms' : '0ms' 
-        }}>
+          style={{
+            transitionDelay: isHovered ? '300ms' : '0ms'
+          }}>
           {project.liveUrl && (
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(project.liveUrl, '_blank');
-              }}
+              onClick={(e) => handleLinkClick(e, project.liveUrl)}
               className="text-accent-orange hover:text-white text-sm font-tech font-bold flex items-center gap-2 transition-all duration-200 hover:gap-3"
             >
               LIVE_DEMO
               <ArrowUpRight className="w-4 h-4" />
             </button>
           )}
-          
+
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              window.open(project.githubUrl, '_blank');
-            }}
+            onClick={(e) => handleLinkClick(e, project.githubUrl)}
             className="text-white/70 hover:text-accent-green text-sm font-tech font-bold flex items-center gap-2 transition-all duration-200 hover:gap-3"
           >
             SOURCE
@@ -225,7 +232,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <h3 className="text-lg font-retro font-bold text-white leading-tight">
           {project.title}
         </h3>
-        <div className="text-white/60 text-xs font-tech mt-1">
+        <div className="text-white/60 text-base font-tech mt-1">
           [HOVER_FOR_DETAILS]
         </div>
       </div>

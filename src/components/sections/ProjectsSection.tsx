@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { ProjectCard } from '../ui/ProjectCard';
 import { VintageTVDial } from '../ui/VintageTVDial';
-import { ScrollReveal, StaggeredList } from '../animations/ScrollAnimations';
+import { ScrollReveal } from '../animations/ScrollAnimations';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 import type { Project } from '../../types';
 import type { Swiper as SwiperType } from 'swiper';
@@ -33,7 +33,7 @@ const sampleProjects: Project[] = [
     liveUrl: 'https://example.com/dashboard',
     githubUrl: 'https://github.com/username/dashboard',
     category: 'data',
-    featured: true,
+    status: 'wip',
     completedDate: new Date('2024-01-15')
   },
   {
@@ -45,7 +45,7 @@ const sampleProjects: Project[] = [
     liveUrl: 'https://example.com/shop',
     githubUrl: 'https://github.com/username/ecommerce',
     category: 'fullstack',
-    featured: true,
+    status: 'wip',
     completedDate: new Date('2024-02-20')
   },
   {
@@ -56,7 +56,7 @@ const sampleProjects: Project[] = [
     imageUrl: '',
     githubUrl: 'https://github.com/username/ml-viz',
     category: 'data',
-    featured: false,
+    status: 'wip',
     completedDate: new Date('2024-03-10')
   },
   {
@@ -68,7 +68,7 @@ const sampleProjects: Project[] = [
     liveUrl: 'https://example.com/tasks',
     githubUrl: 'https://github.com/username/task-app',
     category: 'web',
-    featured: true,
+    status: 'wip',
     completedDate: new Date('2024-04-05')
   },
   {
@@ -80,7 +80,7 @@ const sampleProjects: Project[] = [
     liveUrl: 'https://example.com/api-docs',
     githubUrl: 'https://github.com/username/api-docs',
     category: 'web',
-    featured: false,
+    status: 'wip',
     completedDate: new Date('2024-05-12')
   },
   {
@@ -92,7 +92,7 @@ const sampleProjects: Project[] = [
     liveUrl: 'https://example.com/creative',
     githubUrl: 'https://github.com/username/creative-coding',
     category: 'web',
-    featured: false,
+    status: 'wip',
     completedDate: new Date('2024-06-18')
   }
 ];
@@ -167,7 +167,7 @@ export const ProjectsSection: React.FC = () => {
   ] as const;
 
   return (
-    <section id="projects" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
+    <section id="projects" className="section-fullscreen py-20 bg-primary-bg relative overlay-hidden">
 
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
         {/* Large background text */}
@@ -199,181 +199,190 @@ export const ProjectsSection: React.FC = () => {
             </div>
           </ScrollReveal>
 
-          {/* filter buttons with staggered animation */}
+        </div>
+
+        {/* Filter Buttons - Top Aligned */}
+        <div className="mb-12">
           <div
             ref={filtersRef}
-            className={`mt-12 flex flex-wrap gap-3 justify-center animate-pixel ${filtersVisible ? 'visible' : ''}`}
+            className={`animate-pixel ${filtersVisible ? 'visible' : ''}`}
           >
-            <StaggeredList
-              items={filterButtons.map(({ key, label }) => (
+            {/* filter buttons */}
+            <div className="flex flex-wrap justify-center gap-4">
+              {filterButtons.map(({ key, label }) => (
                 <button
                   key={key}
                   onClick={() => setSelectedFilter(key)}
                   className={`
-                    filter-button
+                    px-6 py-3 rounded-lg font-tech border-2 transition-all duration-200
                     ${selectedFilter === key
-                      ? (key === 'data' ? 'filter-button-active-green' : 'filter-button-active-orange')
-                      : 'filter-button-inactive'
+                      ? (key === 'data'
+                        ? 'bg-accent-green text-primary-bg border-accent-green shadow-lg transform -translate-y-1'
+                        : 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform -translate-y-1'
+                      )
+                      : 'tech-badge-secondary hover:-translate-y-1'
                     }
                   `}
                 >
-                  {label}
+                  <div className="flex items-center gap-2">
+                    <span>{label}</span>
+                    <span className="text-sm opacity-70">
+                      ({key === 'all' ? sampleProjects.length : sampleProjects.filter(p => p.category === key).length})
+                    </span>
+                  </div>
                 </button>
               ))}
-              className="flex flex-wrap gap-3 justify-center"
-              staggerDelay={100}
-              animationType="pixel"
-              reverseOnExit={true}
-            />
+            </div>
           </div>
         </div>
 
         {/* Projects Swiper */}
-        <div
-          ref={swiperRef}
-          className={`relative animate-fade ${swiperVisible ? 'visible' : ''}`}
-        >
-          <Swiper
-            modules={[Navigation, Autoplay]}
-            spaceBetween={40}
-            slidesPerView={1}
-            slidesPerGroup={1}
-            onSwiper={setSwiperInstance}
-            onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
-            navigation={{
-              nextEl: '.swiper-button-next-custom',
-              prevEl: '.swiper-button-prev-custom',
-            }}
-            autoplay={{
-              delay: playbackSpeed,
-              disableOnInteraction: false,
-            }}
-            breakpoints={{
-              640: {
-                slidesPerView: 1,
-                slidesPerGroup: 1,
-                spaceBetween: 32,
-              },
-              768: {
-                slidesPerView: 2,
-                slidesPerGroup: 1,
-                spaceBetween: 36,
-              },
-            }}
-            className="projects-swiper pb-8"
+        <div className="w-full">
+          <div
+            ref={swiperRef}
+            className={`relative animate-fade ${swiperVisible ? 'visible' : ''}`}
           >
-            {filteredProjects.map((project, index) => (
-              <SwiperSlide key={project.id} className="h-auto">
-                <div className="h-full">
-                  <ProjectCard project={project} index={index} />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Controls and Dial Layout */}
-          <div className="mt-4 flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
-            {/* Hi-Fi Style Controls */}
-            <div className="flex justify-center lg:justify-start items-center">
-              {/* Transport Controls */}
-              <div className="flex items-center gap-3">
-                {/* Rewind */}
-                <button
-                  onClick={handleRewind}
-                  className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                  title="Rewind to start"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="11,19 2,12 11,5" />
-                    <polygon points="22,19 13,12 22,5" />
-                  </svg>
-                </button>
-
-                {/* Previous (Skip Back) */}
-                <button
-                  className="swiper-button-prev-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                  title="Previous track"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="19,20 9,12 19,4" />
-                    <line x1="5" y1="19" x2="5" y2="5" />
-                  </svg>
-                </button>
-
-                {/* Play/Pause */}
-                <button
-                  onClick={handlePlayPause}
-                  className="p-4 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                  title={isPlaying ? "Pause" : "Play"}
-                >
-                  {isPlaying ? (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <rect x="6" y="4" width="4" height="16" />
-                      <rect x="14" y="4" width="4" height="16" />
-                    </svg>
-                  ) : (
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="5,3 19,12 5,21" />
-                    </svg>
-                  )}
-                </button>
-
-                {/* Next (Skip Forward) */}
-                <button
-                  className="swiper-button-next-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                  title="Next track"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="5,4 15,12 5,20" />
-                    <line x1="19" y1="5" x2="19" y2="19" />
-                  </svg>
-                </button>
-
-                {/* Fast Forward */}
-                <button
-                  onClick={handleFastForward}
-                  className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
-                  title="Fast forward to end"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polygon points="13,19 22,12 13,5" />
-                    <polygon points="2,19 11,12 2,5" />
-                  </svg>
-                </button>
-              </div>
+            <div
+              onMouseEnter={() => swiperInstance?.autoplay.stop()}
+              onMouseLeave={() => isPlaying && swiperInstance?.autoplay.start()}
+            >
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={40}
+                slidesPerView={1}
+                slidesPerGroup={1}
+                onSwiper={setSwiperInstance}
+                onSlideChange={(swiper) => setCurrentSlide(swiper.activeIndex)}
+                navigation={{
+                  nextEl: '.swiper-button-next-custom',
+                  prevEl: '.swiper-button-prev-custom',
+                }}
+                autoplay={{
+                  delay: playbackSpeed,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 1,
+                    slidesPerGroup: 1,
+                    spaceBetween: 32,
+                  },
+                  768: {
+                    slidesPerView: 2,
+                    slidesPerGroup: 1,
+                    spaceBetween: 36,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 1,
+                    spaceBetween: 40,
+                  },
+                }}
+                className="projects-swiper pb-8"
+              >
+                {filteredProjects.map((project, index) => {
+                  // Only apply asymmetrical positioning on desktop (lg and above)
+                  const isOdd = index % 2 === 1;
+                  return (
+                    <SwiperSlide key={project.id} className="h-auto">
+                      <div
+                        className={`h-full transition-all duration-300 ${isOdd ? 'lg:transform lg:-translate-y-8 lg:-mt-2' : ''}`}
+                      >
+                        <ProjectCard project={project} index={index} />
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
             </div>
 
-            {/* Vintage Radio Dial */}
-            <ScrollReveal threshold={0.3} delay={300} effect="glitch" reverseOnExit={true}>
-              <div className="flex justify-center lg:justify-end">
-                <VintageTVDial
-                  totalSlides={filteredProjects.length}
-                  currentSlide={currentSlide}
-                  onSlideChange={(index) => swiperInstance?.slideTo(index)}
-                  swiperInstance={swiperInstance}
-                />
+            {/* Controls and Dial Layout */}
+            <div className="mt-4 flex flex-col lg:flex-row lg:justify-between lg:items-start gap-8">
+              {/* Hi-Fi Style Controls */}
+              <div className="flex justify-center lg:justify-start items-center">
+                {/* Transport Controls */}
+                <div className="flex items-center gap-3">
+                  {/* Rewind */}
+                  <button
+                    onClick={handleRewind}
+                    className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                    title="Rewind to start"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="11,19 2,12 11,5" />
+                      <polygon points="22,19 13,12 22,5" />
+                    </svg>
+                  </button>
+
+                  {/* Previous (Skip Back) */}
+                  <button
+                    className="swiper-button-prev-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                    title="Previous track"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="19,20 9,12 19,4" />
+                      <line x1="5" y1="19" x2="5" y2="5" />
+                    </svg>
+                  </button>
+
+                  {/* Play/Pause */}
+                  <button
+                    onClick={handlePlayPause}
+                    className="p-4 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                    title={isPlaying ? "Pause" : "Play"}
+                  >
+                    {isPlaying ? (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="6" y="4" width="4" height="16" />
+                        <rect x="14" y="4" width="4" height="16" />
+                      </svg>
+                    ) : (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polygon points="5,3 19,12 5,21" />
+                      </svg>
+                    )}
+                  </button>
+
+                  {/* Next (Skip Forward) */}
+                  <button
+                    className="swiper-button-next-custom p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                    title="Next track"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="5,4 15,12 5,20" />
+                      <line x1="19" y1="5" x2="19" y2="19" />
+                    </svg>
+                  </button>
+
+                  {/* Fast Forward */}
+                  <button
+                    onClick={handleFastForward}
+                    className="p-3 transition-all duration-200 group text-text-secondary hover:text-accent-orange"
+                    title="Fast forward to end"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="13,19 22,12 13,5" />
+                      <polygon points="2,19 11,12 2,5" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </ScrollReveal>
+
+              {/* Vintage Radio Dial */}
+              <ScrollReveal threshold={0.3} delay={300} effect="glitch" reverseOnExit={true}>
+                <div className="flex justify-center lg:justify-end">
+                  <VintageTVDial
+                    totalSlides={filteredProjects.length}
+                    currentSlide={currentSlide}
+                    onSlideChange={(index) => swiperInstance?.slideTo(index)}
+                    swiperInstance={swiperInstance}
+                  />
+                </div>
+              </ScrollReveal>
+            </div>
           </div>
         </div>
-
-        {/* No projects message with unconventional styling */}
-        {filteredProjects.length === 0 && (
-          <div className="relative py-20">
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-4 text-accent-orange font-tech text-xs opacity-30">
-              ERROR_404
-            </div>
-            <div className="text-center">
-              <div className="text-accent-orange font-tech text-lg">
-                [NO_PROJECTS_FOUND]
-              </div>
-              <div className="mt-4 text-text-secondary text-sm">
-                Try adjusting your filter selection
-              </div>
-            </div>
-          </div>
-        )}
-
       </div>
     </section>
   );
