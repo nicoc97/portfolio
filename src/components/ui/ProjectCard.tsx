@@ -10,12 +10,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
   const handleLinkClick = (e: React.MouseEvent, url?: string) => {
     e.stopPropagation();
-    
+
     if (project.status === 'wip') {
       showToast('This project is currently in development', 'warning', 4000);
       return;
     }
-    
+
     if (url) {
       window.open(url, '_blank');
     }
@@ -38,13 +38,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       {/* Status badge - always visible */}
       <div className="absolute top-4 left-4 z-30">
         <div className={`
-          text-white text-xs font-tech font-bold px-2 py-1 rounded-full backdrop-blur-sm
-          ${project.status === 'completed' 
-            ? 'bg-accent-green' 
+          text-white text-sm font-tech font-bold px-2 py-1 tracking-wider rounded-full backdrop-blur-sm
+          ${project.status === 'completed'
+            ? 'bg-accent-green'
             : 'bg-yellow-500'
           }
         `}>
-          {project.status === 'completed' ? 'COMPLETED' : 'WIP'}
+          {project.status === 'completed' ? 'COMPLETED' : 'IN PROGRESS'}
         </div>
       </div>
 

@@ -176,7 +176,7 @@ export const ProjectsSection: React.FC = () => {
         </div>
 
         {/* Section header with scroll animations */}
-        <div className="relative mb-20">
+        <div className="relative mb-12 md:mb-20">
           <ScrollReveal threshold={0.2} effect="materialize" reverseOnExit={true}>
             {/* header layout */}
             <div
@@ -202,7 +202,7 @@ export const ProjectsSection: React.FC = () => {
         </div>
 
         {/* Filter Buttons - Top Aligned */}
-        <div className="mb-12">
+        <div className="md:mb-12">
           <div
             ref={filtersRef}
             className={`animate-pixel ${filtersVisible ? 'visible' : ''}`}
@@ -274,7 +274,7 @@ export const ProjectsSection: React.FC = () => {
                     spaceBetween: 36,
                   },
                   1024: {
-                    slidesPerView: 3,
+                    slidesPerView: 4,
                     slidesPerGroup: 1,
                     spaceBetween: 40,
                   },

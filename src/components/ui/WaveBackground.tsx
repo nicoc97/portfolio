@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useParallaxScroll } from '../../hooks/useScrollAnimation';
 
 /**
  * WaveBackground Component
@@ -10,6 +11,11 @@ import { motion } from 'framer-motion';
 export const WaveBackground = () => {
   // Generate unique IDs to avoid conflicts when component remounts
   const uniqueId = React.useId();
+  
+  // Parallax effects for each wave layer with intense speeds (negative for reverse effect)
+  const wave1Parallax = useParallaxScroll(-0.6); // Background layer - dramatic movement
+  const wave2Parallax = useParallaxScroll(-0.8); // Middle layer - more intense
+  const wave3Parallax = useParallaxScroll(-1.2); // Foreground layer - most dramatic movement
   
   // Detect if we're on mobile/tablet
   const [isMobile, setIsMobile] = React.useState(false);
@@ -121,7 +127,10 @@ export const WaveBackground = () => {
       {/* Wave layers with different gradients and animations */}
       <div className="absolute inset-0">
         {/* Wave 1 - Bottom layer, deepest grooves */}
-        <div className={`absolute inset-x-0 opacity-60 ${isMobile ? 'h-64 bottom-10' : 'h-96 bottom-20'}`}>
+        <div 
+          className={`absolute inset-x-0 opacity-60 ${isMobile ? 'h-64 bottom-10' : 'h-96 bottom-20'}`}
+          style={wave1Parallax.parallaxStyle}
+        >
           <svg
             className="absolute bottom-0 w-full h-full"
             viewBox="0 0 1440 400"
@@ -149,7 +158,10 @@ export const WaveBackground = () => {
         </div>
 
         {/* Wave 2 - Middle layer, flowing rhythm */}
-        <div className={`absolute inset-x-0 opacity-50 ${isMobile ? 'h-56 bottom-10' : 'h-80 bottom-20'}`}>
+        <div 
+          className={`absolute inset-x-0 opacity-50 ${isMobile ? 'h-56 bottom-10' : 'h-80 bottom-20'}`}
+          style={wave2Parallax.parallaxStyle}
+        >
           <svg
             className="absolute bottom-0 w-full h-full"
             viewBox="0 0 1440 400"
@@ -178,7 +190,10 @@ export const WaveBackground = () => {
         </div>
 
         {/* Wave 3 - Top layer, smooth groove */}
-        <div className={`absolute inset-x-0 opacity-30 ${isMobile ? 'h-44 bottom-10' : 'h-64 bottom-20'}`}>
+        <div 
+          className={`absolute inset-x-0 opacity-30 ${isMobile ? 'h-44 bottom-10' : 'h-64 bottom-20'}`}
+          style={wave3Parallax.parallaxStyle}
+        >
           <svg
             className="absolute bottom-0 w-full h-full"
             viewBox="0 0 1440 400"

@@ -38,14 +38,7 @@
   border-color: #e97419;
 }
 
-/* Hide navigation arrows on mobile */
-@media (max-width: 767px) {
-
-  .swiper-button-prev-custom,
-  .swiper-button-next-custom {
-    display: none;
-  }
-}
+/* Navigation arrows visible on all screen sizes */
 
 /* Enhanced TV Dial Styles - Pixelated Version */
 .vintage-tv-dial-container {
