@@ -175,9 +175,10 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                     onClick={() => handleAccordionItemClick(album)}
                     className={`
                       cursor-pointer p-6 transition-all duration-500 group relative
+                      hover:bg-accent-green/5 hover:backdrop-blur-sm hover:rounded-r-full
                       ${selectedAlbum.id === album.id
                         ? 'border-l-2 border-accent-orange'
-                        : 'hover:bg-accent-green/5 hover:backdrop-blur-sm hover:rounded-r-full'
+                        : ''
                       }
                       ${getStaggeredClasses(index, 'slide')}
                     `}

@@ -330,10 +330,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     }
   };
 
-  // Prevent touch scrolling on the overlay
-  const preventTouchScroll = (e: React.TouchEvent) => {
-    e.preventDefault();
-  };
+  // Removed preventTouchScroll - using CSS touchAction instead
 
   // Initialize scene when opened and handle body scroll
   useEffect(() => {
@@ -357,14 +354,6 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
 
-      // Additional prevention for iOS bounce scrolling
-      const preventScroll = (e: TouchEvent) => {
-        e.preventDefault();
-      };
-      
-      // Add passive: false to make preventDefault work on iOS
-      document.addEventListener('touchmove', preventScroll, { passive: false });
-
       // For iOS: Try to hide the URL bar by scrolling slightly
       if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
         // Small delay to ensure DOM is ready
@@ -387,9 +376,6 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         
         // Restore scroll position
         window.scrollTo(0, scrollPositionRef.current);
-        
-        // Remove event listener
-        document.removeEventListener('touchmove', preventScroll);
 
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
@@ -430,7 +416,6 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         bottom: 0
       }}
       onClick={handleBackgroundClick}
-      onTouchMove={preventTouchScroll}
     >
       {/* Inner container with safe area padding for iOS */}
       <div 
