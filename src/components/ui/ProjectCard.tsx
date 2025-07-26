@@ -3,7 +3,7 @@ import type { ProjectCardProps } from '../../types';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
 import { useToast } from '../../hooks/useToast';
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -29,7 +29,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
   const handleCardInteraction = () => {
     if (isTouchDevice) {
-      setIsExpanded(!isExpanded);
+      const newExpandedState = !isExpanded;
+      setIsExpanded(newExpandedState);
+      
+      // Pause swiper when expanding card
+      if (newExpandedState && onCardExpand) {
+        onCardExpand();
+      }
     }
   };
 

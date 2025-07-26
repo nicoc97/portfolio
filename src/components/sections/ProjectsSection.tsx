@@ -289,7 +289,16 @@ export const ProjectsSection: React.FC = () => {
                       <div
                         className={`h-full transition-all duration-300 ${isOdd ? 'lg:transform lg:-translate-y-8 lg:-mt-2' : ''}`}
                       >
-                        <ProjectCard project={project} index={index} />
+                        <ProjectCard
+                          project={project}
+                          index={index}
+                          onCardExpand={() => {
+                            if (swiperInstance && isPlaying) {
+                              swiperInstance.autoplay.stop();
+                              setIsPlaying(false);
+                            }
+                          }}
+                        />
                       </div>
                     </SwiperSlide>
                   );

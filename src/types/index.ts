@@ -32,6 +32,7 @@ export interface PixelButtonProps {
 export interface ProjectCardProps {
   project: Project;
   index: number;
+  onCardExpand?: () => void;
 }
 
 export interface TechBadgeProps {
