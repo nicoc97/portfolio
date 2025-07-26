@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { ProjectCardProps } from '../../types';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
 import { useToast } from '../../hooks/useToast';
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { showToast } = useToast();
+
+  // Detect if device supports touch
+  useEffect(() => {
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
 
   const handleLinkClick = (e: React.MouseEvent, url?: string) => {
     e.stopPropagation();
@@ -21,6 +27,24 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     }
   };
 
+  const handleCardInteraction = () => {
+    if (isTouchDevice) {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
+  const handleMouseEnter = () => {
+    if (!isTouchDevice) {
+      setIsExpanded(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isTouchDevice) {
+      setIsExpanded(false);
+    }
+  };
+
 
 
   return (
@@ -28,10 +52,11 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       className={`
         group relative h-full min-h-[400px] overflow-hidden rounded-2xl cursor-pointer
         transform transition-all duration-500 ease-out
-        ${isHovered ? '-translate-y-2' : 'translate-y-0 shadow-lg shadow-black/20'}
+        ${isExpanded ? '-translate-y-2' : 'translate-y-0 shadow-lg shadow-black/20'}
       `}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleCardInteraction}
     >
 
 
@@ -57,7 +82,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             className={`
               w-full h-full object-cover transition-all duration-700
               ${imageLoaded ? 'opacity-100' : 'opacity-0'}
-              ${isHovered ? 'scale-110' : 'scale-100'}
+              ${isExpanded ? 'scale-110' : 'scale-100'}
             `}
             onLoad={() => setImageLoaded(true)}
           />
@@ -77,7 +102,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       <div className={`
         absolute inset-0 z-15 pointer-events-none
         transition-opacity duration-300
-        ${isHovered ? 'opacity-100' : 'opacity-0'}
+        ${isExpanded ? 'opacity-100' : 'opacity-0'}
       `}>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-accent-orange/5 to-transparent animate-pulse"
           style={{
@@ -93,7 +118,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         {/* Moving scanline */}
         <div className={`
           absolute inset-x-0 h-0.5 bg-accent-orange/30 shadow-lg shadow-accent-orange/50
-          ${isHovered ? 'animate-scanline' : ''}
+          ${isExpanded ? 'animate-scanline' : ''}
         `}>
         </div>
       </div>
@@ -106,7 +131,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           ${project.category === 'data' ? 'bg-accent-green/20 text-accent-green border border-accent-green/50' :
             project.category === 'fullstack' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50' :
               'bg-accent-orange/20 text-accent-orange border border-accent-orange/50'}
-          ${isHovered ? 'scale-105 bg-opacity-90' : ''}
+          ${isExpanded ? 'scale-105 bg-opacity-90' : ''}
         `}>
           {project.category === 'data' ? 'DATA_SCI' :
             project.category === 'fullstack' ? 'FULL_STK' : 'WEB_APP'}
@@ -121,7 +146,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             className={`
               bg-white/10 hover:bg-accent-orange text-white p-2 rounded-lg backdrop-blur-sm
               transition-all duration-300 hover:scale-110
-              ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
+              ${isExpanded ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
             `}
             title="View Live Demo"
           >
@@ -134,7 +159,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
           className={`
             bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg backdrop-blur-sm
             transition-all duration-300 hover:scale-110
-            ${isHovered ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
+            ${isExpanded ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
           `}
           title="View Source Code"
         >
@@ -147,7 +172,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         absolute inset-x-0 bottom-0 p-6 z-20
         bg-gradient-to-t from-black/95 via-black/80 to-transparent backdrop-blur-sm
         transform transition-all duration-500 ease-out
-        ${isHovered ? 'translate-y-0' : 'translate-y-full'}
+        ${isExpanded ? 'translate-y-0' : 'translate-y-full'}
       `}>
 
 
@@ -170,10 +195,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
                 text-xs px-2 py-1 rounded-lg font-tech
                 bg-white/10 border border-white/20 text-white backdrop-blur-sm
                 transition-all duration-200 transform hover:scale-105
-                ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
+                ${isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
               `}
               style={{
-                transitionDelay: isHovered ? `${techIndex * 50 + 200}ms` : '0ms'
+                transitionDelay: isExpanded ? `${techIndex * 50 + 200}ms` : '0ms'
               }}
             >
               {tech}
@@ -183,10 +208,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
             <span className={`
               text-white/60 text-xs px-2 py-1 font-tech
               transition-all duration-200 transform
-              ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
+              ${isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}
             `}
               style={{
-                transitionDelay: isHovered ? '450ms' : '0ms'
+                transitionDelay: isExpanded ? '450ms' : '0ms'
               }}>
               +{project.techStack.length - 5}
             </span>
@@ -197,10 +222,10 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <div className={`
           flex gap-4
           transition-all duration-300 transform
-          ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          ${isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
         `}
           style={{
-            transitionDelay: isHovered ? '300ms' : '0ms'
+            transitionDelay: isExpanded ? '300ms' : '0ms'
           }}>
           {project.liveUrl && (
             <button
@@ -227,13 +252,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         absolute inset-x-0 bottom-0 p-4 z-10
         bg-gradient-to-t from-black/60 to-transparent
         transition-all duration-500
-        ${isHovered ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}
+        ${isExpanded ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}
       `}>
         <h3 className="text-lg font-retro font-bold text-white leading-tight">
           {project.title}
         </h3>
         <div className="text-white/60 text-base font-tech mt-1">
-          [HOVER_FOR_DETAILS]
+          {isTouchDevice ? '[TAP_FOR_DETAILS]' : '[HOVER_FOR_DETAILS]'}
         </div>
       </div>
     </div>
