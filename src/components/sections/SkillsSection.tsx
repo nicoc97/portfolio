@@ -9,12 +9,23 @@ interface SkillsSectionProps {
 }
 
 export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) => {
-  const [selectedCategory, setSelectedCategory] = useState<TechSkill['category'] | 'all'>('all');
+  // Check if mobile on initial load
+  const getInitialCategory = (): TechSkill['category'] | 'all' | null => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      return null; // No category selected on mobile
+    }
+    return 'all'; // All skills selected on desktop
+  };
+
+  const [selectedCategory, setSelectedCategory] = useState<TechSkill['category'] | 'all' | null>(getInitialCategory());
   const [selectedSkill, setSelectedSkill] = useState<TechSkill | null>(null);
   const [hoveredSkill, setHoveredSkill] = useState<TechSkill | null>(null);
 
   // Filter skills based on selected category
   const filteredSkills = useMemo(() => {
+    if (selectedCategory === null) {
+      return []; // No skills shown when no filter selected
+    }
     if (selectedCategory === 'all') {
       return techSkills;
     }
@@ -176,46 +187,55 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
           {/* Right Column - Skills Grid (Asymmetrical on desktop, standard on mobile) */}
           <div className="lg:col-span-3 skills-grid-lines">
-            <div ref={skillsGridRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 relative z-10">
-              {filteredSkills.map((skill, index) => {
-                // Create asymmetrical staggered positioning only for larger screens
-                const isEven = index % 2 === 0;
-                const colIndex = index % 4;
+            {filteredSkills.length === 0 ? (
+              <div className="flex items-center justify-center h-64 text-text-secondary text-center">
+                <div>
+                  <p className="text-lg font-tech mb-2">Select a category to view skills</p>
+                  <p className="text-sm opacity-70">Choose from the filters above</p>
+                </div>
+              </div>
+            ) : (
+              <div ref={skillsGridRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 relative z-10">
+                {filteredSkills.map((skill, index) => {
+                  // Create asymmetrical staggered positioning only for larger screens
+                  const isEven = index % 2 === 0;
+                  const colIndex = index % 4;
 
-                return (
-                  <div
-                    key={skill.name}
-                    onMouseEnter={() => handleSkillHover(skill)}
-                    onMouseLeave={() => handleSkillHover(null)}
-                    className={`
-                      transition-all duration-300 skill-card-stagger
-                      ${isSkillHighlighted(skill) ? 'scale-102 z-20' : ''}
-                      ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
-                      ${getStaggeredClasses(index, 'slide')}
-                    `}
-                    style={{
-                      '--desktop-margin-top': `${isEven ? 0 : 12}px`,
-                      '--desktop-margin-left': `${colIndex * 2}px`,
-                      animationDelay: `${index * 80}ms`
-                    } as React.CSSProperties}
-                  >
-                    <div className="skill-badge-wrapper">
-                      <TechBadge
-                        skill={skill}
-                        onClick={() => handleSkillClick(skill)}
-                        className={`
-                          w-full transition-all duration-300
-                          ${selectedSkill?.name === skill.name ? 'ring-2 ring-offset-2 ring-offset-primary-bg ring-accent-orange' : ''}
-                          ${isEven ? 'md:hover:rotate-1' : 'md:hover:-rotate-1'}
-                          hover:scale-105
-                        `}
-                        showTooltip={!selectedSkill}
-                      />
+                  return (
+                    <div
+                      key={skill.name}
+                      onMouseEnter={() => handleSkillHover(skill)}
+                      onMouseLeave={() => handleSkillHover(null)}
+                      className={`
+                        transition-all duration-300 skill-card-stagger
+                        ${isSkillHighlighted(skill) ? 'scale-102 z-20' : ''}
+                        ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
+                        ${getStaggeredClasses(index, 'slide')}
+                      `}
+                      style={{
+                        '--desktop-margin-top': `${isEven ? 0 : 12}px`,
+                        '--desktop-margin-left': `${colIndex * 2}px`,
+                        animationDelay: `${index * 80}ms`
+                      } as React.CSSProperties}
+                    >
+                      <div className="skill-badge-wrapper">
+                        <TechBadge
+                          skill={skill}
+                          onClick={() => handleSkillClick(skill)}
+                          className={`
+                            w-full transition-all duration-300
+                            ${selectedSkill?.name === skill.name ? 'ring-2 ring-offset-2 ring-offset-primary-bg ring-accent-orange' : ''}
+                            ${isEven ? 'md:hover:rotate-1' : 'md:hover:-rotate-1'}
+                            hover:scale-105
+                          `}
+                          showTooltip={!selectedSkill}
+                        />
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
 
