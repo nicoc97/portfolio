@@ -40,7 +40,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   const { triggerRef: skillsGridRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     filteredSkills.length,
     50,
-    { 
+    {
       threshold: 0.1,
       triggerOnce: false,
       reverseOnExit: true
@@ -49,7 +49,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   const { triggerRef: summaryRef, getStaggeredClasses: getSummaryClasses } = useStaggeredAnimation<HTMLDivElement>(
     skillCategories.length,
     100,
-    { 
+    {
       threshold: 0.2,
       triggerOnce: false,
       reverseOnExit: true
@@ -67,13 +67,18 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
       'CSS': ['HTML', 'JavaScript'],
       'PHP': ['Symfony', 'WordPress', 'SQL'],
       'Symfony': ['PHP', 'SQL Server'],
-      'WordPress': ['PHP', 'ACF', 'Timber'],
+      'WordPress': ['PHP', 'ACF', 'Timber', 'WooCommerce'],
+      'WooCommerce': ['WordPress', 'PHP'],
       'ACF': ['WordPress', 'Timber'],
       'Timber': ['WordPress', 'ACF'],
       'C#': ['.NET Core', 'SQL Server'],
       '.NET Core': ['C#', 'SQL Server'],
-      'SQL': ['SQL Server'],
+      'SQL': ['SQL Server', 'ETL/Data Migration'],
       'SQL Server': ['SQL', 'C#', '.NET Core'],
+      'Python': ['pandas', 'ETL/Data Migration'],
+      'pandas': ['Python', 'Excel/CSV Processing'],
+      'Excel/CSV Processing': ['pandas', 'ETL/Data Migration'],
+      'ETL/Data Migration': ['SQL', 'Python', 'Excel/CSV Processing'],
     };
     return relationships[skill.name] || [];
   };
@@ -97,7 +102,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   return (
     <section className={`section-fullscreen py-16 ${className} relative overflow-hidden`} id="skills">
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
-        
+
         {/* Large background text */}
         <div className="section-bg-text">
           <span>SEC04</span>
@@ -118,13 +123,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
         {/* Main Content Grid - Asymmetrical Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
-          
+
           {/* Left Column - Filters (Staggered) */}
           <div className="lg:col-span-1 space-y-6 skills-decoration">
             <div
               ref={filtersRef}
               className={`animate-pixel ${filtersVisible ? 'visible' : ''}`}
-            >              
+            >
               {/* filter buttons */}
               <div className="space-y-3">
                 <button
@@ -142,7 +147,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                     <span className="text-lg opacity-70">({techSkills.length})</span>
                   </div>
                 </button>
-                
+
                 {skillCategories.map((category) => {
                   const categorySkills = getSkillsByCategory(category.key);
                   return (
@@ -169,14 +174,14 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
           </div>
 
-          {/* Right Column - Skills Grid (Asymmetrical) */}
+          {/* Right Column - Skills Grid (Asymmetrical on desktop, standard on mobile) */}
           <div className="lg:col-span-3 skills-grid-lines">
-            <div ref={skillsGridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 relative z-10">
+            <div ref={skillsGridRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 relative z-10">
               {filteredSkills.map((skill, index) => {
-                // Create asymmetrical staggered positioning
+                // Create asymmetrical staggered positioning only for larger screens
                 const isEven = index % 2 === 0;
                 const colIndex = index % 4;
-                
+
                 return (
                   <div
                     key={skill.name}
@@ -189,21 +194,24 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                       ${getStaggeredClasses(index, 'slide')}
                     `}
                     style={{
-                      marginTop: `${isEven ? 0 : 12}px`,
-                      marginLeft: `${colIndex * 2}px`,
+                      '--desktop-margin-top': `${isEven ? 0 : 12}px`,
+                      '--desktop-margin-left': `${colIndex * 2}px`,
                       animationDelay: `${index * 80}ms`
-                    }}
+                    } as React.CSSProperties}
                   >
-                    <TechBadge
-                      skill={skill}
-                      onClick={() => handleSkillClick(skill)}
-                      className={`
-                        w-full transition-all duration-300
-                        ${selectedSkill?.name === skill.name ? 'ring-2 ring-offset-2 ring-offset-primary-bg ring-accent-orange' : ''}
-                        ${isEven ? 'hover:rotate-1' : 'hover:-rotate-1'}
-                      `}
-                      showTooltip={!selectedSkill}
-                    />
+                    <div className="skill-badge-wrapper">
+                      <TechBadge
+                        skill={skill}
+                        onClick={() => handleSkillClick(skill)}
+                        className={`
+                          w-full transition-all duration-300
+                          ${selectedSkill?.name === skill.name ? 'ring-2 ring-offset-2 ring-offset-primary-bg ring-accent-orange' : ''}
+                          ${isEven ? 'md:hover:rotate-1' : 'md:hover:-rotate-1'}
+                          hover:scale-105
+                        `}
+                        showTooltip={!selectedSkill}
+                      />
+                    </div>
                   </div>
                 );
               })}
@@ -216,14 +224,14 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
             <div className="lg:col-span-1"></div>
             <div className="lg:col-span-3">
-              <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6 transform translate-x-4">
+              <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6 md:transform md:translate-x-4">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-accent-green text-primary-bg rounded-lg flex items-center justify-center text-xl font-bold border-2 border-accent-green-soft">
                       {selectedSkill.pixelIcon}
                     </div>
                     <div>
-                      <h3 className="text-2xl font-retro text-accent-green mb-1">
+                      <h3 className="text-xl md:text-2xl font-retro text-accent-green mb-1">
                         {selectedSkill.name}
                       </h3>
                       <span className="px-2 py-1 bg-accent-green/20 border border-accent-green rounded text-xs font-tech text-accent-green">
@@ -273,7 +281,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
         {/* Skills Summary - Symmetrical Full Width Grid */}
         <div className="mt-12">
-          <div ref={summaryRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div ref={summaryRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {skillCategories.map((category, index) => {
               const categorySkills = getSkillsByCategory(category.key);
 
@@ -282,15 +290,15 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                   key={category.key}
                   className={`
                     bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center 
-                    hover:border-accent-green hover:scale-105 transition-all duration-300 
+                    hover:border-${category.color} hover:scale-105 transition-all duration-300 
                     ${getSummaryClasses(index, 'slide')}
                   `}
                   style={{
                     animationDelay: `${index * 150}ms`
                   }}
                 >
-                  <h3 className="font-tech text-accent-green text-sm mb-2">{category.label}</h3>
-                  <div className="text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
+                  <h3 className={`font-tech text-${category.color} text-sm mb-2`}>{category.label}</h3>
+                  <div className="text-xl md:text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
                   <div className="text-xs text-text-secondary font-mono">
                     Technologies
                   </div>

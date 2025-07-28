@@ -95,6 +95,13 @@ export const techSkills: TechSkill[] = [
     description: 'Twig templating for WordPress theme development'
   },
   {
+    name: 'WooCommerce',
+    category: 'backend',
+    proficiency: 4,
+    pixelIcon: '🛒',
+    description: 'E-commerce development with custom plugins and payment integrations'
+  },
+  {
     name: 'C#',
     category: 'backend',
     proficiency: 4,
@@ -146,6 +153,36 @@ export const techSkills: TechSkill[] = [
     proficiency: 4,
     pixelIcon: '🔧',
     description: 'Diagnosing and repairing computer hardware and mobility equipment'
+  },
+
+  // Data Science & Analysis
+  {
+    name: 'Python',
+    category: 'data-science',
+    proficiency: 4,
+    pixelIcon: '🐍',
+    description: 'Data analysis, automation, and scripting with modern Python libraries'
+  },
+  {
+    name: 'pandas',
+    category: 'data-science',
+    proficiency: 4,
+    pixelIcon: '🐼',
+    description: 'Data manipulation, analysis, and processing with pandas library'
+  },
+  {
+    name: 'Excel/CSV Processing',
+    category: 'data-science',
+    proficiency: 5,
+    pixelIcon: '📊',
+    description: 'Advanced Excel functions, data processing, and CSV file manipulation'
+  },
+  {
+    name: 'ETL/Data Migration',
+    category: 'data-science',
+    proficiency: 4,
+    pixelIcon: '🔄',
+    description: 'Extract, Transform, Load processes and data migration between systems'
   }
 ];
 
@@ -168,5 +205,6 @@ export const skillCategories = [
   { key: 'frontend' as const, label: 'Frontend', color: 'accent-orange' },
   { key: 'backend' as const, label: 'Backend & CMS', color: 'accent-green' },
   { key: 'database' as const, label: 'Database', color: 'accent-green' },
+  { key: 'data-science' as const, label: 'Data Science', color: 'accent-green' },
   { key: 'tools' as const, label: 'Tools', color: 'accent-green' }
 ];
