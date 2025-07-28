@@ -310,6 +310,10 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
         return;
       }
 
+      // Detect mobile and apply scale factor
+      const isMobile = window.innerWidth <= 768;
+      const mobileScale = isMobile ? 0.75 : 1.0;
+
       // Scene setup
       const scene = new THREE.Scene();
       scene.background = null;
@@ -354,42 +358,51 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
         return;
       }
 
-      // Create simple sleeve (box) - 1.4x larger
-      const sleeveGeometry = new THREE.BoxGeometry(5.6, 5.6, 0.28);
+      // Create simple sleeve (box) - 1.4x larger, with mobile scaling
+      const sleeveGeometry = new THREE.BoxGeometry(
+        5.6 * mobileScale, 
+        5.6 * mobileScale, 
+        0.28 * mobileScale
+      );
       const sleeveMaterial = new THREE.MeshLambertMaterial({ map: albumTexture });
       const sleeve = new THREE.Mesh(sleeveGeometry, sleeveMaterial);
-      sleeve.position.set(-1.4, 0, 0);
+      sleeve.position.set(-1.4 * mobileScale, 0, 0);
       sleeve.rotation.y = -0.15;
       scene.add(sleeve);
 
-      // Create simple vinyl record (cylinder) - 1.4x larger
-      const recordGeometry = new THREE.CylinderGeometry(2.8, 2.8, 0.14, 32);
+      // Create simple vinyl record (cylinder) - 1.4x larger, with mobile scaling
+      const recordGeometry = new THREE.CylinderGeometry(
+        2.8 * mobileScale, 
+        2.8 * mobileScale, 
+        0.14 * mobileScale, 
+        32
+      );
       const recordMaterial = new THREE.MeshLambertMaterial({ color: 0x0a0a0a });
       const record = new THREE.Mesh(recordGeometry, recordMaterial);
       record.rotation.x = Math.PI / 2;
-      record.position.set(0.28, 0, 0.28);
+      record.position.set(0.28 * mobileScale, 0, 0.28 * mobileScale);
       record.rotation.z = 0.15;
       scene.add(record);
 
-      // Add center label - 1.4x larger
+      // Add center label - 1.4x larger, with mobile scaling
       const labelTexture = createVinylLabel(album);
-      const labelGeometry = new THREE.CircleGeometry(0.84, 32);
+      const labelGeometry = new THREE.CircleGeometry(0.84 * mobileScale, 32);
       const labelMaterial = new THREE.MeshLambertMaterial({ map: labelTexture });
       const label = new THREE.Mesh(labelGeometry, labelMaterial);
-      label.position.z = 0.073;
+      label.position.z = 0.073 * mobileScale;
       record.add(label);
 
       // Add groove lines to vinyl
       for (let i = 0; i < 8; i++) {
-        const innerRadius = (0.7 + (i * 0.15)) * 1.4;
-        const outerRadius = innerRadius + (0.02 * 1.4);
+        const innerRadius = (0.7 + (i * 0.15)) * 1.4 * mobileScale;
+        const outerRadius = innerRadius + (0.02 * 1.4 * mobileScale);
         const grooveGeometry = new THREE.RingGeometry(innerRadius, outerRadius, 32);
         const grooveMaterial = new THREE.MeshLambertMaterial({
           color: 0x666666,
           side: THREE.FrontSide
         });
         const groove = new THREE.Mesh(grooveGeometry, grooveMaterial);
-        groove.position.z = 0.073;
+        groove.position.z = 0.073 * mobileScale;
         record.add(groove);
       }
 
@@ -427,6 +440,10 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
   // Animation loop
   const animate = () => {
     if (sceneRef.current && isMountedRef.current) {
+      // Detect mobile for animation scaling
+      const isMobile = window.innerWidth <= 768;
+      const mobileScale = isMobile ? 0.75 : 1.0;
+
       // Subtle rotation for the whole scene
       sceneRef.current.scene.rotation.y = Math.sin(Date.now() * 0.0005) * 0.05;
 
@@ -442,14 +459,14 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
         }
       }
 
-      // Enhanced hover effects
+      // Enhanced hover effects with mobile scaling
       if (sceneRef.current.sleeve) {
-        const targetSleeveY = isHovered ? 0.2 : 0;
+        const targetSleeveY = isHovered ? 0.2 * mobileScale : 0;
         sceneRef.current.sleeve.position.y += (targetSleeveY - sceneRef.current.sleeve.position.y) * 0.1;
       }
 
       if (sceneRef.current.record) {
-        const targetRecordX = isHovered ? 0.7 : 0.28;
+        const targetRecordX = isHovered ? 0.7 * mobileScale : 0.28 * mobileScale;
         sceneRef.current.record.position.x += (targetRecordX - sceneRef.current.record.position.x) * 0.1;
       }
 

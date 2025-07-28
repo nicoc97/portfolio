@@ -452,52 +452,82 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       setCurrentPixelLevel(64);
       setDisplayPixelLevel(64);
 
-      // Save current scroll position
+      // Save current scroll position BEFORE manipulating body styles
       scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
 
-      // Prevent body scrolling with a more robust approach for mobile
+      // Store original body styles to restore them properly later
+      const originalBodyStyle = {
+        position: document.body.style.position,
+        top: document.body.style.top,
+        left: document.body.style.left,
+        right: document.body.style.right,
+        overflow: document.body.style.overflow,
+        paddingRight: document.body.style.paddingRight
+      };
+
+      // Prevent body scrolling
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollPositionRef.current}px`;
       document.body.style.left = '0';
       document.body.style.right = '0';
       document.body.style.overflow = 'hidden';
+      
       // Prevent layout shift from scrollbar
       if (scrollbarWidth > 0) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
-      }
-
-      // For iOS: Try to hide the URL bar by scrolling slightly
-      if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-        // Small delay to ensure DOM is ready
-        setTimeout(() => {
-          window.scrollTo(0, 1);
-        }, 10);
       }
 
       init3DScene();
       animate();
       startPixelationProgression();
 
+      // Cleanup function
       return () => {
         // Clear timeouts
-        if (progressionTimeoutRef.current) clearTimeout(progressionTimeoutRef.current);
-        if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+        if (progressionTimeoutRef.current) {
+          clearTimeout(progressionTimeoutRef.current);
+          progressionTimeoutRef.current = null;
+        }
+        if (idleTimeoutRef.current) {
+          clearTimeout(idleTimeoutRef.current);
+          idleTimeoutRef.current = null;
+        }
 
-        // Restore body scrolling and position
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.left = '';
-        document.body.style.right = '';
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-
-        // Restore scroll position
-        window.scrollTo(0, scrollPositionRef.current);
-
+        // Cancel animation frame
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = undefined;
         }
+
+        // Dispose of Three.js resources
+        if (sceneRef.current) {
+          sceneRef.current.renderer.dispose();
+          sceneRef.current = null;
+        }
+
+        // Restore body styles explicitly
+        document.body.style.position = originalBodyStyle.position;
+        document.body.style.top = originalBodyStyle.top;
+        document.body.style.left = originalBodyStyle.left;
+        document.body.style.right = originalBodyStyle.right;
+        document.body.style.overflow = originalBodyStyle.overflow;
+        document.body.style.paddingRight = originalBodyStyle.paddingRight;
+
+        // Force a reflow before scrolling
+        document.body.offsetHeight;
+
+        // Restore scroll position with a small delay to ensure DOM is ready
+        requestAnimationFrame(() => {
+          window.scrollTo(0, scrollPositionRef.current);
+          
+          // Double-check scroll restoration for mobile
+          setTimeout(() => {
+            if (window.pageYOffset !== scrollPositionRef.current) {
+              window.scrollTo(0, scrollPositionRef.current);
+            }
+          }, 0);
+        });
       };
     }
   }, [isOpen]);
