@@ -18,10 +18,83 @@ export interface AlbumData {
   year: string;
   labelColor: string;
   accentColor: string;
+  albumArtUrl?: string; // Added to interface
   spotifyUrl?: string;
   appleMusicUrl?: string;
 }
 
+// Updated with real album art URLs - replace these with your favorite albums!
+const ALBUM_DATA: AlbumData[] = [
+  {
+    id: 'cosmic-voyage',
+    title: 'Dark Side of the Moon',
+    artist: 'Pink Floyd',
+    year: 'Released March \'73',
+    labelColor: '#1a1a1a',
+    accentColor: '#ffffff',
+    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Dark_Side_of_the_Moon.png',
+    spotifyUrl: 'https://open.spotify.com/album/4LH4d3cOWNNsVw41Gqt2kv',
+    appleMusicUrl: 'https://music.apple.com/us/album/the-dark-side-of-the-moon/1065973699'
+  },
+  {
+    id: 'electric-dreams',
+    title: 'Rumours',
+    artist: 'Fleetwood Mac',
+    year: 'Released February \'77',
+    labelColor: '#f5e6d3',
+    accentColor: '#2c1810',
+    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/f/fb/FMacRumours.PNG',
+    spotifyUrl: 'https://open.spotify.com/album/1bt6q2SruMsBtcerNVtpZB',
+    appleMusicUrl: 'https://music.apple.com/us/album/rumours/202271826'
+  },
+  {
+    id: 'sunset-boulevard',
+    title: 'Hotel California',
+    artist: 'Eagles',
+    year: 'Released December \'76',
+    labelColor: '#d4a574',
+    accentColor: '#1e3a5f',
+    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/4/49/Hotelcalifornia.jpg',
+    spotifyUrl: 'https://open.spotify.com/album/2widuo17g5CEC66IbzveRu',
+    appleMusicUrl: 'https://music.apple.com/us/album/hotel-california/635829991'
+  },
+  {
+    id: 'neon-nights',
+    title: 'Parallel Lines',
+    artist: 'Blondie',
+    year: 'Released September \'78',
+    labelColor: '#000000',
+    accentColor: '#ffffff',
+    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/3/33/Blondie_-_Parallel_Lines.png',
+    spotifyUrl: 'https://open.spotify.com/album/2wcGBpuFqJOgitafLXkbLr',
+    appleMusicUrl: 'https://music.apple.com/us/album/parallel-lines/695239984'
+  },
+  {
+    id: 'disco-fever',
+    title: 'Saturday Night Fever',
+    artist: 'Bee Gees',
+    year: 'Released November \'77',
+    labelColor: '#ff0000',
+    accentColor: '#ffffff',
+    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/e/ef/Bee_Gees_-_Saturday_Night_Fever.png',
+    spotifyUrl: 'https://open.spotify.com/album/7aHW8t76G8xfJngN5SV6oP',
+    appleMusicUrl: 'https://music.apple.com/us/album/saturday-night-fever-the-original-movie-soundtrack-deluxe/715579496'
+  },
+  {
+    id: 'moonlight-serenade',
+    title: 'Tapestry',
+    artist: 'Carole King',
+    year: 'Released February \'71',
+    labelColor: '#8b4513',
+    accentColor: '#ffd700',
+    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/2/26/Carole_King_-_Tapestry.jpg',
+    spotifyUrl: 'https://open.spotify.com/album/12n11cgnpjXKLeqrnIERoS',
+    appleMusicUrl: 'https://music.apple.com/us/album/tapestry/310730204'
+  }
+];
+
+// If you prefer to keep your original album names but add art, here's an alternative:
+/*
 const ALBUM_DATA: AlbumData[] = [
   {
     id: 'cosmic-voyage',
@@ -30,60 +103,14 @@ const ALBUM_DATA: AlbumData[] = [
     year: 'Released Summer \'77',
     labelColor: '#ff8c42',
     accentColor: '#7c9756',
+    // Use placeholder services or your own hosted images
+    albumArtUrl: 'https://picsum.photos/seed/cosmic/512/512',
     spotifyUrl: 'https://open.spotify.com/track/example',
     appleMusicUrl: 'https://music.apple.com/example'
   },
-  {
-    id: 'electric-dreams',
-    title: 'Electric Dreams',
-    artist: 'Funkadelic Sunrise',
-    year: 'Released Fall \'76',
-    labelColor: '#7c9756',
-    accentColor: '#ff8c42',
-    spotifyUrl: 'https://open.spotify.com/track/example',
-    appleMusicUrl: 'https://music.apple.com/example'
-  },
-  {
-    id: 'sunset-boulevard',
-    title: 'Sunset Boulevard',
-    artist: 'The Velvet Underground Revival',
-    year: 'Released Spring \'78',
-    labelColor: '#d4c4a0',
-    accentColor: '#b85c00',
-    spotifyUrl: 'https://open.spotify.com/track/example',
-    appleMusicUrl: 'https://music.apple.com/example'
-  },
-  {
-    id: 'neon-nights',
-    title: 'Neon Nights',
-    artist: 'Disco Dynamics',
-    year: 'Released Winter \'79',
-    labelColor: '#ffb380',
-    accentColor: '#5a6e3f',
-    spotifyUrl: 'https://open.spotify.com/track/example',
-    appleMusicUrl: 'https://music.apple.com/example'
-  },
-  {
-    id: 'disco-fever',
-    title: 'Disco Fever',
-    artist: 'Studio 77',
-    year: 'Released Summer \'77',
-    labelColor: '#b85c00',
-    accentColor: '#d4c4a0',
-    spotifyUrl: 'https://open.spotify.com/track/example',
-    appleMusicUrl: 'https://music.apple.com/example'
-  },
-  {
-    id: 'moonlight-serenade',
-    title: 'Moonlight Serenade',
-    artist: 'The Midnight Express',
-    year: 'Released Fall \'78',
-    labelColor: '#5a6e3f',
-    accentColor: '#ffb380',
-    spotifyUrl: 'https://open.spotify.com/track/example',
-    appleMusicUrl: 'https://music.apple.com/example'
-  }
+  // ... rest of your original albums with placeholder art
 ];
+*/
 
 interface JukeboxSectionProps {
   onLightboxStateChange?: (isOpen: boolean) => void;

@@ -10,6 +10,7 @@ interface AlbumData {
   year: string;
   labelColor: string;
   accentColor: string;
+  albumArtUrl?: string;
   spotifyUrl?: string;
   appleMusicUrl?: string;
 }
@@ -32,10 +33,18 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
   } | null>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const scrollPositionRef = useRef<number>(0);
+  const progressionTimeoutRef = useRef<number | null>(null);
+  const idleTimeoutRef = useRef<number | null>(null);
 
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [viewportHeight, setViewportHeight] = useState('100vh');
+
+  // Pixelation state
+  const [currentPixelLevel, setCurrentPixelLevel] = useState(64);
+  const [displayPixelLevel, setDisplayPixelLevel] = useState(64);
+  const targetPixelLevelRef = useRef(64);
+  const currentPixelLevelRef = useRef(64);
 
   // Use refs for rotation values so they can be accessed in the animation loop
   const targetRotationRef = useRef({ x: 0, y: 0 });
@@ -70,71 +79,149 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     };
   }, []);
 
-  // Create album art texture (same as VinylRecord)
-  const createAlbumArt = (albumData: AlbumData) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 64;
-    canvas.height = 64;
-    const ctx = canvas.getContext('2d')!;
-    ctx.imageSmoothingEnabled = false;
+  // Create pixelated album art (same as VinylRecord)
+  const createPixelatedAlbumArt = (albumData: AlbumData, pixelSize: number): Promise<THREE.Texture> => {
+    return new Promise((resolve) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256; // Higher res than original 64x64 for better pixelation
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d')!;
+      ctx.imageSmoothingEnabled = false;
+
+      if (albumData.albumArtUrl) {
+        // Load real album art
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+
+        img.onload = () => {
+          // Create temporary canvas for pixelation
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = pixelSize;
+          tempCanvas.height = pixelSize;
+          const tempCtx = tempCanvas.getContext('2d')!;
+          tempCtx.imageSmoothingEnabled = false;
+
+          // Draw image at small size
+          tempCtx.drawImage(img, 0, 0, pixelSize, pixelSize);
+
+          // Draw pixelated version back to main canvas
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(tempCanvas, 0, 0, 256, 256);
+
+          // Add subtle vinyl texture overlay
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+          ctx.fillRect(0, 0, 256, 256);
+
+          const texture = new THREE.CanvasTexture(canvas);
+          texture.magFilter = THREE.NearestFilter;
+          texture.minFilter = THREE.NearestFilter;
+          resolve(texture);
+        };
+
+        img.onerror = () => {
+          // Fallback to procedural art
+          createProceduralArt(ctx, albumData, 256);
+          const texture = new THREE.CanvasTexture(canvas);
+          texture.magFilter = THREE.NearestFilter;
+          texture.minFilter = THREE.NearestFilter;
+          resolve(texture);
+        };
+
+        img.src = albumData.albumArtUrl;
+      } else {
+        // Use procedural art if no URL provided
+        createProceduralArt(ctx, albumData, 256);
+        const texture = new THREE.CanvasTexture(canvas);
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        resolve(texture);
+      }
+    });
+  };
+
+  // Create procedural art (your original design, but larger)
+  const createProceduralArt = (ctx: CanvasRenderingContext2D, albumData: AlbumData, size: number) => {
+    // Scale factor from original 64x64
+    const scale = size / 64;
 
     // Album-specific gradient background
-    const gradient = ctx.createLinearGradient(0, 0, 64, 64);
+    const gradient = ctx.createLinearGradient(0, 0, size, size);
     gradient.addColorStop(0, albumData.labelColor);
     gradient.addColorStop(0.5, albumData.accentColor);
     gradient.addColorStop(1, albumData.labelColor);
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 64, 64);
+    ctx.fillRect(0, 0, size, size);
 
     // Groovy circular pattern
+    const center = size / 2;
     ctx.fillStyle = albumData.accentColor;
     ctx.beginPath();
-    ctx.arc(32, 32, 20, 0, Math.PI * 2);
+    ctx.arc(center, center, 20 * scale, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = '#2a2419';
     ctx.beginPath();
-    ctx.arc(32, 32, 15, 0, Math.PI * 2);
+    ctx.arc(center, center, 15 * scale, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = albumData.labelColor;
     ctx.beginPath();
-    ctx.arc(32, 32, 10, 0, Math.PI * 2);
+    ctx.arc(center, center, 10 * scale, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.fillStyle = '#f5f2e8';
     ctx.beginPath();
-    ctx.arc(32, 32, 5, 0, Math.PI * 2);
+    ctx.arc(center, center, 5 * scale, 0, Math.PI * 2);
     ctx.fill();
 
     // Album title text
     ctx.fillStyle = '#f5f2e8';
-    ctx.font = 'bold 6px monospace';
+    ctx.font = `bold ${6 * scale}px monospace`;
     const words = albumData.title.toUpperCase().split(' ');
-    ctx.fillText(words[0], 32 - ctx.measureText(words[0]).width / 2, 12);
+    ctx.textAlign = 'center';
+    ctx.fillText(words[0], center, 12 * scale);
     if (words[1]) {
-      ctx.fillText(words[1], 32 - ctx.measureText(words[1]).width / 2, 58);
+      ctx.fillText(words[1], center, (58 * scale));
     }
 
     // Some groovy stars
     ctx.fillStyle = '#f5f2e8';
     const stars = [[8, 20], [56, 16], [48, 48], [16, 44]];
     stars.forEach(([x, y]) => {
-      ctx.fillRect(x, y, 2, 2);
-      ctx.fillRect(x - 2, y, 2, 2);
-      ctx.fillRect(x + 2, y, 2, 2);
-      ctx.fillRect(x, y - 2, 2, 2);
-      ctx.fillRect(x, y + 2, 2, 2);
+      const starX = x * scale;
+      const starY = y * scale;
+      const starSize = 2 * scale;
+      ctx.fillRect(starX, starY, starSize, starSize);
+      ctx.fillRect(starX - starSize, starY, starSize, starSize);
+      ctx.fillRect(starX + starSize, starY, starSize, starSize);
+      ctx.fillRect(starX, starY - starSize, starSize, starSize);
+      ctx.fillRect(starX, starY + starSize, starSize, starSize);
     });
+  };
 
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-    return texture;
+  // Update album texture with new pixelation level
+  const updateAlbumTexture = async (pixelLevel: number) => {
+    if (sceneRef.current) {
+      const newTexture = await createPixelatedAlbumArt(album, pixelLevel);
+      const materials = sceneRef.current.sleeve3D.material;
+
+      // Check if materials is an array (BoxGeometry uses material array)
+      if (Array.isArray(materials)) {
+        // Index 4 is the front face in BoxGeometry
+        const frontMaterial = materials[4] as THREE.MeshPhongMaterial;
+        if (frontMaterial && frontMaterial.map) {
+          frontMaterial.map.dispose(); // Dispose old texture
+          frontMaterial.map = newTexture;
+          frontMaterial.needsUpdate = true;
+        }
+      }
+
+      setDisplayPixelLevel(pixelLevel);
+    }
   };
 
   // Initialize 3D scene
-  const init3DScene = () => {
+  const init3DScene = async () => {
     if (!canvasRef.current) return;
 
     // Get actual canvas dimensions
@@ -184,7 +271,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     // Create sleeve - made 1.4x as large
     const sleeveSize = 3.64; // 2.6 * 1.4
     const sleeveDepth = 0.168; // 0.12 * 1.4
-    const albumTexture = createAlbumArt(album);
+    const albumTexture = await createPixelatedAlbumArt(album, currentPixelLevel);
 
     // Create the main sleeve body using BoxGeometry instead of separate planes
     const sleeveGeometry = new THREE.BoxGeometry(sleeveSize, sleeveSize, sleeveDepth);
@@ -228,24 +315,34 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     };
   };
 
-  // Update album texture when album changes
-  const updateAlbumTexture = () => {
-    if (sceneRef.current) {
-      // Update sleeve texture
-      const newAlbumTexture = createAlbumArt(album);
-      const materials = sceneRef.current.sleeve3D.material;
+  // Start progressive pixelation
+  const startPixelationProgression = () => {
+    // Clear existing timeouts
+    if (progressionTimeoutRef.current) clearTimeout(progressionTimeoutRef.current);
+    if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
 
-      // Check if materials is an array (BoxGeometry uses material array)
-      if (Array.isArray(materials)) {
-        // Index 4 is the front face in BoxGeometry
-        const frontMaterial = materials[4] as THREE.MeshPhongMaterial;
-        if (frontMaterial && frontMaterial.map) {
-          frontMaterial.map.dispose(); // Dispose old texture
-          frontMaterial.map = newAlbumTexture;
-          frontMaterial.needsUpdate = true;
-        }
-      }
-    }
+    // Progress to 128px after 1.5 seconds
+    progressionTimeoutRef.current = setTimeout(() => {
+      targetPixelLevelRef.current = 128;
+
+      // Progress to 192px after being idle for 3 seconds
+      idleTimeoutRef.current = setTimeout(() => {
+        targetPixelLevelRef.current = 192;
+      }, 3000);
+    }, 1500);
+  };
+
+  // Reset idle timer on interaction
+  const resetIdleTimer = () => {
+    if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+
+    // Max out at 256px during interaction
+    targetPixelLevelRef.current = 256;
+
+    // After interaction stops, go back to 192px
+    idleTimeoutRef.current = setTimeout(() => {
+      targetPixelLevelRef.current = 192;
+    }, 2000);
   };
 
   // Animation loop
@@ -258,6 +355,16 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       sceneRef.current.sleeveGroup.rotation.y = currentRotationRef.current.y;
       sceneRef.current.sleeveGroup.rotation.x = currentRotationRef.current.x;
 
+      // Smooth pixelation transition
+      currentPixelLevelRef.current += (targetPixelLevelRef.current - currentPixelLevelRef.current) * 0.05;
+
+      // Update texture when pixelation changes significantly
+      const roundedLevel = Math.round(currentPixelLevelRef.current);
+      if (Math.abs(currentPixelLevel - roundedLevel) > 4 && roundedLevel !== currentPixelLevel) {
+        setCurrentPixelLevel(roundedLevel);
+        updateAlbumTexture(roundedLevel);
+      }
+
       sceneRef.current.renderer.render(sceneRef.current.scene, sceneRef.current.camera);
     }
     animationFrameRef.current = requestAnimationFrame(animate);
@@ -267,6 +374,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
   const handleMouseDown = (event: React.MouseEvent) => {
     setIsMouseDown(true);
     setMousePos({ x: event.clientX, y: event.clientY });
+    resetIdleTimer();
   };
 
   const handleMouseMove = (event: React.MouseEvent) => {
@@ -283,6 +391,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     targetRotationRef.current.x = Math.max(-Math.PI / 3, Math.min(Math.PI / 3, targetRotationRef.current.x));
 
     setMousePos({ x: event.clientX, y: event.clientY });
+    resetIdleTimer();
   };
 
   const handleMouseUp = () => {
@@ -297,6 +406,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         x: event.touches[0].clientX,
         y: event.touches[0].clientY
       });
+      resetIdleTimer();
     }
   };
 
@@ -317,6 +427,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       x: event.touches[0].clientX,
       y: event.touches[0].clientY
     });
+    resetIdleTimer();
   };
 
   const handleTouchEnd = () => {
@@ -330,14 +441,16 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     }
   };
 
-  // Removed preventTouchScroll - using CSS touchAction instead
-
   // Initialize scene when opened and handle body scroll
   useEffect(() => {
     if (isOpen) {
-      // Reset rotation refs when opening
+      // Reset rotation and pixelation refs when opening
       targetRotationRef.current = { x: 0, y: 0 };
       currentRotationRef.current = { x: 0, y: 0 };
+      targetPixelLevelRef.current = 64;
+      currentPixelLevelRef.current = 64;
+      setCurrentPixelLevel(64);
+      setDisplayPixelLevel(64);
 
       // Save current scroll position
       scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
@@ -364,8 +477,13 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
       init3DScene();
       animate();
+      startPixelationProgression();
 
       return () => {
+        // Clear timeouts
+        if (progressionTimeoutRef.current) clearTimeout(progressionTimeoutRef.current);
+        if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
+
         // Restore body scrolling and position
         document.body.style.position = '';
         document.body.style.top = '';
@@ -373,7 +491,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         document.body.style.right = '';
         document.body.style.overflow = '';
         document.body.style.paddingRight = '';
-        
+
         // Restore scroll position
         window.scrollTo(0, scrollPositionRef.current);
 
@@ -387,7 +505,8 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
   // Update texture when album changes
   useEffect(() => {
     if (isOpen) {
-      updateAlbumTexture();
+      updateAlbumTexture(currentPixelLevel);
+      startPixelationProgression();
     }
   }, [album, isOpen]);
 
@@ -418,7 +537,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       onClick={handleBackgroundClick}
     >
       {/* Inner container with safe area padding for iOS */}
-      <div 
+      <div
         className="w-full h-full flex flex-col items-center justify-center p-8"
         style={{
           paddingTop: 'max(2rem, env(safe-area-inset-top))',
@@ -432,7 +551,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
           <canvas
             ref={canvasRef}
             className={`w-full h-full ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
-            style={{ 
+            style={{
               touchAction: 'none',
               WebkitTouchCallout: 'none',
               WebkitUserSelect: 'none'
@@ -446,6 +565,10 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
             onTouchEnd={handleTouchEnd}
           />
 
+          {/* Pixelation Level Indicator */}
+          <div className="absolute top-4 right-4 text-accent-green font-tech text-sm uppercase tracking-wider bg-primary-black/80 px-3 py-1 rounded-sm">
+            Focus: {displayPixelLevel}px
+          </div>
         </div>
 
         {/* Album Info */}
