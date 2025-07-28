@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { TechBadge } from '../ui/TechBadge';
 import { techSkills, skillCategories, getSkillsByCategory } from '../../constants/skills';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
@@ -20,6 +20,18 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
   const [selectedCategory, setSelectedCategory] = useState<TechSkill['category'] | 'all' | null>(getInitialCategory());
   const [selectedSkill, setSelectedSkill] = useState<TechSkill | null>(null);
   const [hoveredSkill, setHoveredSkill] = useState<TechSkill | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile/desktop
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Filter skills based on selected category
   const filteredSkills = useMemo(() => {
@@ -110,6 +122,45 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
     setHoveredSkill(skill);
   };
 
+  // Render skills grid for a specific category (mobile accordion)
+  const renderMobileSkillsGrid = (skills: TechSkill[]) => {
+    return (
+      <div className="skills-accordion-content">
+        <div className="py-4 bg-primary-bg/50 border-t border-text-secondary/10">
+          <div className="grid grid-cols-2 gap-3">
+            {skills.map((skill, index) => (
+              <div
+                key={skill.name}
+                onMouseEnter={() => handleSkillHover(skill)}
+                onMouseLeave={() => handleSkillHover(null)}
+                className={`
+                  transition-all duration-300
+                  ${isSkillHighlighted(skill) ? 'scale-[1.02] z-20' : ''}
+                  ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
+                  animate-fadeInUp
+                `}
+                style={{
+                  animationDelay: `${index * 50}ms`
+                }}
+              >
+                <TechBadge
+                  skill={skill}
+                  onClick={() => handleSkillClick(skill)}
+                  className={`
+                    w-full transition-all duration-300
+                    ${selectedSkill?.name === skill.name ? 'ring-2 ring-offset-2 ring-offset-primary-bg ring-accent-orange' : ''}
+                    hover:scale-105
+                  `}
+                  showTooltip={!selectedSkill}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <section className={`section-fullscreen py-16 ${className} relative overflow-hidden`} id="skills">
       <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
@@ -132,93 +183,143 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           </p>
         </div>
 
-        {/* Main Content Grid - Asymmetrical Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
-
-          {/* Left Column - Filters (Staggered) */}
-          <div className="lg:col-span-1 space-y-6 skills-decoration">
-            <div
-              ref={filtersRef}
-              className={`animate-pixel ${filtersVisible ? 'visible' : ''}`}
-            >
-              {/* filter buttons */}
-              <div className="space-y-3">
-                <button
-                  onClick={() => setSelectedCategory('all')}
-                  className={`
-                    w-full px-4 py-3 rounded-lg font-tech border-2 transition-all duration-200 text-left skills-filter-button
-                    ${selectedCategory === 'all'
-                      ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
-                      : 'tech-badge-secondary hover:translate-x-1'
-                    }
-                  `}
-                >
-                  <div className="flex justify-between items-center">
-                    <span>All Skills</span>
-                    <span className="text-lg opacity-70">({techSkills.length})</span>
-                  </div>
-                </button>
-
-                {skillCategories.map((category) => {
-                  const categorySkills = getSkillsByCategory(category.key);
-                  return (
-                    <button
-                      key={category.key}
-                      onClick={() => setSelectedCategory(category.key)}
-                      className={`
-                        w-full px-4 py-3 rounded-lg font-tech text-lg border-2 transition-all duration-200 text-left skills-filter-button
-                        ${selectedCategory === category.key
-                          ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg transform translate-x-2`
-                          : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color} hover:translate-x-1`
-                        }
-                      `}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span>{category.label}</span>
-                        <span className="text-lg opacity-70">({categorySkills.length})</span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+        {/* Mobile Layout - Accordion Style */}
+        {isMobile ? (
+          <div className="space-y-3 mb-8">
+            {/* All Skills Button */}
+            <div className="overflow-hidden rounded-lg">
+              <button
+                onClick={() => setSelectedCategory(selectedCategory === 'all' ? null : 'all')}
+                className={`
+                  w-full px-4 py-3 rounded-lg font-tech border-2 transition-all duration-200 text-left skills-filter-button
+                  ${selectedCategory === 'all'
+                    ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg'
+                    : 'tech-badge-secondary'
+                  }
+                `}
+              >
+                <div className="flex justify-between items-center">
+                  <span>All Skills</span>
+                  <span className="text-lg opacity-70">({techSkills.length})</span>
+                </div>
+              </button>
+              {selectedCategory === 'all' && renderMobileSkillsGrid(techSkills)}
             </div>
 
+            {/* Category Buttons with Inline Skills */}
+            {skillCategories.map((category) => {
+              const categorySkills = getSkillsByCategory(category.key);
+              const isSelected = selectedCategory === category.key;
+              
+              return (
+                <div key={category.key} className="overflow-hidden rounded-lg">
+                  <button
+                    onClick={() => setSelectedCategory(isSelected ? null : category.key)}
+                    className={`
+                      w-full px-4 py-3 rounded-lg font-tech text-lg border-2 transition-all duration-200 text-left skills-filter-button
+                      ${isSelected
+                        ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg`
+                        : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color}`
+                      }
+                    `}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span>{category.label}</span>
+                      <span className="text-lg opacity-70">({categorySkills.length})</span>
+                    </div>
+                  </button>
+                  {isSelected && renderMobileSkillsGrid(categorySkills)}
+                </div>
+              );
+            })}
           </div>
+        ) : (
+          /* Desktop Layout - Original Side-by-Side */
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
 
-          {/* Right Column - Skills Grid (Asymmetrical on desktop, standard on mobile) */}
-          <div className="lg:col-span-3 skills-grid-lines">
-            {filteredSkills.length === 0 ? (
-              <div className="flex items-center justify-center h-64 text-text-secondary text-center">
-                <div>
-                  <p className="text-lg font-tech mb-2">Select a category to view skills</p>
-                  <p className="text-sm opacity-70">Choose from the filters above</p>
+            {/* Left Column - Filters (Staggered) */}
+            <div className="lg:col-span-1 space-y-6 skills-decoration">
+              <div
+                ref={filtersRef}
+                className={`animate-pixel ${filtersVisible ? 'visible' : ''}`}
+              >
+                {/* filter buttons */}
+                <div className="space-y-3">
+                  <button
+                    onClick={() => setSelectedCategory('all')}
+                    className={`
+                      w-full px-4 py-3 rounded-lg font-tech border-2 transition-all duration-200 text-left skills-filter-button
+                      ${selectedCategory === 'all'
+                        ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
+                        : 'tech-badge-secondary hover:translate-x-1'
+                      }
+                    `}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span>All Skills</span>
+                      <span className="text-lg opacity-70">({techSkills.length})</span>
+                    </div>
+                  </button>
+
+                  {skillCategories.map((category) => {
+                    const categorySkills = getSkillsByCategory(category.key);
+                    return (
+                      <button
+                        key={category.key}
+                        onClick={() => setSelectedCategory(category.key)}
+                        className={`
+                          w-full px-4 py-3 rounded-lg font-tech text-lg border-2 transition-all duration-200 text-left skills-filter-button
+                          ${selectedCategory === category.key
+                            ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg transform translate-x-2`
+                            : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color} hover:translate-x-1`
+                          }
+                        `}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span>{category.label}</span>
+                          <span className="text-lg opacity-70">({categorySkills.length})</span>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            ) : (
-              <div ref={skillsGridRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 relative z-10">
-                {filteredSkills.map((skill, index) => {
-                  // Create asymmetrical staggered positioning only for larger screens
-                  const isEven = index % 2 === 0;
-                  const colIndex = index % 4;
 
-                  return (
-                    <div
-                      key={skill.name}
-                      onMouseEnter={() => handleSkillHover(skill)}
-                      onMouseLeave={() => handleSkillHover(null)}
-                      className={`
-                        transition-all duration-300 skill-card-stagger
-                        ${isSkillHighlighted(skill) ? 'scale-102 z-20' : ''}
-                        ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
-                        ${getStaggeredClasses(index, 'slide')}
-                      `}
-                      style={{
-                        '--desktop-margin-top': `${isEven ? 0 : 12}px`,
-                        '--desktop-margin-left': `${colIndex * 2}px`,
-                        animationDelay: `${index * 80}ms`
-                      } as React.CSSProperties}
-                    >
-                      <div className="skill-badge-wrapper">
+            </div>
+
+            {/* Right Column - Skills Grid (Desktop) */}
+            <div className="lg:col-span-3 skills-grid-lines">
+              {filteredSkills.length === 0 ? (
+                <div className="flex items-center justify-center h-64 text-text-secondary text-center">
+                  <div>
+                    <p className="text-lg font-tech mb-2">Select a category to view skills</p>
+                    <p className="text-sm opacity-70">Choose from the filters above</p>
+                  </div>
+                </div>
+              ) : (
+                <div ref={skillsGridRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 relative z-10">
+                  {filteredSkills.map((skill, index) => {
+                    // Create asymmetrical staggered positioning only for larger screens
+                    const isEven = index % 2 === 0;
+                    const colIndex = index % 4;
+
+                    return (
+                      <div
+                        key={skill.name}
+                        onMouseEnter={() => handleSkillHover(skill)}
+                        onMouseLeave={() => handleSkillHover(null)}
+                        className={`
+                          skill-card-stagger
+                          ${isSkillHighlighted(skill) ? 'scale-[1.02] z-20' : ''}
+                          ${!hoveredSkill || isSkillHighlighted(skill) ? 'opacity-100' : 'opacity-50'}
+                          ${getStaggeredClasses(index, 'slide')}
+                        `}
+                        style={{
+                          animationDelay: `${index * 80}ms`,
+                          marginTop: `${isEven ? 0 : 12}px`,
+                          marginLeft: `${colIndex * 2}px`,
+                        } as React.CSSProperties}
+                      >
                         <TechBadge
                           skill={skill}
                           onClick={() => handleSkillClick(skill)}
@@ -231,13 +332,13 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                           showTooltip={!selectedSkill}
                         />
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Progressive Disclosure - Detailed Skill Information */}
         {selectedSkill && (
