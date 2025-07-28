@@ -18,99 +18,80 @@ export interface AlbumData {
   year: string;
   labelColor: string;
   accentColor: string;
-  albumArtUrl?: string; // Added to interface
+  albumArtUrl?: string;
   spotifyUrl?: string;
   appleMusicUrl?: string;
 }
 
-// Updated with real album art URLs - replace these with your favorite albums!
+// Track collection data
 const ALBUM_DATA: AlbumData[] = [
   {
-    id: 'cosmic-voyage',
-    title: 'Dark Side of the Moon',
-    artist: 'Pink Floyd',
-    year: 'Released March \'73',
-    labelColor: '#1a1a1a',
-    accentColor: '#ffffff',
-    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Dark_Side_of_the_Moon.png',
-    spotifyUrl: 'https://open.spotify.com/album/4LH4d3cOWNNsVw41Gqt2kv',
-    appleMusicUrl: 'https://music.apple.com/us/album/the-dark-side-of-the-moon/1065973699'
+    id: 'too-late',
+    title: 'Too Late to Turn Back Now',
+    artist: 'Cornelius Brothers & Sister Rose',
+    year: 'Released 1972',
+    labelColor: '#8B4513',
+    accentColor: '#FFD700',
+    spotifyUrl: 'https://open.spotify.com/track/2OyaNAq8BcGstyzueloqpE',
+    appleMusicUrl: 'https://music.apple.com/us/artist/cornelius-brothers-sister-rose/19280425',
+    albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e025e7f7ea6cb07e6222bc51f41'
   },
   {
-    id: 'electric-dreams',
-    title: 'Rumours',
-    artist: 'Fleetwood Mac',
-    year: 'Released February \'77',
-    labelColor: '#f5e6d3',
-    accentColor: '#2c1810',
-    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/f/fb/FMacRumours.PNG',
-    spotifyUrl: 'https://open.spotify.com/album/1bt6q2SruMsBtcerNVtpZB',
-    appleMusicUrl: 'https://music.apple.com/us/album/rumours/202271826'
-  },
-  {
-    id: 'sunset-boulevard',
-    title: 'Hotel California',
-    artist: 'Eagles',
-    year: 'Released December \'76',
-    labelColor: '#d4a574',
-    accentColor: '#1e3a5f',
-    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/4/49/Hotelcalifornia.jpg',
-    spotifyUrl: 'https://open.spotify.com/album/2widuo17g5CEC66IbzveRu',
-    appleMusicUrl: 'https://music.apple.com/us/album/hotel-california/635829991'
-  },
-  {
-    id: 'neon-nights',
-    title: 'Parallel Lines',
-    artist: 'Blondie',
-    year: 'Released September \'78',
+    id: 'bela-lugosi',
+    title: 'Bela Lugosi\'s Dead',
+    artist: 'Bauhaus',
+    year: 'Released August \'79',
     labelColor: '#000000',
-    accentColor: '#ffffff',
-    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/3/33/Blondie_-_Parallel_Lines.png',
-    spotifyUrl: 'https://open.spotify.com/album/2wcGBpuFqJOgitafLXkbLr',
-    appleMusicUrl: 'https://music.apple.com/us/album/parallel-lines/695239984'
+    accentColor: '#8B0000',
+    spotifyUrl: 'https://open.spotify.com/track/0JfWS5txNJcbTHnJavTImO',
+    appleMusicUrl: 'https://music.apple.com/us/song/bela-lugosis-dead/160070993',
+    albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e02d951700560c3627500821e24'
   },
   {
-    id: 'disco-fever',
-    title: 'Saturday Night Fever',
-    artist: 'Bee Gees',
-    year: 'Released November \'77',
-    labelColor: '#ff0000',
-    accentColor: '#ffffff',
-    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/e/ef/Bee_Gees_-_Saturday_Night_Fever.png',
-    spotifyUrl: 'https://open.spotify.com/album/7aHW8t76G8xfJngN5SV6oP',
-    appleMusicUrl: 'https://music.apple.com/us/album/saturday-night-fever-the-original-movie-soundtrack-deluxe/715579496'
+    id: 'cherry-bomb',
+    title: 'Cherry Bomb',
+    artist: 'The Runaways',
+    year: 'Released 1976',
+    labelColor: '#DC143C',
+    accentColor: '#000000',
+    spotifyUrl: 'https://open.spotify.com/track/7cdnq45E9aP2XDStHg5vd7',
+    appleMusicUrl: 'https://music.apple.com/us/album/the-runaways/1440747926',
+    albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e02a1c553575418ca43404cb48b'
   },
   {
-    id: 'moonlight-serenade',
-    title: 'Tapestry',
-    artist: 'Carole King',
-    year: 'Released February \'71',
-    labelColor: '#8b4513',
-    accentColor: '#ffd700',
-    albumArtUrl: 'https://upload.wikimedia.org/wikipedia/en/2/26/Carole_King_-_Tapestry.jpg',
-    spotifyUrl: 'https://open.spotify.com/album/12n11cgnpjXKLeqrnIERoS',
-    appleMusicUrl: 'https://music.apple.com/us/album/tapestry/310730204'
+    id: 'give-me-night',
+    title: 'Give Me the Night',
+    artist: 'George Benson',
+    year: 'Released 1980',
+    labelColor: '#191970',
+    accentColor: '#FFD700',
+    spotifyUrl: 'https://open.spotify.com/track/5gaUkg5JNk8c4mr2jnpX8H',
+    appleMusicUrl: 'https://music.apple.com/us/album/give-me-the-night/309576571',
+    albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e029877c2b01fca3367809f9e27'
+  },
+  {
+    id: 'stay-with-me',
+    title: 'Stay with Me',
+    artist: 'Miki Matsubara',
+    year: 'Released November \'79',
+    labelColor: '#FF69B4',
+    accentColor: '#4B0082',
+    spotifyUrl: 'https://open.spotify.com/track/2BHj31ufdEqVK5CkYDp9mA',
+    appleMusicUrl: 'https://music.apple.com/us/song/mayonaka-no-door-stay-with-me/1457961960',
+    albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e0281052badd62d5e14c3377786'
+  },
+  {
+    id: 'rip-it-up',
+    title: 'Rip It Up',
+    artist: 'Orange Juice',
+    year: 'Released February \'83',
+    labelColor: '#FF8C00',
+    accentColor: '#000000',
+    spotifyUrl: 'https://open.spotify.com/track/1eamsmwcYYhJwTgMFdQ6YN',
+    appleMusicUrl: 'https://music.apple.com/us/album/rip-it-up/1183408278',
+    albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e0255e7c78ec58c4670bc0180fb'
   }
 ];
-
-// If you prefer to keep your original album names but add art, here's an alternative:
-/*
-const ALBUM_DATA: AlbumData[] = [
-  {
-    id: 'cosmic-voyage',
-    title: 'Cosmic Voyage',
-    artist: 'The Groove Masters',
-    year: 'Released Summer \'77',
-    labelColor: '#ff8c42',
-    accentColor: '#7c9756',
-    // Use placeholder services or your own hosted images
-    albumArtUrl: 'https://picsum.photos/seed/cosmic/512/512',
-    spotifyUrl: 'https://open.spotify.com/track/example',
-    appleMusicUrl: 'https://music.apple.com/example'
-  },
-  // ... rest of your original albums with placeholder art
-];
-*/
 
 interface JukeboxSectionProps {
   onLightboxStateChange?: (isOpen: boolean) => void;
