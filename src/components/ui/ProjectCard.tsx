@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import type { ProjectCardProps } from '../../types';
 import { ExternalLink, Github, ArrowUpRight } from 'lucide-react';
 import { useToast } from '../../hooks/useToast';
+import { LazyImage } from './LazyImage';
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -82,7 +83,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
       {/* Background Image - fills entire card */}
       <div className="absolute inset-0 w-full h-full">
         {project.imageUrl ? (
-          <img
+          <LazyImage
             src={project.imageUrl}
             alt={project.title}
             className={`

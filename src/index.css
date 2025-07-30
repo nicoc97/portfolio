@@ -292,6 +292,24 @@
    .animate-scanline {
      animation: scanline 2s linear infinite;
    }
+
+   /* Scan animation for image loading */
+   @keyframes scan {
+     0% {
+       top: -2px;
+       opacity: 0;
+     }
+     10% {
+       opacity: 1;
+     }
+     90% {
+       opacity: 1;
+     }
+     100% {
+       top: 100%;
+       opacity: 0;
+     }
+   }
  }
  
  /* 

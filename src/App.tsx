@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { HeroSection } from './components/sections/HeroSection';
 import { ProjectsSection } from './components/sections/ProjectsSection';
 import { AboutSection } from './components/sections/AboutSection';
@@ -8,6 +8,9 @@ import { ContactSection } from './components/sections/ContactSection';
 import { DotPagination } from './components/ui/DotPagination';
 import { MobileMenu } from './components/ui/MobileMenu';
 import { ToastProvider } from './hooks/useToast';
+import { LazyCursorTrail, usePreloadAnimations, useCriticalPreload } from './components/lazy/LazyAnimations';
+import { performanceMonitor } from './utils/performance';
+import { performanceReporter } from './utils/performanceReporter';
 
 /**
  * Main App Component
@@ -28,6 +31,34 @@ function App() {
   const scrollTimeoutRef = useRef<number | null>(null);
   const lastScrollTime = useRef(0);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // Preload animations and monitor performance
+  usePreloadAnimations();
+  useCriticalPreload();
+
+  // Initialize performance reporting
+  useEffect(() => {
+    // Record app initialization time
+    const initStart = performance.now();
+    
+    const recordInitTime = () => {
+      const initTime = performance.now() - initStart;
+      performanceReporter.recordComponentLoadTime('App', initTime);
+    };
+
+    // Record after initial render
+    setTimeout(recordInitTime, 0);
+
+    // Get service worker metrics periodically
+    const metricsInterval = setInterval(async () => {
+      await performanceReporter.getServiceWorkerMetrics();
+    }, 30000);
+
+    return () => clearInterval(metricsInterval);
+  }, []);
+
+  // Get performance recommendations
+  const performanceRecommendations = performanceMonitor.getPerformanceRecommendations();
 
   const sections = ['hero', 'projects', 'about', 'jukebox', 'skills', 'contact'];
 
@@ -283,6 +314,13 @@ function App() {
   return (
     <ToastProvider>
       <div className="min-h-screen bg-primary-bg">
+        {/* Cursor Trail - Desktop only, lazy loaded */}
+        {!performanceRecommendations.simplifyEffects && (
+          <Suspense fallback={null}>
+            <LazyCursorTrail />
+          </Suspense>
+        )}
+
         {/* All sections rendered at once for scrolling */}
         <HeroSection onNavigateToSection={navigateToSection} />
         <ProjectsSection />

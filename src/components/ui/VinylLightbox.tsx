@@ -33,8 +33,8 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
   } | null>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const scrollPositionRef = useRef<number>(0);
-  const progressionTimeoutRef = useRef<number | null>(null);
-  const idleTimeoutRef = useRef<number | null>(null);
+  const progressionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const idleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -453,7 +453,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       setDisplayPixelLevel(64);
 
       // Save current scroll position BEFORE manipulating body styles
-      scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
+      scrollPositionRef.current = window.scrollY || document.documentElement.scrollTop;
 
       // Store original body styles to restore them properly later
       const originalBodyStyle = {
@@ -523,7 +523,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
           
           // Double-check scroll restoration for mobile
           setTimeout(() => {
-            if (window.pageYOffset !== scrollPositionRef.current) {
+            if (window.scrollY !== scrollPositionRef.current) {
               window.scrollTo(0, scrollPositionRef.current);
             }
           }, 0);
