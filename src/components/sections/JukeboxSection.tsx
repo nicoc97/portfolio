@@ -164,12 +164,11 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
               : 'opacity-0 translate-y-8'
               }`}
           >
-            <h2 className="section-header">
-              JUKEBOX
-            </h2>
-            <div className="mt-4 w-16 h-px bg-accent-orange mb-6"></div>
-            <p className="text-accent-orange font-tech text-lg">
-              You'll Love This One
+            <h2 className="section-header">JUKEBOX</h2>
+            <div className="section-divider mb-6"></div>
+            <p className="section-subtitle mb-4">You'll Love This One</p>
+            <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
+              A curated collection of vinyl records that inspire my creative process and development workflow
             </p>
           </div>
 

@@ -69,7 +69,10 @@ export const AboutSection: React.FC = () => {
         >
           <h2 className="section-header">ABOUT</h2>
           <div className="section-divider mb-6"></div>
-          <p className="section-subtitle">Collaborative Web Developer</p>
+          <p className="section-subtitle mb-4">Collaborative Web Developer</p>
+          <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
+            Building digital solutions through teamwork, innovation, and modern development practices
+          </p>
         </div>
 
         {/* Main Content */}

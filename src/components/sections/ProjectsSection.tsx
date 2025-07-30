@@ -183,19 +183,13 @@ export const ProjectsSection: React.FC = () => {
               ref={headerRef}
               className={`text-left space-y-6 animate-slide-up ${headerVisible ? 'visible' : ''}`}
             >
-              <div className="relative">
-                <h2 className="section-header">PROJECTS</h2>
-                {/* decorative line */}
-                <div className="section-divider w-32"></div>
-              </div>
-
-              {/* description */}
-              <div className="max-w-2xl">
-                <p className="text-text-secondary text-sm leading-relaxed">
-                  A collection of web applications, data science projects, and creative experiments
-                  showcasing modern development practices.
-                </p>
-              </div>
+              <h2 className="section-header">PROJECTS</h2>
+              <div className="section-divider mb-6"></div>
+              <p className="section-subtitle mb-4">Featured Work & Experiments</p>
+              <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
+                A collection of web applications, data science projects, and creative experiments
+                showcasing modern development practices.
+              </p>
             </div>
           </ScrollReveal>
 

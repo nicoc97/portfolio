@@ -90,9 +90,10 @@ export const ContactSection: React.FC = () => {
             className={`space-y-4 animate-slide-up ${headerVisible ? 'visible' : ''}`}
           >
             <h2 className="section-header">CONTACT</h2>
-            <div className="section-divider"></div>
-            <p className="text-text-secondary text-lg max-w-2xl">
-              Ready to build something amazing together? Let's connect and discuss your next project.
+            <div className="section-divider mb-6"></div>
+            <p className="section-subtitle mb-4">Let's Build Something Amazing</p>
+            <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
+              Ready to collaborate on your next project? Get in touch and let's discuss how we can work together
             </p>
           </div>
 

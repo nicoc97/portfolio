@@ -27,6 +27,7 @@ function App() {
   const [isScrolling, setIsScrolling] = useState(false);
   const scrollTimeoutRef = useRef<number | null>(null);
   const lastScrollTime = useRef(0);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const sections = ['hero', 'projects', 'about', 'jukebox', 'skills', 'contact'];
 
@@ -52,14 +53,43 @@ function App() {
     }
   };
 
+  // Detect current section based on scroll position
+  const detectCurrentSection = () => {
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
+    let closestSection = sections[0];
+    let closestDistance = Infinity;
+
+    for (const sectionId of sections) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const { offsetTop, offsetHeight } = element;
+        const sectionCenter = offsetTop + offsetHeight / 2;
+        const distance = Math.abs(scrollPosition - sectionCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = sectionId;
+        }
+      }
+    }
+
+    return closestSection;
+  };
+
   // Handle section click from pagination/menu - updates active section and scrolls
   const handleSectionClick = (sectionId: string) => {
     setActiveSection(sectionId as typeof activeSection);
     scrollToSection(sectionId);
   };
 
-  // Navigate to next/previous section
-  const navigateToSection = (direction: 'up' | 'down') => {
+  // Handle navigation from buttons (like "Get in Touch") - updates both state and scroll
+  const navigateToSection = (sectionId: string) => {
+    setActiveSection(sectionId as typeof activeSection);
+    scrollToSection(sectionId);
+  };
+
+  // Navigate to next/previous section (for wheel/keyboard navigation)
+  const navigateToNextSection = (direction: 'up' | 'down') => {
     if (isScrolling) return;
 
     const currentIndex = getCurrentSectionIndex();
@@ -85,7 +115,7 @@ function App() {
 
     // More precise mobile detection - exclude tablets from scroll hijacking
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                          (window.innerWidth <= 768 && 'ontouchstart' in window);
+      (window.innerWidth <= 768 && 'ontouchstart' in window);
 
     console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth);
 
@@ -117,10 +147,10 @@ function App() {
 
       // Only trigger navigation when we have enough accumulated scroll
       const threshold = 50; // Balanced threshold for reliable hijacking
-      
+
       if (Math.abs(scrollAccumulator) >= threshold) {
         const direction = scrollAccumulator > 0 ? 'down' : 'up';
-        
+
         // Reset accumulator
         scrollAccumulator = 0;
         lastScrollTime.current = now;
@@ -131,7 +161,7 @@ function App() {
         }
 
         // Navigate to next section
-        navigateToSection(direction);
+        navigateToNextSection(direction);
       }
     };
 
@@ -144,22 +174,20 @@ function App() {
         case 'PageDown':
         case ' ':
           e.preventDefault();
-          navigateToSection('down');
+          navigateToNextSection('down');
           break;
         case 'ArrowUp':
         case 'PageUp':
           e.preventDefault();
-          navigateToSection('up');
+          navigateToNextSection('up');
           break;
         case 'Home':
           e.preventDefault();
-          setActiveSection('hero');
-          scrollToSection('hero');
+          navigateToSection('hero');
           break;
         case 'End':
           e.preventDefault();
-          setActiveSection('contact');
-          scrollToSection('contact');
+          navigateToSection('contact');
           break;
       }
     };
@@ -167,40 +195,23 @@ function App() {
     // Track active section based on scroll position (mobile only)
     const handleScroll = () => {
       // Only track scroll position on mobile devices
-      if (!isMobileDevice || isScrolling) return;
+      if (!isMobileDevice || isScrolling || !isInitialized) return;
 
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      let closestSection = sections[0];
-      let closestDistance = Infinity;
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          const sectionCenter = offsetTop + offsetHeight / 2;
-          const distance = Math.abs(scrollPosition - sectionCenter);
-          
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestSection = sectionId;
-          }
-        }
-      }
-
-      if (closestSection !== activeSection) {
-        console.log('Mobile scroll: Updating active section from', activeSection, 'to', closestSection);
-        setActiveSection(closestSection as typeof activeSection);
+      const currentSection = detectCurrentSection();
+      if (currentSection !== activeSection) {
+        console.log('Mobile scroll: Updating active section from', activeSection, 'to', currentSection);
+        setActiveSection(currentSection as typeof activeSection);
       }
     };
 
     // Add wheel listener with proper passive setting
     window.addEventListener('wheel', handleWheel, { passive: isMobileDevice });
-    
+
     // Add keyboard navigation only for desktop
     if (!isMobileDevice) {
       window.addEventListener('keydown', handleKeyDown);
     }
-    
+
     // Add scroll tracking only for mobile
     if (isMobileDevice) {
       window.addEventListener('scroll', handleScroll, { passive: true });
@@ -219,12 +230,24 @@ function App() {
         clearTimeout(scrollTimeoutRef.current);
       }
     };
-  }, [activeSection, isScrolling]);
+  }, [activeSection, isScrolling, sections]);
+
+  // Initialize active section on page load based on current scroll position
+  useEffect(() => {
+    if (!isInitialized) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        const currentSection = detectCurrentSection();
+        setActiveSection(currentSection as typeof activeSection);
+        setIsInitialized(true);
+      }, 100);
+    }
+  }, [isInitialized]);
 
   // Simplified section detection - only use intersection observer for mobile
   useEffect(() => {
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-                          (window.innerWidth <= 768 && 'ontouchstart' in window);
+      (window.innerWidth <= 768 && 'ontouchstart' in window);
 
     if (!isMobileDevice) return; // Skip intersection observer on desktop
 
@@ -234,22 +257,14 @@ function App() {
       threshold: 0.3
     };
 
-    const sectionObserver = new IntersectionObserver((entries) => {
-      if (isScrolling) return;
+    const sectionObserver = new IntersectionObserver(() => {
+      if (isScrolling || !isInitialized) return;
 
-      let mostVisible = entries[0];
-      for (const entry of entries) {
-        if (entry.intersectionRatio > mostVisible.intersectionRatio) {
-          mostVisible = entry;
-        }
-      }
-
-      if (mostVisible && mostVisible.isIntersecting) {
-        const sectionId = mostVisible.target.id;
-        if (sections.includes(sectionId) && sectionId !== activeSection) {
-          console.log('Mobile Intersection Observer: Updating active section to', sectionId);
-          setActiveSection(sectionId as typeof activeSection);
-        }
+      // Use the same detection logic for consistency
+      const currentSection = detectCurrentSection();
+      if (currentSection !== activeSection) {
+        console.log('Mobile Intersection Observer: Updating active section to', currentSection);
+        setActiveSection(currentSection as typeof activeSection);
       }
     }, observerOptions);
 
@@ -263,13 +278,13 @@ function App() {
     return () => {
       sectionObserver.disconnect();
     };
-  }, [activeSection, isScrolling, sections]);
+  }, [activeSection, isScrolling, sections, isInitialized]);
 
   return (
     <ToastProvider>
       <div className="min-h-screen bg-primary-bg">
         {/* All sections rendered at once for scrolling */}
-        <HeroSection />
+        <HeroSection onNavigateToSection={navigateToSection} />
         <ProjectsSection />
         <AboutSection />
         <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />

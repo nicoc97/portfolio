@@ -5,7 +5,11 @@ import { useTypingAnimation } from '../../hooks/useTypingAnimation';
 import { HERO_CONSTANTS } from '../../constants/hero';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
-export const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  onNavigateToSection?: (sectionId: string) => void;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection }) => {
   const displayedText = useTypingAnimation({
     strings: HERO_CONSTANTS.TYPING_STRINGS,
   });
@@ -32,14 +36,19 @@ export const HeroSection: React.FC = () => {
     animationType: 'scale'
   });
 
-  // Smooth scroll to section
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
+  // Handle navigation - use parent's navigation function if available
+  const handleNavigation = (sectionId: string) => {
+    if (onNavigateToSection) {
+      onNavigateToSection(sectionId);
+    } else {
+      // Fallback to direct scroll
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     }
   };
 
@@ -98,7 +107,7 @@ export const HeroSection: React.FC = () => {
                 <PixelButton
                   variant="primary"
                   size="lg"
-                  onClick={() => scrollToSection('projects')}
+                  onClick={() => handleNavigation('projects')}
                   className="min-w-44 text-base"
                 >
                   {HERO_CONSTANTS.BUTTONS.PRIMARY}
@@ -107,7 +116,7 @@ export const HeroSection: React.FC = () => {
                 <PixelButton
                   variant="secondary"
                   size="lg"
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => handleNavigation('contact')}
                   className="min-w-44 text-base"
                 >
                   {HERO_CONSTANTS.BUTTONS.SECONDARY}
