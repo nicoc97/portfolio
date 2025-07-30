@@ -329,7 +329,7 @@ export const LazyLoader = {
   lazyLoadImage(
     img: HTMLImageElement,
     src: string,
-    _placeholder?: string
+    placeholder?: string
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       const observer = this.createIntersectionObserver(([entry]) => {
