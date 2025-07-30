@@ -147,7 +147,10 @@ function App() {
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth);
+    // Safari detection for scroll sensitivity adjustment
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'Safari:', isSafari);
 
     const handleWheel = (e: WheelEvent) => {
       // Don't hijack if it's a mobile device - let natural scrolling happen
@@ -173,10 +176,13 @@ function App() {
       }
 
       lastWheelTime = now;
-      scrollAccumulator += e.deltaY;
+      
+      // Safari has different deltaY values, normalise
+      const normalizedDelta = isSafari ? e.deltaY * 0.3 : e.deltaY;
+      scrollAccumulator += normalizedDelta;
 
-      // Only trigger navigation when we have enough accumulated scroll
-      const threshold = 50; // Balanced threshold for reliable hijacking
+      // Adjust threshold based on browser - Safari needs higher threshold
+      const threshold = isSafari ? 120 : 50;
 
       if (Math.abs(scrollAccumulator) >= threshold) {
         const direction = scrollAccumulator > 0 ? 'down' : 'up';
