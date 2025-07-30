@@ -51,8 +51,8 @@ export const AboutSection: React.FC = () => {
 
   // Counter animations
   const yearsCount = useCounter(5, 2000, contentVisible[1]);
-  const projectsCount = useCounter(25, 2500, contentVisible[1]);
-  const clientsCount = useCounter(15, 2200, contentVisible[1]);
+  const teamsCount = useCounter(15, 2500, contentVisible[1]);
+  const techCount = useCounter(10, 2200, contentVisible[1]);
 
   return (
     <section id="about" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
@@ -105,19 +105,19 @@ export const AboutSection: React.FC = () => {
 
                 <div className="text-center sm:text-left ml-16 sm:ml-4">
                   <div className="text-5xl font-bold font-retro text-accent-green mb-2">
-                    {projectsCount}+
+                    {teamsCount}+
                   </div>
                   <p className="text-text-secondary text-base font-tech uppercase tracking-wide">
-                    Projects Delivered
+                    Team COLLABORATIONS
                   </p>
                 </div>
 
                 <div className="text-center sm:text-left mr-8 sm:mr-8">
                   <div className="text-5xl font-bold font-retro text-text-primary mb-2">
-                    {clientsCount}+
+                    {techCount}+
                   </div>
                   <p className="text-text-secondary text-base font-tech uppercase tracking-wide">
-                    Happy Clients
+                    Technologies Mastered
                   </p>
                 </div>
               </div>
@@ -181,22 +181,22 @@ export const AboutSection: React.FC = () => {
 
                   <div className="flex items-center gap-8 lg:ml-16">
                     <div className="text-6xl lg:text-8xl font-bold font-retro">
-                      {projectsCount}+
+                      {teamsCount}+
                     </div>
                     <div>
                       <p className="text-text-secondary text-lg font-tech uppercase tracking-wide">
-                        Projects Delivered
+                      Team COLLABORATIONS
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-8 lg:ml-8">
                     <div className="text-6xl lg:text-8xl font-bold font-retro">
-                      {clientsCount}+
+                      {techCount}+
                     </div>
                     <div>
                       <p className="text-text-secondary text-lg font-tech uppercase tracking-wide">
-                        Happy Clients
+                      Technologies Mastered
                       </p>
                     </div>
                   </div>

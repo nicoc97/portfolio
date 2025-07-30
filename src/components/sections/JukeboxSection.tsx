@@ -168,7 +168,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             <div className="section-divider mb-6"></div>
             <p className="section-subtitle mb-4">You'll Love This One</p>
             <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
-              A curated collection of vinyl records that inspire my creative process and development workflow
+              An excuse to show off some three.js
             </p>
           </div>
 
@@ -259,27 +259,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                   {selectedAlbum.id === album.id && (
                     <div className="lg:hidden flex justify-center items-center py-8 relative">
                       {/* Background repeated track names - mobile version */}
-                      <div className="absolute inset-0 overflow-hidden">
-                        <div className="relative h-full w-full flex flex-col justify-between py-4">
-                          {[...Array(3)].map((_, i) => (
-                            <div
-                              key={i}
-                              className="flex justify-between items-center px-2 opacity-[0.15]"
-                            >
-                              <InteractiveText
-                                text={selectedAlbum.title.toUpperCase()}
-                                className="text-accent-orange font-retro font-bold select-none"
-                                style={{
-                                  fontSize: 'clamp(1rem, 8vw, 2rem)',
-                                  WebkitTextStroke: '1px currentColor',
-                                  WebkitTextFillColor: 'transparent',
-                                }}
-                                magnetStrength={25}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                    
 
                       <div className="w-full max-w-sm relative z-10">
                         <VinylRecord
@@ -303,7 +283,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                 }`}
             >
               {/* Background repeated track names */}
-              <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute inset-0">
                 <div className="relative h-full w-full flex flex-col justify-between">
                   {[...Array(8)].map((_, i) => (
                     <div

@@ -28,7 +28,6 @@ const CACHE_EXPIRY = {
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json',
   '/vite.svg',
   // Critical CSS and JS will be added dynamically
 ];
@@ -70,9 +69,25 @@ self.addEventListener('install', (event) => {
   
   event.waitUntil(
     Promise.all([
-      // Cache static assets
-      caches.open(STATIC_CACHE).then((cache) => {
-        return cache.addAll(STATIC_ASSETS);
+      // Cache static assets with error handling
+      caches.open(STATIC_CACHE).then(async (cache) => {
+        try {
+          return await cache.addAll(STATIC_ASSETS);
+        } catch (error) {
+          console.warn('Failed to cache some static assets:', error);
+          // Try to cache assets individually
+          const cachePromises = STATIC_ASSETS.map(async (asset) => {
+            try {
+              const response = await fetch(asset);
+              if (response.ok) {
+                await cache.put(asset, response);
+              }
+            } catch (err) {
+              console.warn(`Failed to cache asset: ${asset}`, err);
+            }
+          });
+          await Promise.allSettled(cachePromises);
+        }
       }),
       // Skip waiting to activate immediately
       self.skipWaiting()

@@ -268,6 +268,11 @@ export const ProjectsSection: React.FC = () => {
                     spaceBetween: 36,
                   },
                   1024: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 1,
+                    spaceBetween: 36,
+                  },
+                  1280: {
                     slidesPerView: 4,
                     slidesPerGroup: 1,
                     spaceBetween: 40,

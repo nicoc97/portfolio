@@ -125,6 +125,8 @@
    /* Large background section text - shared across all sections */
    .section-bg-text {
      @apply absolute inset-0 flex items-start justify-end opacity-5 pointer-events-none;
+     /* Hide on mobile and tablet, show only on desktop */
+     @apply hidden lg:flex;
    }
  
    .section-bg-text span {
