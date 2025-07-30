@@ -64,8 +64,7 @@ const VinylLightboxComponent = React.lazy(() => {
 });
 
 // Loading fallback for UI components
-const UIComponentFallback: React.FC<{ componentName?: string; size?: 'sm' | 'md' | 'lg' }> = ({ 
-  componentName = 'Component', 
+const UIComponentFallback: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({ 
   size = 'md' 
 }) => {
   const sizeClasses = {
@@ -106,7 +105,7 @@ export const LazyVinylRecord: React.FC<React.ComponentProps<typeof VinylRecordCo
   }
 
   return (
-    <Suspense fallback={<UIComponentFallback componentName="VinylRecord" size="lg" />}>
+    <Suspense fallback={<UIComponentFallback size="lg" />}>
       <VinylRecordComponent {...props} />
     </Suspense>
   );
@@ -125,7 +124,7 @@ export const LazyVintageTVDial: React.FC<React.ComponentProps<typeof VintageTVDi
   }
 
   return (
-    <Suspense fallback={<UIComponentFallback componentName="VintageTVDial" size="md" />}>
+    <Suspense fallback={<UIComponentFallback size="md" />}>
       <VintageTVDialComponent {...props} />
     </Suspense>
   );

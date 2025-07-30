@@ -245,10 +245,15 @@ export class ServiceWorkerManager {
         }
       };
 
-      navigator.serviceWorker.controller.postMessage(
-        { type: 'GET_PERFORMANCE_METRICS' },
-        [messageChannel.port2]
-      );
+      const controller = navigator.serviceWorker.controller;
+      if (controller) {
+        controller.postMessage(
+          { type: 'GET_PERFORMANCE_METRICS' },
+          [messageChannel.port2]
+        );
+      } else {
+        resolve(null);
+      }
 
       // Timeout after 5 seconds
       setTimeout(() => resolve(null), 5000);
@@ -261,10 +266,13 @@ export class ServiceWorkerManager {
       return;
     }
 
-    navigator.serviceWorker.controller.postMessage({
-      type: 'PRELOAD_CRITICAL_ASSETS',
-      assets
-    });
+    const controller = navigator.serviceWorker.controller;
+    if (controller) {
+      controller.postMessage({
+        type: 'PRELOAD_CRITICAL_ASSETS',
+        assets
+      });
+    }
   }
 
   // Trigger cache optimization
@@ -273,9 +281,12 @@ export class ServiceWorkerManager {
       return;
     }
 
-    navigator.serviceWorker.controller.postMessage({
-      type: 'OPTIMIZE_CACHE'
-    });
+    const controller = navigator.serviceWorker.controller;
+    if (controller) {
+      controller.postMessage({
+        type: 'OPTIMIZE_CACHE'
+      });
+    }
   }
 
   // Clear old caches
@@ -284,9 +295,12 @@ export class ServiceWorkerManager {
       return;
     }
 
-    navigator.serviceWorker.controller.postMessage({
-      type: 'CLEAR_CACHE'
-    });
+    const controller = navigator.serviceWorker.controller;
+    if (controller) {
+      controller.postMessage({
+        type: 'CLEAR_CACHE'
+      });
+    }
   }
 
   // Monitor cache performance

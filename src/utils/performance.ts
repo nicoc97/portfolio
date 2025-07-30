@@ -28,24 +28,24 @@ export class PerformanceMonitor {
   // Track animation frame rates
   trackAnimationPerformance(name: string, callback: () => void): void {
     const start = performance.now();
-    
+
     requestAnimationFrame(() => {
       callback();
       const end = performance.now();
       const duration = end - start;
-      
+
       if (!this.metrics.has(name)) {
         this.metrics.set(name, []);
       }
-      
+
       const measurements = this.metrics.get(name)!;
       measurements.push(duration);
-      
+
       // Keep only last 100 measurements
       if (measurements.length > 100) {
         measurements.shift();
       }
-      
+
       // Log warning if performance is poor
       if (duration > 16.67) { // 60fps threshold
         console.warn(`Performance warning: ${name} took ${duration.toFixed(2)}ms`);
@@ -57,7 +57,7 @@ export class PerformanceMonitor {
   getAveragePerformance(name: string): number {
     const measurements = this.metrics.get(name);
     if (!measurements || measurements.length === 0) return 0;
-    
+
     return measurements.reduce((sum, val) => sum + val, 0) / measurements.length;
   }
 
@@ -70,7 +70,7 @@ export class PerformanceMonitor {
       /Android.*Chrome\/[.0-9]*\s(Mobile|$)/.test(navigator.userAgent),
       window.screen.width <= 768 && window.devicePixelRatio <= 1
     ];
-    
+
     return checks.filter(Boolean).length >= 2;
   }
 
@@ -99,10 +99,10 @@ export class PerformanceMonitor {
 export const ImageOptimizer = {
   // WebP support detection with caching
   _webpSupport: null as boolean | null,
-  
+
   async checkWebPSupport(): Promise<boolean> {
     if (this._webpSupport !== null) return this._webpSupport;
-    
+
     return new Promise((resolve) => {
       const webP = new Image();
       webP.onload = webP.onerror = () => {
@@ -115,10 +115,10 @@ export const ImageOptimizer = {
 
   // AVIF support detection
   _avifSupport: null as boolean | null,
-  
+
   async checkAVIFSupport(): Promise<boolean> {
     if (this._avifSupport !== null) return this._avifSupport;
-    
+
     return new Promise((resolve) => {
       const avif = new Image();
       avif.onload = avif.onerror = () => {
@@ -132,27 +132,27 @@ export const ImageOptimizer = {
   // Convert image to optimized format with fallbacks
   async getOptimizedImageUrl(url: string, width?: number, quality = 80): Promise<string> {
     if (!url) return '';
-    
+
     const supportsAVIF = await this.checkAVIFSupport();
     const supportsWebP = await this.checkWebPSupport();
 
     // For local images, try optimized versions
     if (url.startsWith('/') || url.startsWith('./')) {
       let optimizedUrl = url;
-      
+
       // Try AVIF first (best compression)
       if (supportsAVIF) {
         optimizedUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '.avif');
       } else if (supportsWebP) {
         optimizedUrl = url.replace(/\.(jpg|jpeg|png)$/i, '.webp');
       }
-      
+
       // Add size parameters if specified
       if (width) {
         const separator = optimizedUrl.includes('?') ? '&' : '?';
         optimizedUrl += `${separator}w=${width}&q=${quality}`;
       }
-      
+
       return optimizedUrl;
     }
 
@@ -176,27 +176,27 @@ export const ImageOptimizer = {
   // Synchronous version for immediate use (uses cached support detection)
   getOptimizedImageUrlSync(url: string, width?: number, quality = 80): string {
     if (!url) return '';
-    
+
     const supportsAVIF = this._avifSupport === true;
     const supportsWebP = this._webpSupport === true;
 
     // For local images, try optimized versions
     if (url.startsWith('/') || url.startsWith('./')) {
       let optimizedUrl = url;
-      
+
       // Try AVIF first (best compression)
       if (supportsAVIF) {
         optimizedUrl = url.replace(/\.(jpg|jpeg|png|webp)$/i, '.avif');
       } else if (supportsWebP) {
         optimizedUrl = url.replace(/\.(jpg|jpeg|png)$/i, '.webp');
       }
-      
+
       // Add size parameters if specified
       if (width) {
         const separator = optimizedUrl.includes('?') ? '&' : '?';
         optimizedUrl += `${separator}w=${width}&q=${quality}`;
       }
-      
+
       return optimizedUrl;
     }
 
@@ -213,8 +213,8 @@ export const ImageOptimizer = {
   // Generate responsive srcSet with multiple formats
   generateResponsiveSrcSet(url: string, sizes: number[] = [400, 800, 1200, 1600]): string {
     if (!url || url.includes('data:')) return '';
-    
-    
+
+
     return sizes.map(size => {
       const optimizedUrl = this.getOptimizedImageUrlSync(url, size);
       return `${optimizedUrl} ${size}w`;
@@ -246,7 +246,7 @@ export const CodeSplitter = {
     fallback?: React.ComponentType
   ): React.LazyExoticComponent<T> {
     const LazyComponent = React.lazy(importFn);
-    
+
     if (fallback) {
       return React.lazy(async () => {
         try {
@@ -257,7 +257,7 @@ export const CodeSplitter = {
         }
       });
     }
-    
+
     return LazyComponent;
   },
 
@@ -292,16 +292,16 @@ export const BundleAnalyzer = {
   ): React.ComponentType<P> {
     return (props: P) => {
       const renderStart = performance.now();
-      
+
       React.useEffect(() => {
         const renderEnd = performance.now();
         const renderTime = renderEnd - renderStart;
-        
+
         if (renderTime > 16) {
           console.warn(`Slow render: ${name} took ${renderTime.toFixed(2)}ms`);
         }
       });
-      
+
       return React.createElement(Component, props);
     };
   }
