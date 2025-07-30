@@ -25,7 +25,6 @@ const ScrollAnimations = React.lazy(() => {
   });
 });
 
-
 // Lazy load Three.js components (heavy) with performance tracking
 const ThreeJSComponents = React.lazy(() => {
   const startTime = performance.now();
@@ -58,21 +57,6 @@ const SwiperComponents = React.lazy(() => {
     performanceMonitor.trackAnimationPerformance('swiper-error', () => {
       console.error('Swiper components load failed');
     });
-    return { default: () => null };
-  });
-});
-
-// Lazy load CursorTrail component
-const CursorTrailComponent = React.lazy(() => {
-  const startTime = performance.now();
-  return import('../ui/CursorTrail').then(module => {
-    const loadTime = performance.now() - startTime;
-    performanceMonitor.trackAnimationPerformance('cursor-trail-load', () => {
-      console.log(`CursorTrail loaded in ${loadTime.toFixed(2)}ms`);
-    });
-    return { default: module.CursorTrail };
-  }).catch(error => {
-    console.warn('Failed to load CursorTrail:', error);
     return { default: () => null };
   });
 });
@@ -127,21 +111,6 @@ export const LazyScrollReveal: React.FC<React.ComponentProps<typeof ScrollAnimat
   );
 };
 
-export const LazyCursorTrail: React.FC = () => {
-  const recommendations = performanceMonitor.getPerformanceRecommendations();
-
-  // Skip cursor trail on low-end devices or mobile
-  if (recommendations.simplifyEffects || 'ontouchstart' in window) {
-    return null;
-  }
-
-  return (
-    <Suspense fallback={null}>
-      <CursorTrailComponent />
-    </Suspense>
-  );
-};
-
 export const LazyThreeJS: React.FC<any> = (props) => {
   const recommendations = performanceMonitor.getPerformanceRecommendations();
 
@@ -177,14 +146,6 @@ export const preloadAnimations = () => {
   import('../animations/ScrollAnimations').catch(error => {
     console.warn('Failed to preload ScrollAnimations:', error);
   });
-
-  // Preload cursor trail on desktop devices
-  if (!('ontouchstart' in window)) {
-    import('../ui/CursorTrail').catch(error => {
-      console.warn('Failed to preload CursorTrail:', error);
-    });
-  }
-
 
   // Preload Three.js components on high-end devices only
   if (!recommendations.simplifyEffects && navigator.hardwareConcurrency && navigator.hardwareConcurrency > 4) {

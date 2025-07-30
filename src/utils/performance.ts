@@ -214,8 +214,6 @@ export const ImageOptimizer = {
   generateResponsiveSrcSet(url: string, sizes: number[] = [400, 800, 1200, 1600]): string {
     if (!url || url.includes('data:')) return '';
     
-    const supportsAVIF = this._avifSupport === true;
-    const supportsWebP = this._webpSupport === true;
     
     return sizes.map(size => {
       const optimizedUrl = this.getOptimizedImageUrlSync(url, size);
@@ -329,7 +327,6 @@ export const LazyLoader = {
   lazyLoadImage(
     img: HTMLImageElement,
     src: string,
-    placeholder?: string
   ): Promise<void> {
     return new Promise((resolve, reject) => {
       const observer = this.createIntersectionObserver(([entry]) => {
