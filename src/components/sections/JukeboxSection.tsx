@@ -113,7 +113,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
   const { triggerRef: albumListRef, getStaggeredClasses } = useStaggeredAnimation<HTMLDivElement>(
     ALBUM_DATA.length,
     100,
-    { 
+    {
       threshold: 0.2,
       triggerOnce: false,
       reverseOnExit: true
@@ -172,10 +172,10 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             </p>
           </div>
 
-          {/* Accordion Layout */}
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-            {/* Record List (Accordion) - Modern borderless design */}
-            <div ref={albumListRef} className="lg:w-1/2 xl:w-2/5 space-y-6">
+          {/* Responsive Layout */}
+          <div className="flex flex-col gap-8">
+            {/* Mobile/Tablet: Accordion Layout */}
+            <div className="md:hidden space-y-6" ref={albumListRef}>
               {ALBUM_DATA.map((album, index) => (
                 <div key={album.id} className="space-y-6">
                   <div
@@ -255,12 +255,9 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                     </div>
                   </div>
 
-                  {/* Mobile/Tablet Record Display - appears directly below selected item */}
+                  {/* Mobile Record Display - appears directly below selected item */}
                   {selectedAlbum.id === album.id && (
-                    <div className="lg:hidden flex justify-center items-center py-8 relative">
-                      {/* Background repeated track names - mobile version */}
-                    
-
+                    <div className="flex justify-center items-center py-8 relative">
                       <div className="w-full max-w-sm relative z-10">
                         <VinylRecord
                           album={selectedAlbum}
@@ -274,47 +271,124 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
               ))}
             </div>
 
-            {/* Desktop Record Display - side panel */}
-            <div
-              ref={recordDisplayRef}
-              className={`hidden lg:flex lg:w-1/2 xl:w-3/5 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible
-                ? 'opacity-100 translate-y-0 scale-100 blur-none'
-                : 'opacity-0 translate-y-4 scale-95 blur-sm'
-                }`}
-            >
-              {/* Background repeated track names */}
-              <div className="absolute inset-0">
-                <div className="relative h-full w-full flex flex-col justify-between">
-                  {[...Array(8)].map((_, i) => (
+            {/* Desktop: Top-aligned Records with Hover Names */}
+            <div className="hidden md:flex flex-col gap-8">
+              {/* Record Icons Row */}
+              <div ref={albumListRef} className="flex justify-center items-center gap-4 lg:gap-6 xl:gap-8 flex-wrap group/container">
+                {ALBUM_DATA.map((album, index) => (
+                  <div
+                    key={album.id}
+                    onClick={() => handleAccordionItemClick(album)}
+                    className={`
+                      cursor-pointer transition-all duration-500 group relative
+                      ${getStaggeredClasses(index, 'slide')}
+                    `}
+                  >
+                    {/* Record Icon */}
                     <div
-                      key={i}
-                      className="flex justify-between items-center opacity-[0.3]"
+                      className={`
+                        w-16 h-16 lg:w-20 lg:h-20 xl:w-24 xl:h-24 rounded-full relative
+                        transition-all duration-500 pixel-art bg-black
+                        ${selectedAlbum.id === album.id
+                          ? 'animate-spin shadow-lg shadow-accent-orange/30 scale-110'
+                          : 'group-hover:scale-125 group-hover:shadow-lg group-hover:shadow-black/30'
+                        }
+                      `}
+                      style={{
+                        filter: 'contrast(1.2) saturate(1.1)'
+                      }}
                     >
-                      <InteractiveText
-                        text={selectedAlbum.title.toUpperCase()}
-                        className="text-accent-orange font-retro font-bold select-none"
+                      {/* Enhanced record grooves */}
+                      <div className="absolute inset-[2px] rounded-full border border-gray-700/70"></div>
+                      <div className="absolute inset-[4px] lg:inset-[6px] rounded-full border border-gray-600/60"></div>
+                      <div className="absolute inset-[6px] lg:inset-[10px] rounded-full border border-gray-500/50"></div>
+                      <div className="absolute inset-[8px] lg:inset-[14px] rounded-full border border-gray-400/40"></div>
+
+                      {/* Center colored label */}
+                      <div
+                        className="absolute inset-[16px] lg:inset-[24px] rounded-full shadow-inner"
                         style={{
-                          fontSize: 'clamp(1.5rem, 4vw, 3rem)',
-                          WebkitTextStroke: '1px currentColor',
-                          WebkitTextFillColor: 'transparent',
-                          // Safari-specific fixes for text stroke
-                          textShadow: '0 0 1px currentColor',
-                          fontWeight: 'bold',
-                          letterSpacing: '0.05em',
+                          backgroundColor: album.labelColor,
+                          boxShadow: `inset 0 2px 4px rgba(0,0,0,0.3)`
                         }}
-                        magnetStrength={40}
-                      />
+                      >
+                        {/* Center hole */}
+                        <div className="absolute top-1/2 left-1/2 w-1 h-1 lg:w-1.5 lg:h-1.5 bg-primary-bg/70 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-sm"></div>
+                      </div>
                     </div>
-                  ))}
-                </div>
+
+                    {/* Hover Tooltip with Album Info */}
+                    <div className={`
+                      absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3
+                      bg-primary-bg/95 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-4
+                      transition-all duration-300 pointer-events-none z-20 min-w-max
+                      ${selectedAlbum.id === album.id
+                        ? 'opacity-100 translate-y-0 group-hover/container:opacity-0 group-hover/container:translate-y-2 group-hover:opacity-100 group-hover:translate-y-0'
+                        : 'opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0'
+                      }
+                    `}>
+                      <div className="text-center space-y-1.5">
+                        <h4 className="font-retro text-base font-bold text-accent-orange">
+                          {album.title}
+                        </h4>
+                        <p className="text-text-secondary font-tech text-sm">
+                          {album.artist}
+                        </p>
+                        <p className="text-text-secondary/70 font-tech text-sm">
+                          {album.year}
+                        </p>
+                      </div>
+                      {/* Tooltip arrow */}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px w-2 h-2 bg-primary-bg/95 border-r border-b border-accent-orange/20 rotate-45"></div>
+                    </div>
+
+
+                  </div>
+                ))}
               </div>
 
-              <div className="w-full max-w-lg relative z-10">
-                <VinylRecord
-                  album={selectedAlbum}
-                  index={ALBUM_DATA.findIndex(album => album.id === selectedAlbum.id)}
-                  onClick={() => handleRecordClick(selectedAlbum)}
-                />
+              {/* Desktop Record Display */}
+              <div
+                ref={recordDisplayRef}
+                className={`flex justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible
+                  ? 'opacity-100 translate-y-0 scale-100 blur-none'
+                  : 'opacity-0 translate-y-4 scale-95 blur-sm'
+                  }`}
+              >
+                {/* Background repeated track names */}
+                <div className="absolute inset-0">
+                  <div className="relative h-full w-full flex flex-col justify-between">
+                    {[...Array(8)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="flex justify-between items-center opacity-[0.3]"
+                      >
+                        <InteractiveText
+                          text={selectedAlbum.title.toUpperCase()}
+                          className="text-accent-orange font-retro font-bold select-none"
+                          style={{
+                            fontSize: 'clamp(1.5rem, 4vw, 3rem)',
+                            WebkitTextStroke: '1px currentColor',
+                            WebkitTextFillColor: 'transparent',
+                            // Safari-specific fixes for text stroke
+                            textShadow: '0 0 1px currentColor',
+                            fontWeight: 'bold',
+                            letterSpacing: '0.05em',
+                          }}
+                          magnetStrength={40}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="w-full max-w-lg relative z-10">
+                  <VinylRecord
+                    album={selectedAlbum}
+                    index={ALBUM_DATA.findIndex(album => album.id === selectedAlbum.id)}
+                    onClick={() => handleRecordClick(selectedAlbum)}
+                  />
+                </div>
               </div>
             </div>
           </div>
