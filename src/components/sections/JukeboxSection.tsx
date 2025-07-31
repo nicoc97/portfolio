@@ -4,13 +4,6 @@ import { VinylLightbox } from '../ui/VinylLightbox.tsx';
 import { InteractiveText } from '../ui/InteractiveText.tsx';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 
-/**
- * JukeboxSection Component
- * 
- * Interactive vinyl record collection with Three.js animations.
- * Features scroll-triggered animations and clickable records that open in a lightbox.
- */
-
 export interface AlbumData {
   id: string;
   title: string;
@@ -174,91 +167,88 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
 
           {/* Responsive Layout */}
           <div className="flex flex-col gap-8">
-            {/* Mobile/Tablet: Accordion Layout */}
-            <div className="md:hidden space-y-6" ref={albumListRef}>
+            {/* Mobile/Tablet: Accordion Layout - FIXED */}
+            <div className="md:hidden space-y-4" ref={albumListRef}>
               {ALBUM_DATA.map((album, index) => (
-                <div key={album.id} className="space-y-6">
+                <div key={album.id} className="space-y-4">
                   <div
                     onClick={() => handleAccordionItemClick(album)}
                     className={`
-                      cursor-pointer p-6 transition-all duration-500 group relative
-                      hover:bg-accent-green/5 hover:backdrop-blur-sm hover:rounded-r-full
+                      cursor-pointer p-4 transition-all duration-300 group relative
+                      bg-primary-bg/50 backdrop-blur-sm rounded-lg
+                      border border-accent-orange/10 hover:border-accent-orange/30
                       ${selectedAlbum.id === album.id
-                        ? 'border-l-2 border-accent-orange'
+                        ? 'border-accent-orange shadow-lg shadow-accent-orange/20 bg-accent-orange/5'
                         : ''
                       }
-                      ${getStaggeredClasses(index, 'slide')}
                     `}
+                    // Remove the animation classes for mobile to ensure visibility
+                    style={{ opacity: 1, transform: 'none' }}
                   >
-                    <div className="flex items-center gap-6">
-                      {/* Mini Record Icon - Enhanced */}
+                    <div className="flex items-center gap-4">
+                      {/* Mini Record Icon */}
                       <div
                         className={`
-                          w-20 h-20 rounded-full flex-shrink-0 relative
-                          transition-all duration-500 pixel-art bg-black
+                          w-16 h-16 rounded-full flex-shrink-0 relative
+                          transition-all duration-500 bg-black
                           ${selectedAlbum.id === album.id
                             ? 'animate-spin shadow-lg shadow-accent-orange/30'
-                            : 'group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-black/30'
+                            : 'group-hover:scale-110'
                           }
                         `}
-                        style={{
-                          filter: 'contrast(1.2) saturate(1.1)'
-                        }}
                       >
-                        {/* Enhanced record grooves */}
-                        <div className="absolute inset-[2px] rounded-full border border-gray-700/70"></div>
-                        <div className="absolute inset-[6px] rounded-full border border-gray-600/60"></div>
-                        <div className="absolute inset-[10px] rounded-full border border-gray-500/50"></div>
-                        <div className="absolute inset-[14px] rounded-full border border-gray-400/40"></div>
+                        {/* Record grooves */}
+                        <div className="absolute inset-[2px] rounded-full border border-gray-700/50"></div>
+                        <div className="absolute inset-[5px] rounded-full border border-gray-600/40"></div>
+                        <div className="absolute inset-[8px] rounded-full border border-gray-500/30"></div>
+                        <div className="absolute inset-[11px] rounded-full border border-gray-400/20"></div>
 
-                        {/* Center colored label - larger */}
+                        {/* Center colored label */}
                         <div
-                          className="absolute inset-[24px] rounded-full shadow-inner"
+                          className="absolute inset-[20px] rounded-full shadow-inner"
                           style={{
                             backgroundColor: album.labelColor,
                             boxShadow: `inset 0 2px 4px rgba(0,0,0,0.3)`
                           }}
                         >
                           {/* Center hole */}
-                          <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-primary-bg/70 rounded-full transform -translate-x-1/2 -translate-y-1/2 shadow-sm"></div>
+                          <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-primary-bg/70 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
                         </div>
                       </div>
 
-                      {/* Album Info - Enhanced typography */}
-                      <div className="flex-1 space-y-1">
+                      {/* Album Info - Ensure text is visible */}
+                      <div className="flex-1 space-y-0.5">
                         <h3 className={`
-                          font-retro text-lg md:text-xl lg:text-lg xl:text-lg 2xl:text-xl font-bold transition-all duration-300
+                          font-retro text-base font-bold transition-all duration-300
                           ${selectedAlbum.id === album.id
                             ? 'text-accent-orange'
-                            : 'text-text-primary group-hover:text-accent-orange'
+                            : 'text-white group-hover:text-accent-orange'
                           }
                         `}>
                           {album.title}
                         </h3>
-                        <p className="text-text-secondary font-tech text-sm opacity-90">
+                        <p className="text-gray-400 font-tech text-sm">
                           {album.artist}
                         </p>
-                        <p className="text-text-secondary/70 font-tech text-xs">
+                        <p className="text-gray-500 font-tech text-xs">
                           {album.year}
                         </p>
                       </div>
 
-                      {/* Active Indicator - Minimal */}
-                      <div className={`
-                        transition-all duration-300 flex items-center
-                        ${selectedAlbum.id === album.id ? 'opacity-100' : 'opacity-0'}
-                      `}>
-                        {selectedAlbum.id === album.id && (
-                          <div className="w-2 h-2 bg-accent-orange rounded-full animate-pulse"></div>
-                        )}
-                      </div>
+                      {/* Active Indicator */}
+                      {selectedAlbum.id === album.id && (
+                        <div className="w-2 h-2 bg-accent-orange rounded-full animate-pulse"></div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Mobile Record Display - appears directly below selected item */}
-                  {selectedAlbum.id === album.id && (
-                    <div className="flex justify-center items-center py-8 relative">
-                      <div className="w-full max-w-sm relative z-10">
+                  {/* Mobile Record Display - Collapsible */}
+                  <div className={`
+                    overflow-hidden transition-all duration-500 ease-in-out
+                    ${selectedAlbum.id === album.id ? 'max-h-[400px] opacity-100' : 'max-h-0 opacity-0'}
+                  `}>
+                    <div className="flex justify-center items-center py-4">
+                      <div className="w-full max-w-[280px] relative">
                         <VinylRecord
                           album={selectedAlbum}
                           index={ALBUM_DATA.findIndex(a => a.id === selectedAlbum.id)}
@@ -266,7 +256,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                         />
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               ))}
             </div>
@@ -341,8 +331,6 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                       {/* Tooltip arrow */}
                       <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px w-2 h-2 bg-primary-bg/95 border-r border-b border-accent-orange/20 rotate-45"></div>
                     </div>
-
-
                   </div>
                 ))}
               </div>
@@ -370,7 +358,6 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                             fontSize: 'clamp(1.5rem, 4vw, 3rem)',
                             WebkitTextStroke: '1px currentColor',
                             WebkitTextFillColor: 'transparent',
-                            // Safari-specific fixes for text stroke
                             textShadow: '0 0 1px currentColor',
                             fontWeight: 'bold',
                             letterSpacing: '0.05em',
