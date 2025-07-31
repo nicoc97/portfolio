@@ -58,7 +58,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
       <WaveBackground />
 
       <div className="relative z-10 pt-20 md:pt-0 mobile-padding">
-        <div className="flex flex-col justify-center min-h-[80vh] lg:min-h-[100vh]">
+        <div className="flex flex-col justify-center min-h-[80vh] lg:min-h-[85vh] xl:min-h-[95vh]">
           {/* All content centered vertically */}
           <div>
             {/* Main heading container - 80% width */}
@@ -68,7 +68,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
                 ref={nameTagRef}
                 className={`flex justify-center mb-2 animate-pixel ${nameTagVisible ? 'visible' : ''}`}
               >
-                <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-lg uppercase tracking-wider border border-accent-orange hover:scale-102 transition-all duration-200">
+                <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-base xl:text-lg uppercase tracking-wider border border-accent-orange hover:scale-102 transition-all duration-200">
                   Nico Cruickshank ✦ {displayedText}
                   <span className="text-accent-green inline-block">|</span>
                 </span>
@@ -76,7 +76,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
 
               <h1 
                 ref={headingRef}
-                className={`text-5xl md:text-6xl lg:text-8xl xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
+                className={`text-5xl md:text-6xl lg:text-7xl xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
               >
                 <span>{HERO_CONSTANTS.MAIN_HEADING}</span>
               </h1>
@@ -89,11 +89,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
                 ref={subtitleRef}
                 className={`text-center mb-8 animate-fade ${subtitleVisible ? 'visible' : ''}`}
               >
-                <p className="text-md md:text-xl lg:text-xl xl:text-2xl text-text-secondary">
+                <p className="text-md md:text-xl lg:text-lg xl:text-2xl text-text-secondary">
                   {HERO_CONSTANTS.SUBTITLE}
                 </p>
                 <div className="mt-4">
-                  <span className="font-tech text-sm md:text-base">
+                  <span className="font-tech text-sm md:text-base lg:text-sm xl:text-base">
                     <span className="text-accent-green">{HERO_CONSTANTS.TECH_STACK}</span>
                   </span>
                 </div>

@@ -81,7 +81,7 @@ export const AboutSection: React.FC = () => {
           {/* Brief Introduction */}
           <div className={`animate-slide-up ${contentVisible[0] ? 'visible' : ''}`}>
             <div className="max-w-4xl">
-              <p className="text-2xl lg:text-2xl xl:text-3xl text-text-primary leading-relaxed font-light">
+              <p className="text-2xl lg:text-xl xl:text-3xl text-text-primary leading-relaxed font-light">
                 Collaborative web developer focused on delivering results through
                 <span className="text-accent-orange font-medium"> teamwork</span> and
                 <span className="text-accent-green font-medium"> innovation</span>.
@@ -129,7 +129,7 @@ export const AboutSection: React.FC = () => {
                 <h3 className="text-xl font-bold text-accent-green font-tech mb-6 uppercase tracking-wide">
                   Currently
                 </h3>
-                <h4 className="text-3xl font-bold text-text-primary font-retro mb-4">
+                <h4 className="text-3xl lg:text-2xl xl:text-3xl font-bold text-text-primary font-retro mb-4">
                   Freelance Developer
                 </h4>
                 <p className="text-text-secondary text-lg mb-6">
@@ -169,7 +169,7 @@ export const AboutSection: React.FC = () => {
                 {/* Left Column - Stats Counters */}
                 <div className="space-y-12 lg:space-y-16 xl:space-y-20">
                   <div className="flex items-center gap-8">
-                    <div className="text-6xl lg:text-7xl xl:text-8xl font-bold font-retro">
+                    <div className="text-6xl lg:text-6xl xl:text-8xl font-bold font-retro">
                       {yearsCount}+
                     </div>
                     <div>
@@ -180,7 +180,7 @@ export const AboutSection: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-8 lg:ml-12 xl:ml-16">
-                    <div className="text-6xl lg:text-7xl xl:text-8xl font-bold font-retro">
+                    <div className="text-6xl lg:text-6xl xl:text-8xl font-bold font-retro">
                       {teamsCount}+
                     </div>
                     <div>
@@ -191,7 +191,7 @@ export const AboutSection: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-8 lg:ml-6 xl:ml-8">
-                    <div className="text-6xl lg:text-7xl xl:text-8xl font-bold font-retro">
+                    <div className="text-6xl lg:text-6xl xl:text-8xl font-bold font-retro">
                       {techCount}+
                     </div>
                     <div>
@@ -210,7 +210,7 @@ export const AboutSection: React.FC = () => {
                     <h3 className="text-xl font-bold text-accent-green font-tech mb-6 uppercase tracking-wide">
                       Currently
                     </h3>
-                    <h4 className="text-3xl font-bold text-text-primary font-retro mb-4">
+                    <h4 className="text-3xl lg:text-2xl xl:text-3xl font-bold text-text-primary font-retro mb-4">
                       Freelance Developer
                     </h4>
                     <p className="text-text-secondary text-lg mb-6">

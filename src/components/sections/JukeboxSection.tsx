@@ -227,7 +227,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                       {/* Album Info - Enhanced typography */}
                       <div className="flex-1 space-y-1">
                         <h3 className={`
-                          font-retro text-xl font-bold transition-all duration-300
+                          font-retro text-xl lg:text-lg xl:text-xl font-bold transition-all duration-300
                           ${selectedAlbum.id === album.id
                             ? 'text-accent-orange'
                             : 'text-text-primary group-hover:text-accent-orange'

@@ -76,10 +76,10 @@ export const ContactSection: React.FC = () => {
 
           {/* Subtle background pattern */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.03]">
-            <div className="absolute top-1/4 left-1/4 text-accent-orange font-tech text-6xl font-bold rotate-12">
+            <div className="absolute top-1/4 left-1/4 text-accent-orange font-tech text-4xl lg:text-4xl xl:text-6xl font-bold rotate-12">
               GET IN TOUCH
             </div>
-            <div className="absolute bottom-1/3 right-1/4 text-accent-green font-tech text-4xl font-bold -rotate-6">
+            <div className="absolute bottom-1/3 right-1/4 text-accent-green font-tech text-2xl lg:text-2xl xl:text-4xl font-bold -rotate-6">
               CONNECT
             </div>
           </div>
@@ -112,7 +112,7 @@ export const ContactSection: React.FC = () => {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-text-primary font-tech text-lg font-semibold">
+                  <p className="text-text-primary font-tech text-base lg:text-base xl:text-lg font-semibold">
                     nico@example.com
                   </p>
                   <p className="text-text-secondary text-sm">Click to copy</p>
@@ -130,7 +130,7 @@ export const ContactSection: React.FC = () => {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-text-primary font-tech text-lg font-semibold">
+                  <p className="text-text-primary font-tech text-base lg:text-base xl:text-lg font-semibold">
                     +44 7XXX XXXXXX
                   </p>
                   <p className="text-text-secondary text-sm">Click to copy</p>
@@ -145,7 +145,7 @@ export const ContactSection: React.FC = () => {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-text-primary font-tech text-lg font-semibold">
+                  <p className="text-text-primary font-tech text-base lg:text-base xl:text-lg font-semibold">
                     Glasgow, UK
                   </p>
                   <p className="text-text-secondary text-sm">Remote worldwide</p>
@@ -165,7 +165,7 @@ export const ContactSection: React.FC = () => {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-text-primary font-tech text-lg font-semibold">
+                  <p className="text-text-primary font-tech text-base lg:text-base xl:text-lg font-semibold">
                     GitHub
                   </p>
                   <p className="text-text-secondary text-sm">Code & projects</p>
@@ -185,7 +185,7 @@ export const ContactSection: React.FC = () => {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-text-primary font-tech text-lg font-semibold">
+                  <p className="text-text-primary font-tech text-base lg:text-base xl:text-lg font-semibold">
                     LinkedIn
                   </p>
                   <p className="text-text-secondary text-sm">Professional network</p>
