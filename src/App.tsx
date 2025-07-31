@@ -40,7 +40,7 @@ function App() {
   useEffect(() => {
     // Record app initialization time
     const initStart = performance.now();
-    
+
     const recordInitTime = () => {
       const initTime = performance.now() - initStart;
       performanceReporter.recordComponentLoadTime('App', initTime);
@@ -78,7 +78,7 @@ function App() {
 
     // Use custom smooth scrolling for Safari
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    
+
     if (isSafari) {
       // Custom smooth scroll implementation for Safari
       const startPosition = window.pageYOffset;
@@ -91,10 +91,10 @@ function App() {
         if (!start) start = timestamp;
         const progress = timestamp - start;
         const percentage = Math.min(progress / duration, 1);
-        
+
         // Apply easing
         const easedPercentage = easeInOutCubic(percentage);
-        
+
         window.scrollTo(0, startPosition + distance * easedPercentage);
 
         if (progress < duration) {
@@ -193,7 +193,7 @@ function App() {
 
     // Safari detection for scroll sensitivity adjustment
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    
+
     // Safari-specific scroll optimization
     if (isSafari) {
       // Disable elastic scrolling which can interfere
@@ -224,7 +224,7 @@ function App() {
       // Detect if this is a trackpad or mouse wheel
       // Trackpads typically have fractional deltaY values
       const isTrackpad = Math.abs(e.deltaY) < 50 && e.deltaY % 1 !== 0;
-      
+
       // Safari-specific: Detect momentum end (small consecutive deltas)
       if (isSafari && Math.abs(e.deltaY) < 2) {
         consecutiveSmallDeltas++;
@@ -246,7 +246,7 @@ function App() {
       }
 
       lastWheelTime = now;
-      
+
       // Safari-specific normalization
       let normalizedDelta;
       if (isSafari) {
@@ -263,7 +263,7 @@ function App() {
         // Chrome/Firefox
         normalizedDelta = isTrackpad ? e.deltaY * 0.8 : e.deltaY;
       }
-      
+
       lastDeltaY = e.deltaY;
       scrollAccumulator += normalizedDelta;
 
@@ -278,7 +278,7 @@ function App() {
       // Use RAF for smoother transitions in Safari
       if (Math.abs(scrollAccumulator) >= threshold) {
         if (rafId) cancelAnimationFrame(rafId);
-        
+
         rafId = requestAnimationFrame(() => {
           const direction = scrollAccumulator > 0 ? 'down' : 'up';
 
@@ -294,7 +294,7 @@ function App() {
 
           // Navigate to next section
           navigateToNextSection(direction);
-          
+
           rafId = null;
         });
       }
