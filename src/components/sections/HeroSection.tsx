@@ -57,12 +57,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
       {/* Wave background */}
       <WaveBackground />
 
-      <div className="relative z-10 pt-20 md:pt-0 mobile-padding">
-        <div className="flex flex-col justify-center min-h-[80vh] lg:min-h-[85vh] xl:min-h-[90vh] 2xl:min-h-[95vh]">
+      <div className="relative z-10 pt-20 md:pt-8 mobile-padding">
+        <div className="flex flex-col justify-center min-h-[80vh] md:min-h-[85vh] lg:min-h-[85vh] xl:min-h-[90vh] 2xl:min-h-[95vh]">
           {/* All content centered vertically */}
           <div>
-            {/* Main heading container - 80% width */}
-            <div className="w-full md:w-4/5 mx-auto">
+            {/* Main heading container - centered on md+ screens */}
+            <div className="w-full md:w-5/6 lg:w-4/5 mx-auto">
               {/* Name tag with typing animation */}
               <div 
                 ref={nameTagRef}
@@ -82,8 +82,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
               </h1>
             </div>
 
-            {/* Subtitle and buttons container - 60% width, centered under header */}
-            <div className="w-full lg:w-3/5 xl:w-1/2 mx-auto mt-8 lg:mt-12">
+            {/* Subtitle and buttons container - centered and responsive width */}
+            <div className="w-full md:w-4/5 lg:w-3/5 xl:w-1/2 mx-auto mt-8 lg:mt-12">
               {/* Subtitle - centered */}
               <div 
                 ref={subtitleRef}
