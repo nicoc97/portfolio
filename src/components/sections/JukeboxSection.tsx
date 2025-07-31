@@ -169,7 +169,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
           <div className="flex flex-col gap-8">
             {/* Mobile/Tablet: Accordion Layout - FIXED */}
             <div className="md:hidden space-y-4" ref={albumListRef}>
-              {ALBUM_DATA.map((album, index) => (
+              {ALBUM_DATA.map((album) => (
                 <div key={album.id} className="space-y-4">
                   <div
                     onClick={() => handleAccordionItemClick(album)}
