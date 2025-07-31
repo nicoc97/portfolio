@@ -76,10 +76,10 @@ export const ContactSection: React.FC = () => {
 
           {/* Subtle background pattern */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.03]">
-            <div className="absolute top-1/4 left-1/4 text-accent-orange font-tech text-2xl md:text-3xl lg:text-4xl xl:text-6xl font-bold rotate-12">
+            <div className="absolute top-1/4 left-1/4 text-accent-orange font-tech text-2xl md:text-3xl lg:text-4xl xl:text-4xl 2xl:text-5xl 3xl:text-6xl font-bold rotate-12">
               GET IN TOUCH
             </div>
-            <div className="absolute bottom-1/3 right-1/4 text-accent-green font-tech text-lg md:text-xl lg:text-2xl xl:text-4xl font-bold -rotate-6">
+            <div className="absolute bottom-1/3 right-1/4 text-accent-green font-tech text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl 3xl:text-4xl font-bold -rotate-6">
               CONNECT
             </div>
           </div>

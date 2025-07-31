@@ -22,6 +22,11 @@ export default {
   darkMode: 'class', // Enable dark mode with class strategy
   theme: {
     extend: {
+      // 🔧 UPDATE: Custom breakpoints for better desktop scaling
+      screens: {
+        '2xl': '1536px',  // Large desktops (20"+ monitors)
+        '3xl': '1920px',  // Very large desktops (24"+ monitors)
+      },
       // 🔧 UPDATE: Custom color palette - warm 70s retro-futuristic theme
       colors: {
         'primary-bg': '#1a1611',          // Warm dark brown background

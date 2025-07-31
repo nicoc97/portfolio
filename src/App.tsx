@@ -203,9 +203,9 @@ function App() {
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    // Only enable scroll hijacking on xl screens (1280px+) and larger
-    const isXLScreen = window.innerWidth >= 1280;
-    const shouldHijackScroll = !isMobileDevice && isXLScreen;
+    // Only enable scroll hijacking on 2xl screens (1536px+) and larger - true desktop monitors
+    const isLargeDesktop = window.innerWidth >= 1536;
+    const shouldHijackScroll = !isMobileDevice && isLargeDesktop;
 
     // Safari detection for scroll sensitivity adjustment
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -217,7 +217,7 @@ function App() {
       document.body.style.overscrollBehavior = 'none';
     }
 
-    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'XL screen:', isXLScreen, 'Should hijack scroll:', shouldHijackScroll, 'Safari:', isSafari);
+    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'Large desktop:', isLargeDesktop, 'Should hijack scroll:', shouldHijackScroll, 'Safari:', isSafari);
 
     const handleWheel = (e: WheelEvent) => {
       // Only hijack scroll on xl screens (1280px+) and larger
@@ -403,8 +403,8 @@ function App() {
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    const isXLScreen = window.innerWidth >= 1280;
-    const shouldHijackScroll = !isMobileDevice && isXLScreen;
+    const isLargeDesktop = window.innerWidth >= 1536;
+    const shouldHijackScroll = !isMobileDevice && isLargeDesktop;
 
     if (shouldHijackScroll) return; // Skip intersection observer on xl screens with scroll hijacking
 

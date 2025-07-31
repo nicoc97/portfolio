@@ -44,8 +44,8 @@
     /* Internet Explorer 10+ */
   }
 
-  /* Smooth scrolling for screens below xl (1280px) - xl and above use scroll hijacking */
-  @media (max-width: 1279px) {
+  /* Smooth scrolling for screens below 2xl (1536px) - 2xl and above use scroll hijacking */
+  @media (max-width: 1535px) {
     html {
       scroll-behavior: smooth;
     }
@@ -61,8 +61,8 @@
     /* Prevent horizontal scrolling */
   }
 
-  /* Scroll improvements for screens below xl (natural scrolling) */
-  @media (max-width: 1279px) {
+  /* Scroll improvements for screens below 2xl (natural scrolling) */
+  @media (max-width: 1535px) {
     body {
       /* Enable momentum scrolling on iOS */
       -webkit-overflow-scrolling: touch;
@@ -79,8 +79,8 @@
     scroll-snap-align: start;
   }
 
-  /* XL screens and above: Minimum viewport height for scroll hijacking */
-  @media (min-width: 1280px) {
+  /* 2XL screens and above: Minimum viewport height for scroll hijacking */
+  @media (min-width: 1536px) {
     .section-fullscreen {
       min-height: 100vh;
       /* Allow sections to grow beyond 100vh if content requires it */
@@ -133,12 +133,12 @@
   }
 
   .section-bg-text span {
-    @apply text-[1.5rem] md:text-[2.5rem] lg:text-[3.5rem] xl:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
+    @apply text-[1.5rem] md:text-[2.5rem] lg:text-[3.5rem] xl:text-[4rem] 2xl:text-[5rem] 3xl:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
   }
 
   /* Section header pattern - consistent across all sections */
   .section-header {
-    @apply text-4xl md:text-5xl lg:text-6xl xl:text-[6rem] font-bold tracking-wide font-retro text-left;
+    @apply text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl 3xl:text-[6rem] font-bold tracking-wide font-retro text-left;
     /* Safari-specific font rendering fixes */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -151,7 +151,7 @@
   }
 
   .section-subtitle {
-    @apply text-accent-orange font-tech text-left text-sm md:text-base lg:text-base xl:text-lg;
+    @apply text-accent-orange font-tech text-left text-sm md:text-base lg:text-base xl:text-base 2xl:text-lg;
   }
 
   /* Animation utility classes */
