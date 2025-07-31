@@ -76,7 +76,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
 
               <h1 
                 ref={headingRef}
-                className={`text-4xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl 3xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
+                className={`text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl 3xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
               >
                 <span>{HERO_CONSTANTS.MAIN_HEADING}</span>
               </h1>
