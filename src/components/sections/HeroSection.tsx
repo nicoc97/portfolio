@@ -68,7 +68,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
                 ref={nameTagRef}
                 className={`flex justify-center mb-2 animate-pixel ${nameTagVisible ? 'visible' : ''}`}
               >
-                <span className="inline-block bg-accent-orange-dark px-4 py-2 rounded-full font-tech text-sm lg:text-base xl:text-lg uppercase tracking-wider border border-accent-orange hover:scale-102 transition-all duration-200">
+                <span className="inline-block bg-accent-orange-dark px-3 py-1.5 rounded-full font-tech text-xs md:text-sm lg:text-base xl:text-lg uppercase tracking-wider border border-accent-orange hover:scale-102 transition-all duration-200">
                   Nico Cruickshank ✦ {displayedText}
                   <span className="text-accent-green inline-block">|</span>
                 </span>
@@ -76,7 +76,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
 
               <h1 
                 ref={headingRef}
-                className={`text-5xl md:text-6xl lg:text-7xl xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
+                className={`text-4xl md:text-5xl lg:text-6xl xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
               >
                 <span>{HERO_CONSTANTS.MAIN_HEADING}</span>
               </h1>
@@ -89,7 +89,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
                 ref={subtitleRef}
                 className={`text-center mb-8 animate-fade ${subtitleVisible ? 'visible' : ''}`}
               >
-                <p className="text-md md:text-xl lg:text-lg xl:text-2xl text-text-secondary">
+                <p className="text-sm md:text-base lg:text-lg xl:text-2xl text-text-secondary">
                   {HERO_CONSTANTS.SUBTITLE}
                 </p>
                 <div className="mt-4">

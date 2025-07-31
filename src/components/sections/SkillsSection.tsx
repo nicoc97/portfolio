@@ -352,7 +352,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                       {selectedSkill.pixelIcon}
                     </div>
                     <div>
-                      <h3 className="text-xl lg:text-xl xl:text-2xl font-retro text-accent-green mb-1">
+                      <h3 className="text-lg md:text-xl lg:text-xl xl:text-2xl font-retro text-accent-green mb-1">
                         {selectedSkill.name}
                       </h3>
                       <span className="px-2 py-1 bg-accent-green/20 border border-accent-green rounded text-xs font-tech text-accent-green">
@@ -419,7 +419,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                   }}
                 >
                   <h3 className={`font-tech text-${category.color} text-sm mb-2`}>{category.label}</h3>
-                  <div className="text-xl lg:text-xl xl:text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
+                  <div className="text-lg md:text-xl lg:text-xl xl:text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
                   <div className="text-xs text-text-secondary font-mono">
                     Technologies
                   </div>

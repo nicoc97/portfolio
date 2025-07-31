@@ -91,9 +91,9 @@
 /* 🔧 UPDATE: Custom component classes - modify these for global component styling */
 @layer components {
 
-  /* Mobile padding utility - 2rem left and right on mobile */
+  /* Mobile padding utility - responsive padding for all screen sizes */
   .mobile-padding {
-    @apply px-8 md:px-6 lg:px-4 xl:px-0;
+    @apply px-6 md:px-8 lg:px-6 xl:px-0;
   }
 
   /* Base button styling - used by PixelButton component */
@@ -133,12 +133,12 @@
   }
 
   .section-bg-text span {
-    @apply text-[2rem] md:text-[4rem] lg:text-[3rem] xl:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
+    @apply text-[1.5rem] md:text-[2.5rem] lg:text-[3.5rem] xl:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
   }
 
   /* Section header pattern - consistent across all sections */
   .section-header {
-    @apply text-5xl md:text-6xl lg:text-5xl xl:text-[6rem] font-bold tracking-wide font-retro text-left;
+    @apply text-4xl md:text-5xl lg:text-6xl xl:text-[6rem] font-bold tracking-wide font-retro text-left;
     /* Safari-specific font rendering fixes */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -151,7 +151,7 @@
   }
 
   .section-subtitle {
-    @apply text-accent-orange font-tech text-left text-base lg:text-base xl:text-lg;
+    @apply text-accent-orange font-tech text-left text-sm md:text-base lg:text-base xl:text-lg;
   }
 
   /* Animation utility classes */
