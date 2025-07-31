@@ -169,7 +169,7 @@ export const ProjectsSection: React.FC = () => {
   return (
     <section id="projects" className="section-fullscreen py-20 bg-primary-bg relative overlay-hidden">
 
-      <div className="w-full lg:w-4/5 xl:w-3/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full md:w-4/5 mx-auto mobile-padding relative z-10">
         {/* Large background text */}
         <div className="section-bg-text">
           <span>SEC01</span>
@@ -197,7 +197,7 @@ export const ProjectsSection: React.FC = () => {
 
         {/* Projects Content - Side-by-side layout for md+ screens */}
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-8">
-          
+
           {/* Left Column - Filter Buttons + Controls (md+ screens) */}
           <div className="md:col-span-1 lg:col-span-1 space-y-6">
             <div
