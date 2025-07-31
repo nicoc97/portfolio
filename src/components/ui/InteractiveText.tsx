@@ -123,9 +123,10 @@ export const InteractiveText = ({
         state.x += state.vx;
         state.y += state.vy;
         
-        // Apply transform with rotation
+        // Apply transform with rotation - Safari optimized
         const rotation = (state.vx * 0.5) + (state.vy * 0.1);
-        letter.style.transform = `translate(${state.x}px, ${state.y}px) rotate(${rotation}deg)`;
+        letter.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) rotate(${rotation}deg)`;
+        letter.style.webkitTransform = `translate3d(${state.x}px, ${state.y}px, 0) rotate(${rotation}deg)`;
       });
       
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -162,6 +163,11 @@ export const InteractiveText = ({
           style={{
             transformOrigin: 'center center',
             transition: 'none',
+            // Safari performance optimizations
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+            WebkitPerspective: 1000,
+            perspective: 1000,
           }}
         >
           {letter === ' ' ? '\u00A0' : letter}

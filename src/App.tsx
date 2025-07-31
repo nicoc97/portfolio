@@ -57,8 +57,6 @@ function App() {
     return () => clearInterval(metricsInterval);
   }, []);
 
-
-
   const sections = ['hero', 'projects', 'about', 'jukebox', 'skills', 'contact'];
 
   // Get current section index
@@ -66,17 +64,59 @@ function App() {
     return sections.indexOf(activeSection);
   };
 
+  // Custom easing function for smoother scrolling
+  const easeInOutCubic = (t: number): number => {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  };
+
   // Smooth scroll to section with enhanced easing
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
-    if (element) {
-      setIsScrolling(true);
+    if (!element) return;
+
+    setIsScrolling(true);
+
+    // Use custom smooth scrolling for Safari
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+    if (isSafari) {
+      // Custom smooth scroll implementation for Safari
+      const startPosition = window.pageYOffset;
+      const targetPosition = element.offsetTop;
+      const distance = targetPosition - startPosition;
+      const duration = 800; // ms
+      let start: number | null = null;
+
+      const animateScroll = (timestamp: number) => {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const percentage = Math.min(progress / duration, 1);
+        
+        // Apply easing
+        const easedPercentage = easeInOutCubic(percentage);
+        
+        window.scrollTo(0, startPosition + distance * easedPercentage);
+
+        if (progress < duration) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          // Ensure we're exactly at the target position
+          window.scrollTo(0, targetPosition);
+          setTimeout(() => {
+            setIsScrolling(false);
+          }, 100);
+        }
+      };
+
+      requestAnimationFrame(animateScroll);
+    } else {
+      // Use native smooth scrolling for other browsers
       element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
 
-      // Reset scrolling state after animation - optimized timeout for smooth hijacking
+      // Reset scrolling state after animation
       setTimeout(() => {
         setIsScrolling(false);
       }, 1000);
@@ -142,6 +182,10 @@ function App() {
   useEffect(() => {
     let scrollAccumulator = 0;
     let lastWheelTime = 0;
+    let velocityY = 0;
+    let rafId: number | null = null;
+    let lastDeltaY = 0;
+    let consecutiveSmallDeltas = 0;
 
     // More precise mobile detection - exclude tablets from scroll hijacking
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
@@ -149,6 +193,13 @@ function App() {
 
     // Safari detection for scroll sensitivity adjustment
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+    // Safari-specific scroll optimization
+    if (isSafari) {
+      // Disable elastic scrolling which can interfere
+      document.documentElement.style.overscrollBehavior = 'none';
+      document.body.style.overscrollBehavior = 'none';
+    }
 
     console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'Safari:', isSafari);
 
@@ -170,34 +221,82 @@ function App() {
       const now = Date.now();
       const timeSinceLastWheel = now - lastWheelTime;
 
+      // Detect if this is a trackpad or mouse wheel
+      // Trackpads typically have fractional deltaY values
+      const isTrackpad = Math.abs(e.deltaY) < 50 && e.deltaY % 1 !== 0;
+      
+      // Safari-specific: Detect momentum end (small consecutive deltas)
+      if (isSafari && Math.abs(e.deltaY) < 2) {
+        consecutiveSmallDeltas++;
+        if (consecutiveSmallDeltas > 3) {
+          // Reset and ignore momentum tail
+          scrollAccumulator = 0;
+          velocityY = 0;
+          consecutiveSmallDeltas = 0;
+          return;
+        }
+      } else {
+        consecutiveSmallDeltas = 0;
+      }
+
       // Reset accumulator if it's been too long since last wheel event (new gesture)
-      if (timeSinceLastWheel > 150) {
+      if (timeSinceLastWheel > 200) {
         scrollAccumulator = 0;
+        velocityY = 0;
       }
 
       lastWheelTime = now;
       
-      // Safari has different deltaY values, normalise
-      const normalizedDelta = isSafari ? e.deltaY * 0.3 : e.deltaY;
+      // Safari-specific normalization
+      let normalizedDelta;
+      if (isSafari) {
+        if (isTrackpad) {
+          // Safari trackpad: use velocity-based approach
+          const acceleration = Math.abs(e.deltaY) > Math.abs(lastDeltaY) ? 1.2 : 0.8;
+          velocityY = velocityY * 0.8 + e.deltaY * 0.2 * acceleration;
+          normalizedDelta = velocityY;
+        } else {
+          // Safari mouse wheel
+          normalizedDelta = e.deltaY * 0.5;
+        }
+      } else {
+        // Chrome/Firefox
+        normalizedDelta = isTrackpad ? e.deltaY * 0.8 : e.deltaY;
+      }
+      
+      lastDeltaY = e.deltaY;
       scrollAccumulator += normalizedDelta;
 
-      // Adjust threshold based on browser - Safari needs higher threshold
-      const threshold = isSafari ? 120 : 50;
+      // Dynamic threshold based on browser and input device
+      let threshold;
+      if (isSafari) {
+        threshold = isTrackpad ? 40 : 80;
+      } else {
+        threshold = isTrackpad ? 30 : 50;
+      }
 
+      // Use RAF for smoother transitions in Safari
       if (Math.abs(scrollAccumulator) >= threshold) {
-        const direction = scrollAccumulator > 0 ? 'down' : 'up';
+        if (rafId) cancelAnimationFrame(rafId);
+        
+        rafId = requestAnimationFrame(() => {
+          const direction = scrollAccumulator > 0 ? 'down' : 'up';
 
-        // Reset accumulator
-        scrollAccumulator = 0;
-        lastScrollTime.current = now;
+          // Reset accumulator and velocity
+          scrollAccumulator = 0;
+          velocityY = 0;
+          lastScrollTime.current = now;
 
-        // Clear existing timeout
-        if (scrollTimeoutRef.current !== null) {
-          clearTimeout(scrollTimeoutRef.current);
-        }
+          // Clear existing timeout
+          if (scrollTimeoutRef.current !== null) {
+            clearTimeout(scrollTimeoutRef.current);
+          }
 
-        // Navigate to next section
-        navigateToNextSection(direction);
+          // Navigate to next section
+          navigateToNextSection(direction);
+          
+          rafId = null;
+        });
       }
     };
 
@@ -241,7 +340,7 @@ function App() {
     };
 
     // Add wheel listener with proper passive setting
-    window.addEventListener('wheel', handleWheel, { passive: isMobileDevice });
+    window.addEventListener('wheel', handleWheel, { passive: false });
 
     // Add keyboard navigation only for desktop
     if (!isMobileDevice) {
@@ -264,6 +363,9 @@ function App() {
       }
       if (scrollTimeoutRef.current !== null) {
         clearTimeout(scrollTimeoutRef.current);
+      }
+      if (rafId) {
+        cancelAnimationFrame(rafId);
       }
     };
   }, [activeSection, isScrolling, sections]);
@@ -319,8 +421,6 @@ function App() {
   return (
     <ToastProvider>
       <div className="min-h-screen bg-primary-bg">
-
-
         {/* All sections rendered at once for scrolling */}
         <HeroSection onNavigateToSection={navigateToSection} />
         <ProjectsSection />

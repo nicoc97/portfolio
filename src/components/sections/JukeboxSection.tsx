@@ -297,6 +297,10 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                           fontSize: 'clamp(1.5rem, 4vw, 3rem)',
                           WebkitTextStroke: '1px currentColor',
                           WebkitTextFillColor: 'transparent',
+                          // Safari-specific fixes for text stroke
+                          textShadow: '0 0 1px currentColor',
+                          fontWeight: 'bold',
+                          letterSpacing: '0.05em',
                         }}
                         magnetStrength={40}
                       />

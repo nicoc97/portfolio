@@ -13,471 +13,536 @@
  * - body font-family: Default font stack
  */
 
- @tailwind base;
- @tailwind components;
- @tailwind utilities;
- 
- @layer base {
-   * {
-     @apply border-transparent;
-     /* Remove default borders */
-   }
- 
-   /* 🔧 UPDATE: Global body styles and default font */
-   body {
-     @apply bg-primary-bg-light text-text-primary;
-     font-family: 'JetBrains Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-       sans-serif;
-     -webkit-font-smoothing: antialiased;
-     -moz-osx-font-smoothing: grayscale;
-   }
- 
-   /* Hide scrollbar while keeping scroll functionality */
-   html {
-     scrollbar-width: none;
-     /* Firefox */
-     -ms-overflow-style: none;
-     /* Internet Explorer 10+ */
-   }
- 
-   /* Smooth scrolling only on mobile - desktop uses scroll hijacking */
-   @media (max-width: 768px) {
-     html {
-       scroll-behavior: smooth;
-     }
-   }
- 
-   html::-webkit-scrollbar {
-     display: none;
-     /* WebKit browsers (Chrome, Safari, Edge) */
-   }
- 
-   body {
-     overflow-x: hidden;
-     /* Prevent horizontal scrolling */
-   }
- 
-   /* Mobile scroll improvements */
-   @media (max-width: 768px) {
-     body {
-       /* Enable momentum scrolling on iOS */
-       -webkit-overflow-scrolling: touch;
-       /* Improve scroll performance */
-       overscroll-behavior-y: contain;
-     }
-   }
- 
-   /* Full viewport height sections for scroll hijacking */
-   .section-fullscreen {
-     /* Desktop: Full viewport height for scroll hijacking */
-     height: 100vh;
-     min-height: 100vh;
-     scroll-snap-align: start;
-   }
- 
-   /* Mobile: Allow natural content height */
-   @media (max-width: 768px) {
-     .section-fullscreen {
-       height: auto;
-       min-height: 100vh;
-     }
-   }
- }
- 
- /* 🔧 UPDATE: Custom component classes - modify these for global component styling */
- @layer components {
- 
-   /* Mobile padding utility - 2rem left and right on mobile */
-   .mobile-padding {
-     @apply px-8 md:px-0;
-   }
- 
-   /* Base button styling - used by PixelButton component */
-   .pixel-button {
-     @apply text-text-primary px-4 py-2 border-2 font-tech text-sm rounded-xl;
-     @apply transition-all duration-200;
-     @apply active:scale-95 active:shadow-inner;
-     backdrop-filter: blur(10px);
-     -webkit-backdrop-filter: blur(10px);
-   }
- 
-   /* Base card styling - used by ProjectCard component */
-   .pixel-card {
-     @apply bg-primary-bg-light border-2 border-accent-orange-dark p-6 rounded-xl;
-     @apply hover:border-accent-orange hover:shadow-lg hover:shadow-accent-orange/20;
-     @apply transition-all duration-300;
-     image-rendering: pixelated;
-     /* Crisp pixel rendering */
-   }
- 
-   /* Green variant for data science/backend cards */
-   .pixel-card-green {
-     @apply bg-primary-bg-light border-2 border-accent-green-dark p-6 rounded-xl;
-     @apply hover:border-accent-green hover:shadow-lg hover:shadow-accent-green/20;
-     @apply transition-all duration-300;
-     image-rendering: pixelated;
-     /* Crisp pixel rendering */
-   }
- 
- 
- 
-   /* Large background section text - shared across all sections */
-   .section-bg-text {
-     @apply absolute inset-0 flex items-start justify-end opacity-5 pointer-events-none;
-     /* Hide on mobile and tablet, show only on desktop */
-     @apply hidden lg:flex;
-   }
- 
-   .section-bg-text span {
-     @apply text-[2rem] md:text-[4rem] lg:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
-   }
- 
-   /* Section header pattern - consistent across all sections */
-   .section-header {
-     @apply text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left;
-   }
- 
-   .section-divider {
-     @apply mt-4 w-16 h-px bg-accent-orange;
-   }
- 
-   .section-subtitle {
-     @apply text-accent-orange font-tech text-left text-lg;
-   }
- 
-   /* Animation utility classes */
-   .animate-slide-up {
-     @apply transition-all duration-700;
-   }
- 
-   .animate-slide-up.visible {
-     @apply opacity-100 translate-y-0;
-   }
- 
-   .animate-slide-up:not(.visible) {
-     @apply opacity-0 translate-y-8;
-   }
- 
-   .animate-pixel {
-     @apply transition-all duration-700;
-   }
- 
-   .animate-pixel.visible {
-     @apply opacity-100 translate-y-0 scale-100 blur-none;
-   }
- 
-   .animate-pixel:not(.visible) {
-     @apply opacity-0 translate-y-4 scale-95 blur-sm;
-   }
- 
-   .animate-fade {
-     @apply transition-all duration-700;
-   }
- 
-   .animate-fade.visible {
-     @apply opacity-100;
-   }
- 
-   .animate-fade:not(.visible) {
-     @apply opacity-0;
-   }
- 
-   .animate-scale {
-     @apply transition-all duration-700;
-   }
- 
-   .animate-scale.visible {
-     @apply opacity-100 scale-100;
-   }
- 
-   .animate-scale:not(.visible) {
-     @apply opacity-0 scale-95;
-   }
- 
-   /* Icon container pattern */
-   .icon-container {
-     @apply w-8 h-8;
-   }
- 
-   .icon-container-orange {
-     @apply icon-container text-accent-orange;
-   }
- 
-   .icon-container-green {
-     @apply icon-container text-accent-green;
-   }
- 
-   /* Tech badge pattern */
-   .tech-badge {
-     @apply px-3 py-1 text-sm font-tech border rounded-full transition-all duration-200;
-   }
- 
-   .tech-badge-orange {
-     @apply tech-badge bg-accent-orange/20 border-accent-orange/30 text-accent-orange hover:bg-accent-orange/30;
-   }
- 
-   .tech-badge-green {
-     @apply tech-badge bg-accent-green/20 border-accent-green/30 text-accent-green hover:bg-accent-green/30;
-   }
- 
-   .tech-badge-secondary {
-     @apply tech-badge bg-transparent border-text-secondary/30 text-text-secondary hover:border-accent-orange hover:text-accent-orange;
-   }
- 
-   /* Contact card pattern - Clean modern design */
-   .contact-card {
-     @apply bg-primary-bg-light/50 border border-accent-orange/20 p-6 rounded-lg;
-     @apply hover:border-accent-orange/60 hover:bg-primary-bg-light/80 hover:shadow-lg hover:shadow-accent-orange/10;
-     @apply transition-all duration-300 cursor-pointer;
-     @apply flex items-center space-x-4;
-   }
- 
-   .contact-card-green {
-     @apply bg-primary-bg-light/50 border border-accent-green/20 p-6 rounded-lg;
-     @apply hover:border-accent-green/60 hover:bg-primary-bg-light/80 hover:shadow-lg hover:shadow-accent-green/10;
-     @apply transition-all duration-300 cursor-pointer;
-     @apply flex items-center space-x-4;
-   }
- 
-   /* Filter button pattern */
-   .filter-button {
-     @apply pixel-button px-6 pt-2 font-tech transition-all duration-200;
-   }
- 
-   .filter-button-active-orange {
-     @apply bg-accent-orange text-primary-bg border-accent-orange;
-   }
- 
-   .filter-button-active-green {
-     @apply bg-accent-green text-primary-bg border-accent-green;
-   }
- 
-   .filter-button-inactive {
-     @apply bg-primary-bg-light text-text-primary border-accent-orange-dark hover:border-accent-orange;
-   }
- 
-   /* Mobile menu animations */
-   @keyframes slideInUp {
-     from {
-       opacity: 0;
-       transform: translateY(30px);
-     }
- 
-     to {
-       opacity: 1;
-       transform: translateY(0);
-     }
-   }
- 
-   .animate-slideInUp {
-     animation: slideInUp 0.5s ease-out forwards;
-   }
- 
-   /* Scanline animation for retro CRT effect */
-   @keyframes scanline {
-     0% {
-       top: 0%;
-       opacity: 1;
-     }
- 
-     50% {
-       opacity: 0.8;
-     }
- 
-     100% {
-       top: 100%;
-       opacity: 0.3;
-     }
-   }
- 
-   .animate-scanline {
-     animation: scanline 2s linear infinite;
-   }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-   /* Scan animation for image loading */
-   @keyframes scan {
-     0% {
-       top: -2px;
-       opacity: 0;
-     }
-     10% {
-       opacity: 1;
-     }
-     90% {
-       opacity: 1;
-     }
-     100% {
-       top: 100%;
-       opacity: 0;
-     }
-   }
- }
- 
- /* 
+@layer base {
+  * {
+    @apply border-transparent;
+    /* Remove default borders */
+  }
+
+  /* 🔧 UPDATE: Global body styles and default font */
+  body {
+    @apply bg-primary-bg-light text-text-primary;
+    font-family: 'JetBrains Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Safari-specific font rendering improvements */
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Hide scrollbar while keeping scroll functionality */
+  html {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* Internet Explorer 10+ */
+  }
+
+  /* Smooth scrolling only on mobile - desktop uses scroll hijacking */
+  @media (max-width: 768px) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+    /* WebKit browsers (Chrome, Safari, Edge) */
+  }
+
+  body {
+    overflow-x: hidden;
+    /* Prevent horizontal scrolling */
+  }
+
+  /* Mobile scroll improvements */
+  @media (max-width: 768px) {
+    body {
+      /* Enable momentum scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
+      /* Improve scroll performance */
+      overscroll-behavior-y: contain;
+    }
+  }
+
+  /* Full viewport height sections for scroll hijacking */
+  .section-fullscreen {
+    /* Desktop: Full viewport height for scroll hijacking */
+    height: 100vh;
+    min-height: 100vh;
+    scroll-snap-align: start;
+  }
+
+  /* Mobile: Allow natural content height */
+  @media (max-width: 768px) {
+    .section-fullscreen {
+      height: auto;
+      min-height: 100vh;
+    }
+  }
+}
+
+/* 🔧 UPDATE: Custom component classes - modify these for global component styling */
+@layer components {
+
+  /* Mobile padding utility - 2rem left and right on mobile */
+  .mobile-padding {
+    @apply px-8 md:px-0;
+  }
+
+  /* Base button styling - used by PixelButton component */
+  .pixel-button {
+    @apply text-text-primary px-4 py-2 border-2 font-tech text-sm rounded-xl;
+    @apply transition-all duration-200;
+    @apply active:scale-95 active:shadow-inner;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Base card styling - used by ProjectCard component */
+  .pixel-card {
+    @apply bg-primary-bg-light border-2 border-accent-orange-dark p-6 rounded-xl;
+    @apply hover:border-accent-orange hover:shadow-lg hover:shadow-accent-orange/20;
+    @apply transition-all duration-300;
+    image-rendering: pixelated;
+    /* Crisp pixel rendering */
+  }
+
+  /* Green variant for data science/backend cards */
+  .pixel-card-green {
+    @apply bg-primary-bg-light border-2 border-accent-green-dark p-6 rounded-xl;
+    @apply hover:border-accent-green hover:shadow-lg hover:shadow-accent-green/20;
+    @apply transition-all duration-300;
+    image-rendering: pixelated;
+    /* Crisp pixel rendering */
+  }
+
+
+
+  /* Large background section text - shared across all sections */
+  .section-bg-text {
+    @apply absolute inset-0 flex items-start justify-end opacity-5 pointer-events-none;
+    /* Hide on mobile and tablet, show only on desktop */
+    @apply hidden lg:flex;
+  }
+
+  .section-bg-text span {
+    @apply text-[2rem] md:text-[4rem] lg:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
+  }
+
+  /* Section header pattern - consistent across all sections */
+  .section-header {
+    @apply text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left;
+    /* Safari-specific font rendering fixes */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+  }
+
+  .section-divider {
+    @apply mt-4 w-16 h-px bg-accent-orange;
+  }
+
+  .section-subtitle {
+    @apply text-accent-orange font-tech text-left text-lg;
+  }
+
+  /* Animation utility classes */
+  .animate-slide-up {
+    @apply transition-all duration-700;
+  }
+
+  .animate-slide-up.visible {
+    @apply opacity-100 translate-y-0;
+  }
+
+  .animate-slide-up:not(.visible) {
+    @apply opacity-0 translate-y-8;
+  }
+
+  .animate-pixel {
+    @apply transition-all duration-700;
+  }
+
+  .animate-pixel.visible {
+    @apply opacity-100 translate-y-0 scale-100 blur-none;
+  }
+
+  .animate-pixel:not(.visible) {
+    @apply opacity-0 translate-y-4 scale-95 blur-sm;
+  }
+
+  .animate-fade {
+    @apply transition-all duration-700;
+  }
+
+  .animate-fade.visible {
+    @apply opacity-100;
+  }
+
+  .animate-fade:not(.visible) {
+    @apply opacity-0;
+  }
+
+  .animate-scale {
+    @apply transition-all duration-700;
+  }
+
+  .animate-scale.visible {
+    @apply opacity-100 scale-100;
+  }
+
+  .animate-scale:not(.visible) {
+    @apply opacity-0 scale-95;
+  }
+
+  /* Icon container pattern */
+  .icon-container {
+    @apply w-8 h-8;
+  }
+
+  .icon-container-orange {
+    @apply icon-container text-accent-orange;
+  }
+
+  .icon-container-green {
+    @apply icon-container text-accent-green;
+  }
+
+  /* Tech badge pattern */
+  .tech-badge {
+    @apply px-3 py-1 text-sm font-tech border rounded-full transition-all duration-200;
+  }
+
+  .tech-badge-orange {
+    @apply tech-badge bg-accent-orange/20 border-accent-orange/30 text-accent-orange hover:bg-accent-orange/30;
+  }
+
+  .tech-badge-green {
+    @apply tech-badge bg-accent-green/20 border-accent-green/30 text-accent-green hover:bg-accent-green/30;
+  }
+
+  .tech-badge-secondary {
+    @apply tech-badge bg-transparent border-text-secondary/30 text-text-secondary hover:border-accent-orange hover:text-accent-orange;
+  }
+
+  /* Contact card pattern - Clean modern design */
+  .contact-card {
+    @apply bg-primary-bg-light/50 border border-accent-orange/20 p-6 rounded-lg;
+    @apply hover:border-accent-orange/60 hover:bg-primary-bg-light/80 hover:shadow-lg hover:shadow-accent-orange/10;
+    @apply transition-all duration-300 cursor-pointer;
+    @apply flex items-center space-x-4;
+  }
+
+  .contact-card-green {
+    @apply bg-primary-bg-light/50 border border-accent-green/20 p-6 rounded-lg;
+    @apply hover:border-accent-green/60 hover:bg-primary-bg-light/80 hover:shadow-lg hover:shadow-accent-green/10;
+    @apply transition-all duration-300 cursor-pointer;
+    @apply flex items-center space-x-4;
+  }
+
+  /* Filter button pattern */
+  .filter-button {
+    @apply pixel-button px-6 pt-2 font-tech transition-all duration-200;
+  }
+
+  .filter-button-active-orange {
+    @apply bg-accent-orange text-primary-bg border-accent-orange;
+  }
+
+  .filter-button-active-green {
+    @apply bg-accent-green text-primary-bg border-accent-green;
+  }
+
+  .filter-button-inactive {
+    @apply bg-primary-bg-light text-text-primary border-accent-orange-dark hover:border-accent-orange;
+  }
+
+  /* Mobile menu animations */
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slideInUp {
+    animation: slideInUp 0.5s ease-out forwards;
+  }
+
+  /* Scanline animation for retro CRT effect */
+  @keyframes scanline {
+    0% {
+      top: 0%;
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.8;
+    }
+
+    100% {
+      top: 100%;
+      opacity: 0.3;
+    }
+  }
+
+  .animate-scanline {
+    animation: scanline 2s linear infinite;
+  }
+
+  /* Scan animation for image loading */
+  @keyframes scan {
+    0% {
+      top: -2px;
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 1;
+    }
+
+    90% {
+      opacity: 1;
+    }
+
+    100% {
+      top: 100%;
+      opacity: 0;
+    }
+  }
+}
+
+/* 
  Skills Section - Contemporary Asymmetrical Styling */
- .skills-filter-button {
-   position: relative;
-   overflow: hidden;
- }
- 
- .skills-filter-button::before {
-   content: '';
-   position: absolute;
-   top: 0;
-   left: -100%;
-   width: 100%;
-   height: 100%;
-   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-   transition: left 0.5s;
- }
- 
- .skills-filter-button:hover::before {
-   left: 100%;
- }
- 
- /* Staggered skill cards with subtle animations */
- .skill-card-stagger {
-   animation: skillCardFloat 6s ease-in-out infinite;
- }
- 
- .skill-card-stagger:nth-child(even) {
-   animation-delay: -3s;
- }
- 
- @keyframes skillCardFloat {
-   0%, 100% {
-     transform: translateY(0px);
-   }
-   50% {
-     transform: translateY(-2px);
-   }
- }
- 
- /* Contemporary grid lines */
- .skills-grid-lines {
-   position: relative;
- }
- 
- .skills-grid-lines::before {
-   content: '';
-   position: absolute;
-   top: 0;
-   left: 25%;
-   width: 1px;
-   height: 100%;
-   background: linear-gradient(to bottom, transparent, rgba(var(--accent-green-rgb), 0.1), transparent);
-   z-index: 0;
- }
- 
- .skills-grid-lines::after {
-   content: '';
-   position: absolute;
-   top: 0;
-   right: 25%;
-   width: 1px;
-   height: 100%;
-   background: linear-gradient(to bottom, transparent, rgba(var(--accent-orange-rgb), 0.1), transparent);
-   z-index: 0;
- }
- 
- /* Asymmetrical decorative elements */
- .skills-decoration {
-   position: relative;
- }
- 
- .skills-decoration::before {
-   content: '';
-   position: absolute;
-   top: 20%;
-   right: -10px;
-   width: 2px;
-   height: 60%;
-   background: linear-gradient(to bottom, var(--accent-green), transparent);
-   opacity: 0.3;
-   transform: rotate(15deg);
- }
- 
- /* Responsive Skill Badge Layout - NEW ADDITION */
- /* Standard grid on mobile, asymmetrical on desktop */
- .skill-badge-wrapper {
-   margin-top: var(--desktop-margin-top, 0);
-   margin-left: var(--desktop-margin-left, 0);
-   transition: margin 0.3s ease;
- }
- 
- /* Mobile: Standard grid layout */
- @media (max-width: 767px) {
-   .skill-badge-wrapper {
-     margin-top: 0 !important;
-     margin-left: 0 !important;
-   }
-   
-   /* Disable grid decoration lines on mobile for cleaner look */
-   .skills-grid-lines::before,
-   .skills-grid-lines::after {
-     display: none;
-   }
-   
-   /* Disable floating animation on mobile to reduce visual complexity */
-   .skill-card-stagger {
-     animation: none;
-   }
- }
- 
- /* Desktop: Apply asymmetrical margins */
- @media (min-width: 768px) {
-   .skill-badge-wrapper {
-     margin-top: var(--desktop-margin-top);
-     margin-left: var(--desktop-margin-left);
-   }
-
-   /* Skills Accordion Animation for Mobile */
-.skills-accordion-content {
-  animation: accordionOpen 0.3s ease-out forwards;
-  transform-origin: top;
+.skills-filter-button {
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes accordionOpen {
-  from {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
+.skills-filter-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.skills-filter-button:hover::before {
+  left: 100%;
+}
+
+/* Staggered skill cards with subtle animations */
+.skill-card-stagger {
+  animation: skillCardFloat 6s ease-in-out infinite;
+}
+
+.skill-card-stagger:nth-child(even) {
+  animation-delay: -3s;
+}
+
+@keyframes skillCardFloat {
+
+  0%,
+  100% {
+    transform: translateY(0px);
   }
-  to {
-    opacity: 1;
-    max-height: 1000px; /* Adjust based on your content */
-    transform: translateY(0);
+
+  50% {
+    transform: translateY(-2px);
   }
 }
 
-/* Individual skill fade-in animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Contemporary grid lines */
+.skills-grid-lines {
+  position: relative;
 }
 
-.animate-fadeInUp {
-  animation: fadeInUp 0.4s ease-out forwards;
-  opacity: 0;
+.skills-grid-lines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 25%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(var(--accent-green-rgb), 0.1), transparent);
+  z-index: 0;
 }
 
-/* Mobile-specific adjustments for accordion layout */
+.skills-grid-lines::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 25%;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(var(--accent-orange-rgb), 0.1), transparent);
+  z-index: 0;
+}
+
+/* Asymmetrical decorative elements */
+.skills-decoration {
+  position: relative;
+}
+
+.skills-decoration::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: -10px;
+  width: 2px;
+  height: 60%;
+  background: linear-gradient(to bottom, var(--accent-green), transparent);
+  opacity: 0.3;
+  transform: rotate(15deg);
+}
+
+/* Responsive Skill Badge Layout - NEW ADDITION */
+/* Standard grid on mobile, asymmetrical on desktop */
+.skill-badge-wrapper {
+  margin-top: var(--desktop-margin-top, 0);
+  margin-left: var(--desktop-margin-left, 0);
+  transition: margin 0.3s ease;
+}
+
+/* Mobile: Standard grid layout */
 @media (max-width: 767px) {
-  .skills-filter-button {
-    border-radius: 0.5rem;
-    /* Maintain rounded corners when skills are shown */
+  .skill-badge-wrapper {
+    margin-top: 0 !important;
+    margin-left: 0 !important;
   }
-  
-  /* Smooth transitions for filter button state changes */
-  .skills-filter-button {
-    transition: all 0.3s ease-out;
+
+  /* Disable grid decoration lines on mobile for cleaner look */
+  .skills-grid-lines::before,
+  .skills-grid-lines::after {
+    display: none;
+  }
+
+  /* Disable floating animation on mobile to reduce visual complexity */
+  .skill-card-stagger {
+    animation: none;
   }
 }
- }
+
+/* Desktop: Apply asymmetrical margins */
+@media (min-width: 768px) {
+  .skill-badge-wrapper {
+    margin-top: var(--desktop-margin-top);
+    margin-left: var(--desktop-margin-left);
+  }
+
+  /* Skills Accordion Animation for Mobile */
+  .skills-accordion-content {
+    animation: accordionOpen 0.3s ease-out forwards;
+    transform-origin: top;
+  }
+
+  @keyframes accordionOpen {
+    from {
+      opacity: 0;
+      max-height: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      max-height: 1000px;
+      /* Adjust based on your content */
+      transform: translateY(0);
+    }
+  }
+
+  /* Individual skill fade-in animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fadeInUp {
+    animation: fadeInUp 0.4s ease-out forwards;
+    opacity: 0;
+  }
+
+  /* Mobile-specific adjustments for accordion layout */
+  @media (max-width: 767px) {
+    .skills-filter-button {
+      border-radius: 0.5rem;
+      /* Maintain rounded corners when skills are shown */
+    }
+
+    /* Smooth transitions for filter button state changes */
+    .skills-filter-button {
+      transition: all 0.3s ease-out;
+    }
+  }
+}
+
+/* Safari-specific fixes */
+@supports (-webkit-appearance: none) {
+
+  /* Safari tooltip blur fix */
+  .safari-tooltip {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: opacity, transform;
+  }
+
+  /* Safari retro font rendering improvements */
+  .font-retro {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+    /* Force hardware acceleration for better rendering */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  /* Safari text stroke improvements */
+  [style*="WebkitTextStroke"] {
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 1px currentColor;
+    /* Improve text stroke rendering */
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+  }
+
+  /* Safari scroll performance improvements */
+  body {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Safari animation performance */
+  .will-change-transform {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+}

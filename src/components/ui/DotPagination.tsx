@@ -39,7 +39,7 @@ export const DotPagination: React.FC<DotPaginationProps> = ({
             aria-label={`Go to ${section} section`}
           >
             {/* Tooltip */}
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 px-2 py-1 bg-primary-bg/90 backdrop-blur-sm border border-white/20 rounded-lg font-tech text-xs text-text-primary whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 px-2 py-1 bg-primary-bg/90 backdrop-blur-sm border border-white/20 rounded-lg font-tech text-xs text-text-primary whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none safari-tooltip">
               {section.toUpperCase()}
             </div>
 
