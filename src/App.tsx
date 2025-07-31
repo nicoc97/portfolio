@@ -190,7 +190,7 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Enhanced scroll hijacking - Only on xl screens (1280px+) and above
+  // Enhanced scroll hijacking - Only on 3xl screens (1920px+) and above
   useEffect(() => {
     let scrollAccumulator = 0;
     let lastWheelTime = 0;
@@ -199,13 +199,13 @@ function App() {
     let lastDeltaY = 0;
     let consecutiveSmallDeltas = 0;
 
-    // More precise device detection - only enable scroll hijacking on xl screens (1280px+)
+    // More precise device detection - only enable scroll hijacking on 3xl screens (1920px+)
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    // Only enable scroll hijacking on 2xl screens (1536px+) and larger - true desktop monitors
-    const isLargeDesktop = window.innerWidth >= 1536;
-    const shouldHijackScroll = !isMobileDevice && isLargeDesktop;
+    // Only enable scroll hijacking on 3xl screens (1920px+) and larger - very large desktop monitors
+    const isVeryLargeDesktop = window.innerWidth >= 1920;
+    const shouldHijackScroll = !isMobileDevice && isVeryLargeDesktop;
 
     // Safari detection for scroll sensitivity adjustment
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -217,15 +217,15 @@ function App() {
       document.body.style.overscrollBehavior = 'none';
     }
 
-    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'Large desktop:', isLargeDesktop, 'Should hijack scroll:', shouldHijackScroll, 'Safari:', isSafari);
+    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'Very large desktop:', isVeryLargeDesktop, 'Should hijack scroll:', shouldHijackScroll, 'Safari:', isSafari);
 
     const handleWheel = (e: WheelEvent) => {
-      // Only hijack scroll on xl screens (1280px+) and larger
+      // Only hijack scroll on 3xl screens (1920px+) and larger
       if (!shouldHijackScroll) {
         return;
       }
 
-      // Always prevent default on xl screens to ensure consistent hijacking
+      // Always prevent default on 3xl screens to ensure consistent hijacking
       e.preventDefault();
       e.stopPropagation();
 
@@ -358,7 +358,7 @@ function App() {
     // Add wheel listener with proper passive setting
     window.addEventListener('wheel', handleWheel, { passive: false });
 
-    // Add keyboard navigation only for xl screens with scroll hijacking
+    // Add keyboard navigation only for 3xl screens with scroll hijacking
     if (shouldHijackScroll) {
       window.addEventListener('keydown', handleKeyDown);
     }
@@ -398,15 +398,15 @@ function App() {
     }
   }, [isInitialized]);
 
-  // Simplified section detection - only use intersection observer for non-xl screens
+  // Simplified section detection - only use intersection observer for non-3xl screens
   useEffect(() => {
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    const isLargeDesktop = window.innerWidth >= 1536;
-    const shouldHijackScroll = !isMobileDevice && isLargeDesktop;
+    const isVeryLargeDesktop = window.innerWidth >= 1920;
+    const shouldHijackScroll = !isMobileDevice && isVeryLargeDesktop;
 
-    if (shouldHijackScroll) return; // Skip intersection observer on xl screens with scroll hijacking
+    if (shouldHijackScroll) return; // Skip intersection observer on 3xl screens with scroll hijacking
 
     const observerOptions = {
       root: null,
