@@ -62,7 +62,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
           {/* All content centered vertically */}
           <div>
             {/* Main heading container - 80% width */}
-            <div className="w-full lg:w-4/5 mx-auto">
+            <div className="w-full md:w-4/5 mx-auto">
               {/* Name tag with typing animation */}
               <div 
                 ref={nameTagRef}
