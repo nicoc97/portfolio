@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { PixelButton } from './PixelButton';
 import { ExternalLink } from 'lucide-react';
 
 // Define the AlbumData type since it's imported in the original
@@ -595,62 +594,75 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
             onTouchEnd={handleTouchEnd}
           />
 
-          {/* Pixelation Level Indicator */}
-          <div className="absolute top-4 right-4 text-accent-green font-tech text-sm uppercase tracking-wider bg-primary-black/80 px-3 py-1 rounded-sm">
+          {/* Pixelation Level Indicator - Updated styling */}
+          <div className="absolute top-4 right-4 text-accent-green/80 font-tech text-xs uppercase tracking-wider bg-primary-bg/80 backdrop-blur-sm px-2 py-1 rounded border border-accent-green/20">
             Focus: {displayPixelLevel}px
           </div>
         </div>
 
-        {/* Album Info */}
-        <div className="pixel-card max-w-lg w-full text-center mx-4">
-          <p className="text-center text-text-secondary text-sm mb-2 font-tech uppercase tracking-wider">
+        {/* Album Info - Styled like accordion items */}
+        <div className="max-w-lg w-full mx-4">
+          {/* Drag hint */}
+          <p className="text-center text-accent-orange/60 text-xs mb-3 font-tech uppercase tracking-wider">
             ↔ Drag to Rotate ↔
           </p>
-          <h3 className="text-2xl sm:text-3xl font-bold text-accent-orange mb-2 font-retro uppercase tracking-wider">
-            {album.title}
-          </h3>
-          <p className="text-lg sm:text-xl text-accent-green mb-2 font-tech uppercase tracking-wider">
-            {album.artist}
-          </p>
-          <p className="text-text-secondary uppercase tracking-wide font-tech text-sm mb-4 sm:mb-6">
-            {album.year}
-          </p>
+          
+          {/* Info Card */}
+          <div className="bg-primary-bg/50 backdrop-blur-sm rounded-lg border border-accent-orange/10 p-6 mb-4">
+            <div className="text-center space-y-2">
+              <h3 className="font-retro text-xl sm:text-2xl font-bold text-white">
+                {album.title}
+              </h3>
+              <p className="text-gray-400 font-tech text-base sm:text-lg">
+                {album.artist}
+              </p>
+              <p className="text-gray-500 font-tech text-sm">
+                {album.year}
+              </p>
+            </div>
 
-          {/* Action buttons */}
-          <div className="flex gap-3 mb-4">
-            {album.spotifyUrl && (
-              <PixelButton
-                variant="success"
-                size="sm"
-                onClick={() => window.open(album.spotifyUrl, '_blank')}
-                className="flex-1 flex items-center justify-center"
-              >
-                <ExternalLink className="w-4 h-4 mr-1" />
-                SPOTIFY
-              </PixelButton>
-            )}
-            {album.appleMusicUrl && (
-              <PixelButton
-                variant="primary"
-                size="sm"
-                onClick={() => window.open(album.appleMusicUrl, '_blank')}
-                className="flex-1 flex items-center justify-center"
-              >
-                <ExternalLink className="w-4 h-4 mr-1" />
-                APPLE MUSIC
-              </PixelButton>
-            )}
+            {/* Action buttons */}
+            <div className="flex gap-3 mt-6">
+              {album.spotifyUrl && (
+                <button
+                  onClick={() => window.open(album.spotifyUrl, '_blank')}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 
+                    bg-accent-green/10 hover:bg-accent-green/20 
+                    border border-accent-green/30 hover:border-accent-green/50
+                    rounded-md transition-all duration-200
+                    text-accent-green font-tech text-sm uppercase tracking-wider"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  SPOTIFY
+                </button>
+              )}
+              {album.appleMusicUrl && (
+                <button
+                  onClick={() => window.open(album.appleMusicUrl, '_blank')}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 
+                    bg-accent-orange/10 hover:bg-accent-orange/20 
+                    border border-accent-orange/30 hover:border-accent-orange/50
+                    rounded-md transition-all duration-200
+                    text-accent-orange font-tech text-sm uppercase tracking-wider"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  APPLE
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Close button */}
-          <PixelButton
-            variant="ghost"
-            size="sm"
+          <button
             onClick={onClose}
-            className="w-full"
+            className="w-full px-4 py-2.5 
+              bg-primary-bg/30 hover:bg-primary-bg/50 
+              border border-gray-600/30 hover:border-accent-orange/50
+              rounded-md transition-all duration-200
+              text-gray-400 hover:text-accent-orange font-tech text-sm uppercase tracking-wider"
           >
             CLOSE
-          </PixelButton>
+          </button>
         </div>
       </div>
     </div>
