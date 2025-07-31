@@ -150,7 +150,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
         ref={sectionRef}
         className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden"
       >
-        <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+        <div className="w-full lg:w-4/5 xl:w-3/5 mx-auto mobile-padding relative z-10">
           {/* Large background text */}
           <div className="section-bg-text">
             <span>SEC03</span>
@@ -173,9 +173,9 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
           </div>
 
           {/* Accordion Layout */}
-          <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
             {/* Record List (Accordion) - Modern borderless design */}
-            <div ref={albumListRef} className="lg:w-2/5 space-y-6">
+            <div ref={albumListRef} className="lg:w-1/2 xl:w-2/5 space-y-6">
               {ALBUM_DATA.map((album, index) => (
                 <div key={album.id} className="space-y-6">
                   <div
@@ -277,7 +277,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
             {/* Desktop Record Display - side panel */}
             <div
               ref={recordDisplayRef}
-              className={`hidden lg:flex lg:w-3/5 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible
+              className={`hidden lg:flex lg:w-1/2 xl:w-3/5 justify-center items-center min-h-[500px] transition-all duration-700 relative ${recordDisplayVisible
                 ? 'opacity-100 translate-y-0 scale-100 blur-none'
                 : 'opacity-0 translate-y-4 scale-95 blur-sm'
                 }`}

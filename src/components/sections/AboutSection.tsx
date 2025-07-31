@@ -56,7 +56,7 @@ export const AboutSection: React.FC = () => {
 
   return (
     <section id="about" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
-      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-4/5 xl:w-3/5 mx-auto mobile-padding relative z-10">
         {/* Large background text */}
         <div className="section-bg-text">
           <span>SEC02</span>
@@ -81,7 +81,7 @@ export const AboutSection: React.FC = () => {
           {/* Brief Introduction */}
           <div className={`animate-slide-up ${contentVisible[0] ? 'visible' : ''}`}>
             <div className="max-w-4xl">
-              <p className="text-2xl lg:text-3xl text-text-primary leading-relaxed font-light">
+              <p className="text-2xl lg:text-2xl xl:text-3xl text-text-primary leading-relaxed font-light">
                 Collaborative web developer focused on delivering results through
                 <span className="text-accent-orange font-medium"> teamwork</span> and
                 <span className="text-accent-green font-medium"> innovation</span>.
@@ -164,12 +164,12 @@ export const AboutSection: React.FC = () => {
           {/* Desktop Layout - Original Side-by-Side */}
           <div className="hidden lg:block">
             <div className={`animate-slide-up ${contentVisible[1] ? 'visible' : ''}`}>
-              <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 items-start">
 
                 {/* Left Column - Stats Counters */}
-                <div className="space-y-16 lg:space-y-20">
+                <div className="space-y-12 lg:space-y-16 xl:space-y-20">
                   <div className="flex items-center gap-8">
-                    <div className="text-6xl lg:text-8xl font-bold font-retro">
+                    <div className="text-6xl lg:text-7xl xl:text-8xl font-bold font-retro">
                       {yearsCount}+
                     </div>
                     <div>
@@ -179,8 +179,8 @@ export const AboutSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-8 lg:ml-16">
-                    <div className="text-6xl lg:text-8xl font-bold font-retro">
+                  <div className="flex items-center gap-8 lg:ml-12 xl:ml-16">
+                    <div className="text-6xl lg:text-7xl xl:text-8xl font-bold font-retro">
                       {teamsCount}+
                     </div>
                     <div>
@@ -190,8 +190,8 @@ export const AboutSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-8 lg:ml-8">
-                    <div className="text-6xl lg:text-8xl font-bold font-retro">
+                  <div className="flex items-center gap-8 lg:ml-6 xl:ml-8">
+                    <div className="text-6xl lg:text-7xl xl:text-8xl font-bold font-retro">
                       {techCount}+
                     </div>
                     <div>
@@ -203,7 +203,7 @@ export const AboutSection: React.FC = () => {
                 </div>
 
                 {/* Right Column - Content Sections */}
-                <div className="space-y-20 lg:space-y-24 lg:mt-8">
+                <div className="space-y-16 lg:space-y-20 xl:space-y-24 lg:mt-6 xl:mt-8">
 
                   {/* Currently */}
                   <div className="max-w-md">
@@ -222,7 +222,7 @@ export const AboutSection: React.FC = () => {
                   </div>
 
                   {/* Core Stack */}
-                  <div className="max-w-md lg:ml-8">
+                  <div className="max-w-md lg:ml-6 xl:ml-8">
                     <h3 className="text-xl font-bold text-accent-orange font-tech mb-6 uppercase tracking-wide">
                       Core Stack
                     </h3>

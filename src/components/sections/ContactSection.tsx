@@ -67,7 +67,7 @@ export const ContactSection: React.FC = () => {
 
   return (
     <section id="contact" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
-      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-4/5 xl:w-3/5 mx-auto mobile-padding relative z-10">
         <div className="text-left space-y-8">
           {/* Large background text */}
           <div className="section-bg-text">
@@ -99,7 +99,7 @@ export const ContactSection: React.FC = () => {
 
           {/* Simple Grid Layout */}
           <div ref={contentRef} className={`animate-slide-up ${contentVisible ? 'visible' : ''} mt-16`}>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               
               {/* Email */}
               <div
@@ -193,7 +193,7 @@ export const ContactSection: React.FC = () => {
               </a>
 
               {/* CV Download */}
-              <div className="md:col-span-2 lg:col-span-1">
+              <div className="md:col-span-2 lg:col-span-2 xl:col-span-1">
                 <PixelButton
                   variant="primary"
                   size="lg"

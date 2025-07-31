@@ -76,20 +76,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
 
               <h1 
                 ref={headingRef}
-                className={`text-5xl md:text-6xl lg:text-7xl xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
+                className={`text-5xl md:text-6xl lg:text-8xl xl:text-[10rem] font-bold font-retro tracking-tight text-center animate-slide-up ${headingVisible ? 'visible' : ''}`}
               >
                 <span>{HERO_CONSTANTS.MAIN_HEADING}</span>
               </h1>
             </div>
 
             {/* Subtitle and buttons container - 60% width, centered under header */}
-            <div className="w-full lg:w-1/2 mx-auto mt-8 lg:mt-12">
+            <div className="w-full lg:w-3/5 xl:w-1/2 mx-auto mt-8 lg:mt-12">
               {/* Subtitle - centered */}
               <div 
                 ref={subtitleRef}
                 className={`text-center mb-8 animate-fade ${subtitleVisible ? 'visible' : ''}`}
               >
-                <p className="text-md md:text-xl lg:text-2xl text-text-secondary">
+                <p className="text-md md:text-xl lg:text-xl xl:text-2xl text-text-secondary">
                   {HERO_CONSTANTS.SUBTITLE}
                 </p>
                 <div className="mt-4">

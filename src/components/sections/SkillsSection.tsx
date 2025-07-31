@@ -163,7 +163,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
   return (
     <section className={`section-fullscreen py-16 ${className} relative overflow-hidden`} id="skills">
-      <div className="w-full lg:w-3/5 mx-auto mobile-padding relative z-10">
+      <div className="w-full lg:w-4/5 xl:w-3/5 mx-auto mobile-padding relative z-10">
 
         {/* Large background text */}
         <div className="section-bg-text">
@@ -235,10 +235,10 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           </div>
         ) : (
           /* Desktop Layout - Original Side-by-Side */
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
 
             {/* Left Column - Filters (Staggered) */}
-            <div className="lg:col-span-1 space-y-6 skills-decoration">
+            <div className="lg:col-span-1 xl:col-span-1 space-y-6 skills-decoration">
               <div
                 ref={filtersRef}
                 className={`animate-pixel ${filtersVisible ? 'visible' : ''}`}
@@ -288,7 +288,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
             </div>
 
             {/* Right Column - Skills Grid (Desktop) */}
-            <div className="lg:col-span-3 skills-grid-lines">
+            <div className="lg:col-span-2 xl:col-span-3 skills-grid-lines">
               {filteredSkills.length === 0 ? (
                 <div className="flex items-center justify-center h-64 text-text-secondary text-center">
                   <div>
@@ -297,7 +297,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                   </div>
                 </div>
               ) : (
-                <div ref={skillsGridRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 relative z-10">
+                <div ref={skillsGridRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 relative z-10">
                   {filteredSkills.map((skill, index) => {
                     // Create asymmetrical staggered positioning only for larger screens
                     const isEven = index % 2 === 0;
@@ -342,9 +342,9 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
         {/* Progressive Disclosure - Detailed Skill Information */}
         {selectedSkill && (
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
-            <div className="lg:col-span-1"></div>
-            <div className="lg:col-span-3">
+          <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
+            <div className="lg:col-span-1 xl:col-span-1"></div>
+            <div className="lg:col-span-2 xl:col-span-3">
               <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6 md:transform md:translate-x-4">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-4">
@@ -402,7 +402,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
         {/* Skills Summary - Symmetrical Full Width Grid */}
         <div className="mt-12">
-          <div ref={summaryRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          <div ref={summaryRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
             {skillCategories.map((category, index) => {
               const categorySkills = getSkillsByCategory(category.key);
 

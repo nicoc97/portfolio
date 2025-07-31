@@ -44,8 +44,8 @@
     /* Internet Explorer 10+ */
   }
 
-  /* Smooth scrolling only on mobile - desktop uses scroll hijacking */
-  @media (max-width: 768px) {
+  /* Smooth scrolling for screens below xl (1280px) - xl and above use scroll hijacking */
+  @media (max-width: 1279px) {
     html {
       scroll-behavior: smooth;
     }
@@ -61,8 +61,8 @@
     /* Prevent horizontal scrolling */
   }
 
-  /* Mobile scroll improvements */
-  @media (max-width: 768px) {
+  /* Scroll improvements for screens below xl (natural scrolling) */
+  @media (max-width: 1279px) {
     body {
       /* Enable momentum scrolling on iOS */
       -webkit-overflow-scrolling: touch;
@@ -71,18 +71,18 @@
     }
   }
 
-  /* Full viewport height sections for scroll hijacking */
+  /* Full viewport height sections for scroll hijacking (xl screens and above) */
   .section-fullscreen {
-    /* Desktop: Full viewport height for scroll hijacking */
-    height: 100vh;
+    /* Default: Allow natural content height */
+    height: auto;
     min-height: 100vh;
     scroll-snap-align: start;
   }
 
-  /* Mobile: Allow natural content height */
-  @media (max-width: 768px) {
+  /* XL screens and above: Full viewport height for scroll hijacking */
+  @media (min-width: 1280px) {
     .section-fullscreen {
-      height: auto;
+      height: 100vh;
       min-height: 100vh;
     }
   }
@@ -93,7 +93,7 @@
 
   /* Mobile padding utility - 2rem left and right on mobile */
   .mobile-padding {
-    @apply px-8 md:px-0;
+    @apply px-8 md:px-6 lg:px-4 xl:px-0;
   }
 
   /* Base button styling - used by PixelButton component */
@@ -133,12 +133,12 @@
   }
 
   .section-bg-text span {
-    @apply text-[2rem] md:text-[4rem] lg:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
+    @apply text-[2rem] md:text-[4rem] lg:text-[5rem] xl:text-[6rem] font-bold text-accent-orange font-retro tracking-tight leading-none;
   }
 
   /* Section header pattern - consistent across all sections */
   .section-header {
-    @apply text-5xl md:text-[6rem] font-bold tracking-wide font-retro text-left;
+    @apply text-5xl md:text-6xl lg:text-7xl xl:text-[6rem] font-bold tracking-wide font-retro text-left;
     /* Safari-specific font rendering fixes */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

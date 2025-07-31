@@ -178,7 +178,19 @@ function App() {
     }
   };
 
-  // Enhanced scroll hijacking - Desktop only, but always track scroll position
+  // Handle window resize to update scroll behavior dynamically
+  useEffect(() => {
+    const handleResize = () => {
+      // Force re-evaluation of scroll behavior on resize
+      // This will trigger the main scroll effect to re-run
+      setIsScrolling(false);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Enhanced scroll hijacking - Only on xl screens (1280px+) and above
   useEffect(() => {
     let scrollAccumulator = 0;
     let lastWheelTime = 0;
@@ -187,9 +199,13 @@ function App() {
     let lastDeltaY = 0;
     let consecutiveSmallDeltas = 0;
 
-    // More precise mobile detection - exclude tablets from scroll hijacking
+    // More precise device detection - only enable scroll hijacking on xl screens (1280px+)
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
+
+    // Only enable scroll hijacking on xl screens (1280px+) and larger
+    const isXLScreen = window.innerWidth >= 1280;
+    const shouldHijackScroll = !isMobileDevice && isXLScreen;
 
     // Safari detection for scroll sensitivity adjustment
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
@@ -201,15 +217,15 @@ function App() {
       document.body.style.overscrollBehavior = 'none';
     }
 
-    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'Safari:', isSafari);
+    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'XL screen:', isXLScreen, 'Should hijack scroll:', shouldHijackScroll, 'Safari:', isSafari);
 
     const handleWheel = (e: WheelEvent) => {
-      // Don't hijack if it's a mobile device - let natural scrolling happen
-      if (isMobileDevice) {
+      // Only hijack scroll on xl screens (1280px+) and larger
+      if (!shouldHijackScroll) {
         return;
       }
 
-      // Always prevent default on desktop to ensure consistent hijacking
+      // Always prevent default on xl screens to ensure consistent hijacking
       e.preventDefault();
       e.stopPropagation();
 
@@ -327,14 +343,14 @@ function App() {
       }
     };
 
-    // Track active section based on scroll position (mobile only)
+    // Track active section based on scroll position (non-xl screens)
     const handleScroll = () => {
-      // Only track scroll position on mobile devices
-      if (!isMobileDevice || isScrolling || !isInitialized) return;
+      // Only track scroll position on screens that don't use scroll hijacking
+      if (shouldHijackScroll || isScrolling || !isInitialized) return;
 
       const currentSection = detectCurrentSection();
       if (currentSection !== activeSection) {
-        console.log('Mobile scroll: Updating active section from', activeSection, 'to', currentSection);
+        console.log('Natural scroll: Updating active section from', activeSection, 'to', currentSection);
         setActiveSection(currentSection as typeof activeSection);
       }
     };
@@ -342,23 +358,23 @@ function App() {
     // Add wheel listener with proper passive setting
     window.addEventListener('wheel', handleWheel, { passive: false });
 
-    // Add keyboard navigation only for desktop
-    if (!isMobileDevice) {
+    // Add keyboard navigation only for xl screens with scroll hijacking
+    if (shouldHijackScroll) {
       window.addEventListener('keydown', handleKeyDown);
     }
 
-    // Add scroll tracking only for mobile
-    if (isMobileDevice) {
+    // Add scroll tracking for screens without scroll hijacking
+    if (!shouldHijackScroll) {
       window.addEventListener('scroll', handleScroll, { passive: true });
       setTimeout(handleScroll, 100);
     }
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
-      if (!isMobileDevice) {
+      if (shouldHijackScroll) {
         window.removeEventListener('keydown', handleKeyDown);
       }
-      if (isMobileDevice) {
+      if (!shouldHijackScroll) {
         window.removeEventListener('scroll', handleScroll);
       }
       if (scrollTimeoutRef.current !== null) {
@@ -382,12 +398,15 @@ function App() {
     }
   }, [isInitialized]);
 
-  // Simplified section detection - only use intersection observer for mobile
+  // Simplified section detection - only use intersection observer for non-xl screens
   useEffect(() => {
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    if (!isMobileDevice) return; // Skip intersection observer on desktop
+    const isXLScreen = window.innerWidth >= 1280;
+    const shouldHijackScroll = !isMobileDevice && isXLScreen;
+
+    if (shouldHijackScroll) return; // Skip intersection observer on xl screens with scroll hijacking
 
     const observerOptions = {
       root: null,
@@ -401,7 +420,7 @@ function App() {
       // Use the same detection logic for consistency
       const currentSection = detectCurrentSection();
       if (currentSection !== activeSection) {
-        console.log('Mobile Intersection Observer: Updating active section to', currentSection);
+        console.log('Intersection Observer: Updating active section to', currentSection);
         setActiveSection(currentSection as typeof activeSection);
       }
     }, observerOptions);
