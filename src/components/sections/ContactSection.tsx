@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { PixelButton } from '../ui/PixelButton';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
 /**
