@@ -193,10 +193,27 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 className={`
                   w-full px-4 py-3 rounded-lg font-tech border-2 transition-all duration-200 text-left skills-filter-button
                   ${selectedCategory === 'all'
-                    ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg'
+                    ? 'shadow-lg'
                     : 'tech-badge-secondary'
                   }
                 `}
+                style={{
+                  backgroundColor: selectedCategory === 'all' ? '#FF8C42' : '',
+                  borderColor: selectedCategory === 'all' ? '#FF8C42' : '',
+                  color: selectedCategory === 'all' ? '#1a1612' : ''
+                }}
+                onMouseEnter={(e) => {
+                  if (selectedCategory !== 'all') {
+                    e.currentTarget.style.borderColor = '#FF8C42';
+                    e.currentTarget.style.color = '#FF8C42';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedCategory !== 'all') {
+                    e.currentTarget.style.borderColor = '';
+                    e.currentTarget.style.color = '';
+                  }
+                }}
               >
                 <div className="flex justify-between items-center">
                   <span>All Skills</span>
@@ -210,6 +227,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
             {skillCategories.map((category) => {
               const categorySkills = getSkillsByCategory(category.key);
               const isSelected = selectedCategory === category.key;
+              const isOrange = category.key === 'frontend';
               
               return (
                 <div key={category.key} className="overflow-hidden rounded-lg">
@@ -218,8 +236,12 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                     className={`
                       w-full px-4 py-3 rounded-lg font-tech text-lg border-2 transition-all duration-200 text-left skills-filter-button
                       ${isSelected
-                        ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg`
-                        : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color}`
+                        ? isOrange
+                          ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg'
+                          : 'bg-accent-green text-primary-bg border-accent-green shadow-lg'
+                        : isOrange
+                          ? 'tech-badge-secondary hover:border-accent-orange hover:text-accent-orange'
+                          : 'tech-badge-secondary hover:border-accent-green hover:text-accent-green'
                       }
                     `}
                   >
@@ -250,10 +272,27 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                     className={`
                       w-full px-4 py-3 rounded-lg font-tech border-2 transition-all duration-200 text-left skills-filter-button
                       ${selectedCategory === 'all'
-                        ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
+                        ? 'shadow-lg transform translate-x-2'
                         : 'tech-badge-secondary hover:translate-x-1'
                       }
                     `}
+                    style={{
+                      backgroundColor: selectedCategory === 'all' ? '#FF8C42' : '',
+                      borderColor: selectedCategory === 'all' ? '#FF8C42' : '',
+                      color: selectedCategory === 'all' ? '#1a1612' : ''
+                    }}
+                    onMouseEnter={(e) => {
+                      if (selectedCategory !== 'all') {
+                        e.currentTarget.style.borderColor = '#FF8C42';
+                        e.currentTarget.style.color = '#FF8C42';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedCategory !== 'all') {
+                        e.currentTarget.style.borderColor = '';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
                   >
                     <div className="flex justify-between items-center">
                       <span>All Skills</span>
@@ -263,6 +302,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
                   {skillCategories.map((category) => {
                     const categorySkills = getSkillsByCategory(category.key);
+                    const isOrange = category.key === 'frontend';
+                    
                     return (
                       <button
                         key={category.key}
@@ -270,8 +311,12 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                         className={`
                           w-full px-4 py-3 rounded-lg font-tech text-lg border-2 transition-all duration-200 text-left skills-filter-button
                           ${selectedCategory === category.key
-                            ? `bg-${category.color} text-primary-bg border-${category.color} shadow-lg transform translate-x-2`
-                            : `tech-badge-secondary hover:border-${category.color} hover:text-${category.color} hover:translate-x-1`
+                            ? isOrange 
+                              ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
+                              : 'bg-accent-green text-primary-bg border-accent-green shadow-lg transform translate-x-2'
+                            : isOrange
+                              ? 'tech-badge-secondary hover:border-accent-orange hover:text-accent-orange hover:translate-x-1'
+                              : 'tech-badge-secondary hover:border-accent-green hover:text-accent-green hover:translate-x-1'
                           }
                         `}
                       >
@@ -345,24 +390,24 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
             <div className="lg:col-span-1 xl:col-span-1"></div>
             <div className="lg:col-span-2 xl:col-span-3">
-              <div className="bg-primary-bg-light border-2 border-accent-green rounded-lg p-6 md:transform md:translate-x-4">
+              <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-green/20 rounded-lg p-6 md:transform md:translate-x-4 shadow-lg shadow-accent-green/10">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-accent-green text-primary-bg rounded-lg flex items-center justify-center text-xl font-bold border-2 border-accent-green-soft">
+                    <div className="w-12 h-12 bg-accent-green/20 text-accent-green rounded-lg flex items-center justify-center text-xl font-bold border border-accent-green/30">
                       {selectedSkill.pixelIcon}
                     </div>
                     <div>
-                      <h3 className="text-lg md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl font-retro text-accent-green mb-1">
+                      <h3 className="text-lg md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl font-retro text-white mb-1">
                         {selectedSkill.name}
                       </h3>
-                      <span className="px-2 py-1 bg-accent-green/20 border border-accent-green rounded text-xs font-tech text-accent-green">
+                      <span className="px-2 py-1 bg-accent-green/10 border border-accent-green/30 rounded text-xs font-tech text-accent-green uppercase tracking-wider">
                         {selectedSkill.category.toUpperCase()}
                       </span>
                     </div>
                   </div>
                   <button
                     onClick={() => setSelectedSkill(null)}
-                    className="text-text-secondary hover:text-accent-orange transition-colors duration-200 text-xl"
+                    className="text-gray-500 hover:text-accent-orange transition-colors duration-200 text-2xl leading-none pb-1"
                     aria-label="Close skill details"
                   >
                     ×
@@ -370,7 +415,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 </div>
 
                 {selectedSkill.description && (
-                  <p className="text-text-secondary font-mono text-sm leading-relaxed mb-4">
+                  <p className="text-gray-400 font-mono text-sm leading-relaxed mb-4">
                     {selectedSkill.description}
                   </p>
                 )}
@@ -378,7 +423,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 {/* Related Skills */}
                 {getRelatedSkills(selectedSkill).length > 0 && (
                   <div>
-                    <h4 className="text-sm font-tech text-accent-green mb-2">Related Technologies:</h4>
+                    <h4 className="text-sm font-tech text-accent-green/80 mb-2 uppercase tracking-wider">Related Technologies:</h4>
                     <div className="flex flex-wrap gap-2">
                       {getRelatedSkills(selectedSkill).map((relatedSkillName) => {
                         const relatedSkill = techSkills.find(s => s.name === relatedSkillName);
@@ -386,7 +431,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                           <button
                             key={relatedSkillName}
                             onClick={() => setSelectedSkill(relatedSkill)}
-                            className="tech-badge-secondary text-xs hover:border-accent-green hover:text-accent-green"
+                            className="px-3 py-1.5 bg-primary-bg/30 border border-gray-600/30 hover:border-accent-green/50 rounded text-xs font-tech text-gray-400 hover:text-accent-green transition-all duration-200 uppercase tracking-wider"
                           >
                             {relatedSkillName}
                           </button>
@@ -400,9 +445,9 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
           </div>
         )}
 
-        {/* Skills Summary - Symmetrical Full Width Grid */}
+        {/* Skills Summary - Updated Styling */}
         <div className="mt-12">
-          <div ref={summaryRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+          <div ref={summaryRef} className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {skillCategories.map((category, index) => {
               const categorySkills = getSkillsByCategory(category.key);
 
@@ -410,17 +455,28 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 <div
                   key={category.key}
                   className={`
-                    bg-primary-bg-light border-2 border-text-secondary/20 rounded-lg p-4 text-center 
-                    hover:border-${category.color} hover:scale-105 transition-all duration-300 
+                    bg-primary-bg/50 backdrop-blur-sm rounded-lg 
+                    border border-gray-600/20
+                    p-4 text-center transition-all duration-300 
+                    hover:scale-105
+                    group cursor-pointer
                     ${getSummaryClasses(index, 'slide')}
+                    ${category.key === 'frontend' ? 'hover:border-accent-orange/50 hover:shadow-lg hover:shadow-accent-orange/10' : 'hover:border-accent-green/50 hover:shadow-lg hover:shadow-accent-green/10'}
                   `}
                   style={{
                     animationDelay: `${index * 150}ms`
                   }}
                 >
-                  <h3 className={`font-tech text-${category.color} text-sm mb-2`}>{category.label}</h3>
-                  <div className="text-lg md:text-xl lg:text-xl xl:text-xl 2xl:text-2xl font-retro text-text-primary mb-1">{categorySkills.length}</div>
-                  <div className="text-xs text-text-secondary font-mono">
+                  <h3 className={`
+                    font-tech text-gray-400 text-sm mb-2 uppercase tracking-wider transition-colors duration-300
+                    ${category.key === 'frontend' ? 'group-hover:text-accent-orange' : 'group-hover:text-accent-green'}
+                  `}>
+                    {category.label}
+                  </h3>
+                  <div className="text-xl md:text-2xl font-retro text-white mb-1">
+                    {categorySkills.length}
+                  </div>
+                  <div className="text-xs text-gray-500 font-tech uppercase tracking-wider">
                     Technologies
                   </div>
                 </div>
