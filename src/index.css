@@ -34,6 +34,9 @@
     /* Safari-specific font rendering improvements */
     text-rendering: optimizeLegibility;
     -webkit-text-size-adjust: 100%;
+    /* Performance optimizations for low-end devices */
+    will-change: auto; /* Reset will-change to prevent unnecessary compositing */
+    transform: translateZ(0); /* Force hardware acceleration only when needed */
   }
 
   /* Hide scrollbar while keeping scroll functionality */
@@ -154,13 +157,16 @@
     @apply text-accent-orange font-tech text-left text-sm md:text-base lg:text-base xl:text-base 2xl:text-lg;
   }
 
-  /* Animation utility classes */
+  /* Performance-aware animation utility classes */
   .animate-slide-up {
     @apply transition-all duration-700;
+    /* Optimize for performance */
+    will-change: opacity, transform;
   }
 
   .animate-slide-up.visible {
     @apply opacity-100 translate-y-0;
+    will-change: auto; /* Reset after animation */
   }
 
   .animate-slide-up:not(.visible) {
@@ -169,10 +175,12 @@
 
   .animate-pixel {
     @apply transition-all duration-700;
+    will-change: opacity, transform;
   }
 
   .animate-pixel.visible {
     @apply opacity-100 translate-y-0 scale-100 blur-none;
+    will-change: auto;
   }
 
   .animate-pixel:not(.visible) {
@@ -181,10 +189,12 @@
 
   .animate-fade {
     @apply transition-all duration-700;
+    will-change: opacity;
   }
 
   .animate-fade.visible {
     @apply opacity-100;
+    will-change: auto;
   }
 
   .animate-fade:not(.visible) {
@@ -193,14 +203,34 @@
 
   .animate-scale {
     @apply transition-all duration-700;
+    will-change: opacity, transform;
   }
 
   .animate-scale.visible {
     @apply opacity-100 scale-100;
+    will-change: auto;
   }
 
   .animate-scale:not(.visible) {
     @apply opacity-0 scale-95;
+  }
+
+  /* Reduced motion support for accessibility and performance */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-slide-up,
+    .animate-pixel,
+    .animate-fade,
+    .animate-scale {
+      @apply transition-none;
+      animation: none;
+    }
+    
+    .animate-slide-up:not(.visible),
+    .animate-pixel:not(.visible),
+    .animate-fade:not(.visible),
+    .animate-scale:not(.visible) {
+      @apply opacity-50; /* Still show some visual feedback */
+    }
   }
 
   /* Icon container pattern */

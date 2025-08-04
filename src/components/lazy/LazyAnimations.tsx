@@ -111,7 +111,7 @@ export const LazyScrollReveal: React.FC<React.ComponentProps<typeof ScrollAnimat
   );
 };
 
-export const LazyThreeJS: React.FC<any> = (props) => {
+export const LazyThreeJS: React.FC<Record<string, unknown>> = (props) => {
   const recommendations = performanceMonitor.getPerformanceRecommendations();
 
   // Skip Three.js on low-end devices
@@ -155,27 +155,50 @@ export const preloadAnimations = () => {
   }
 };
 
-// Enhanced hook with adaptive preloading
+// Enhanced hook with adaptive preloading and memory management
 export const usePreloadAnimations = () => {
   React.useEffect(() => {
     const recommendations = performanceMonitor.getPerformanceRecommendations();
 
-    // Delay preloading on low-end devices
-    const delay = recommendations.reduceAnimations ? 5000 : 2000;
+    // Skip preloading entirely on very low-end devices
+    if (recommendations.reduceAnimations && recommendations.simplifyEffects) {
+      console.log('Skipping animation preload on low-end device');
+      return;
+    }
+
+    // Adaptive delay based on device capabilities
+    const delay = recommendations.reduceAnimations ? 8000 : 2000;
+
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let idleCallbackId: number;
 
     // Preload on idle or after delay
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => {
-        setTimeout(preloadAnimations, delay);
-      });
+      idleCallbackId = requestIdleCallback(() => {
+        timeoutId = setTimeout(preloadAnimations, delay);
+      }, { timeout: 10000 }); // Fallback timeout
     } else {
-      setTimeout(preloadAnimations, delay);
+      timeoutId = setTimeout(preloadAnimations, delay);
     }
+
+    // Cleanup function to prevent memory leaks
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (idleCallbackId) cancelIdleCallback(idleCallbackId);
+    };
   }, []);
 };
 
-// Utility to preload critical components immediately
+// Performance-aware critical component preloading
 export const preloadCriticalComponents = () => {
+  const recommendations = performanceMonitor.getPerformanceRecommendations();
+  
+  // Skip preloading on low-end devices to save memory
+  if (recommendations.reduceAnimations) {
+    console.log('Skipping critical component preload on low-end device');
+    return;
+  }
+
   // Preload components that are likely to be needed soon
   const criticalImports = [
     import('../ui/LazyImage'),

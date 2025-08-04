@@ -160,7 +160,7 @@ function isNavigationRequest(request) {
   return request.mode === 'navigate';
 }
 
-// Enhanced image request handling with WebP conversion and optimization
+// Enhanced image request handling with performance optimization
 async function handleImageRequest(request) {
   try {
     const cache = await caches.open(IMAGE_CACHE);
@@ -175,13 +175,17 @@ async function handleImageRequest(request) {
     performanceMetrics.cacheMisses++;
     performanceMetrics.networkRequests++;
 
-    // Try to fetch WebP version if browser supports it
+    // Detect device capabilities for adaptive image handling
+    const isLowEndDevice = navigator.hardwareConcurrency <= 2 || 
+                          (navigator.deviceMemory && navigator.deviceMemory <= 2);
+
+    // Try to fetch WebP version if browser supports it and device is capable
     const acceptHeader = request.headers.get('accept') || '';
     const supportsWebP = acceptHeader.includes('image/webp');
     
     let fetchRequest = request;
-    if (supportsWebP && !request.url.includes('.webp')) {
-      // Try WebP version first
+    if (supportsWebP && !request.url.includes('.webp') && !isLowEndDevice) {
+      // Try WebP version first on capable devices
       const webpUrl = request.url.replace(/\.(jpg|jpeg|png)$/i, '.webp');
       fetchRequest = new Request(webpUrl, {
         method: request.method,
@@ -194,17 +198,27 @@ async function handleImageRequest(request) {
       });
     }
 
-    // Fetch from network
-    const networkResponse = await fetch(fetchRequest);
+    // Add timeout for low-end devices to prevent hanging
+    const fetchPromise = fetch(fetchRequest);
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Request timeout')), isLowEndDevice ? 5000 : 10000);
+    });
+
+    // Fetch from network with timeout
+    const networkResponse = await Promise.race([fetchPromise, timeoutPromise]);
     
-    // Cache successful responses with timestamp
+    // Cache successful responses with timestamp (limit cache size on low-end devices)
     if (networkResponse.ok) {
       const responseToCache = addCacheTimestamp(networkResponse.clone());
-      cache.put(request, responseToCache);
       
-      // Also cache the WebP version if we fetched it
-      if (fetchRequest.url !== request.url) {
-        cache.put(fetchRequest, addCacheTimestamp(networkResponse.clone()));
+      // Only cache if we have space (simplified check for low-end devices)
+      if (!isLowEndDevice || performanceMetrics.cacheHits < 100) {
+        cache.put(request, responseToCache);
+        
+        // Also cache the WebP version if we fetched it
+        if (fetchRequest.url !== request.url) {
+          cache.put(fetchRequest, addCacheTimestamp(networkResponse.clone()));
+        }
       }
     }
     
@@ -213,9 +227,11 @@ async function handleImageRequest(request) {
     console.error('Image request failed:', error);
     performanceMetrics.failedRequests++;
     
-    // Return enhanced pixel-style fallback image
+    // Return simplified fallback for low-end devices
+    const isLowEndDevice = navigator.hardwareConcurrency <= 2;
+    
     return new Response(
-      createPixelFallbackSVG(request.url),
+      isLowEndDevice ? createSimpleFallbackSVG(request.url) : createPixelFallbackSVG(request.url),
       {
         headers: {
           'Content-Type': 'image/svg+xml',
@@ -350,6 +366,33 @@ function createPixelFallbackSVG(originalUrl = '') {
       <rect x="2" y="2" width="${width-4}" height="${height-4}" fill="none" stroke="#ff8c42" stroke-width="2" stroke-dasharray="8,4" opacity="0.5">
         <animate attributeName="stroke-dashoffset" values="0;12" dur="1s" repeatCount="indefinite"/>
       </rect>
+    </svg>
+  `;
+}
+
+// Simplified fallback SVG for low-end devices
+function createSimpleFallbackSVG(originalUrl = '') {
+  const width = 400;
+  const height = 300;
+  
+  // Extract filename for error display
+  const filename = originalUrl.split('/').pop() || 'UNKNOWN';
+  const shortFilename = filename.length > 15 ? filename.substring(0, 12) + '...' : filename;
+  
+  return `
+    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <rect width="${width}" height="${height}" fill="#1a1611"/>
+      
+      <!-- Simple error message without animations -->
+      <text x="${width/2}" y="${height/2 - 10}" text-anchor="middle" fill="#ff8c42" font-family="monospace" font-size="14" font-weight="bold">
+        [IMAGE_ERROR]
+      </text>
+      <text x="${width/2}" y="${height/2 + 15}" text-anchor="middle" fill="#7c9756" font-family="monospace" font-size="10">
+        ${shortFilename}
+      </text>
+      
+      <!-- Simple border -->
+      <rect x="2" y="2" width="${width-4}" height="${height-4}" fill="none" stroke="#ff8c42" stroke-width="2" opacity="0.5"/>
     </svg>
   `;
 }

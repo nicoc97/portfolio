@@ -192,7 +192,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                           w-16 h-16 rounded-full flex-shrink-0 relative
                           transition-all duration-500 bg-black
                           ${selectedAlbum.id === album.id
-                            ? 'animate-spin shadow-lg shadow-accent-orange/30'
+                            ? ''
                             : 'group-hover:scale-110'
                           }
                         `}
@@ -237,7 +237,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
 
                       {/* Active Indicator */}
                       {selectedAlbum.id === album.id && (
-                        <div className="w-2 h-2 bg-accent-orange rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 bg-accent-orange rounded-full"></div>
                       )}
                     </div>
                   </div>

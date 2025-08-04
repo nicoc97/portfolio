@@ -5,7 +5,6 @@ interface LazyImageProps {
   src: string;
   alt: string;
   className?: string;
-  placeholder?: string;
   onLoad?: () => void;
   onError?: () => void;
 }
@@ -24,7 +23,6 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   src,
   alt,
   className = '',
-  placeholder: _placeholder,
   onLoad,
   onError
 }) => {
@@ -34,9 +32,16 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const imgRef = useRef<HTMLImageElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Enhanced WebP optimization with multiple formats and sizes
+  // Performance-aware image optimization
   const getOptimizedSrc = (originalSrc: string, width?: number): string => {
     if (!originalSrc) return '';
+    
+    const recommendations = performanceMonitor.getPerformanceRecommendations();
+    
+    // Skip optimization on low-end devices to reduce processing
+    if (!recommendations.useWebP) {
+      return originalSrc;
+    }
     
     // Check if it's already WebP
     if (originalSrc.includes('.webp')) return originalSrc;
@@ -48,7 +53,8 @@ export const LazyImage: React.FC<LazyImageProps> = ({
       // Add responsive sizing if width is provided
       if (width) {
         const separator = webpSrc.includes('?') ? '&' : '?';
-        webpSrc += `${separator}w=${width}&q=80&f=webp`;
+        const quality = recommendations.reduceAnimations ? 60 : 80; // Lower quality for low-end devices
+        webpSrc += `${separator}w=${width}&q=${quality}&f=webp`;
       }
       
       return webpSrc;
@@ -57,23 +63,28 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     // For external images, try to add WebP format parameter
     if (originalSrc.includes('unsplash.com') || originalSrc.includes('cloudinary.com')) {
       const separator = originalSrc.includes('?') ? '&' : '?';
-      return `${originalSrc}${separator}fm=webp&q=80${width ? `&w=${width}` : ''}`;
+      const quality = recommendations.reduceAnimations ? 60 : 80;
+      return `${originalSrc}${separator}fm=webp&q=${quality}${width ? `&w=${width}` : ''}`;
     }
     
     // For other external images, try to append WebP parameters
     if (originalSrc.startsWith('http')) {
       const separator = originalSrc.includes('?') ? '&' : '?';
-      return `${originalSrc}${separator}format=webp&quality=80${width ? `&width=${width}` : ''}`;
+      const quality = recommendations.reduceAnimations ? 60 : 80;
+      return `${originalSrc}${separator}format=webp&quality=${quality}${width ? `&width=${width}` : ''}`;
     }
     
     return originalSrc;
   };
 
-  // Generate responsive srcSet for different screen densities
+  // Performance-aware responsive srcSet generation
   const generateSrcSet = (originalSrc: string): string => {
     if (!originalSrc || originalSrc.includes('data:')) return '';
     
-    const sizes = [400, 800, 1200, 1600];
+    const recommendations = performanceMonitor.getPerformanceRecommendations();
+    
+    // Reduce srcSet complexity on low-end devices
+    const sizes = recommendations.reduceAnimations ? [400, 800] : [400, 800, 1200, 1600];
     const srcSet = sizes.map(size => {
       const optimizedSrc = getOptimizedSrc(originalSrc, size);
       return `${optimizedSrc} ${size}w`;
@@ -123,72 +134,91 @@ export const LazyImage: React.FC<LazyImageProps> = ({
 
   return (
     <div ref={containerRef} className={`relative overflow-hidden ${className}`}>
-      {/* Enhanced pixel-style placeholder */}
-      {!isLoaded && (
-        <div className="absolute inset-0 bg-primary-bg-light flex items-center justify-center overflow-hidden">
-          {/* Animated pixel grid background */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="grid grid-cols-16 gap-px h-full w-full">
-              {Array.from({ length: 256 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-accent-orange animate-pulse"
-                  style={{
-                    animationDelay: `${(i % 16) * 50 + Math.floor(i / 16) * 25}ms`,
-                    animationDuration: '2s'
-                  }}
-                />
-              ))}
+      {/* Performance-aware pixel-style placeholder */}
+      {!isLoaded && (() => {
+        const recommendations = performanceMonitor.getPerformanceRecommendations();
+        
+        // Simplified placeholder for low-end devices
+        if (recommendations.reduceAnimations) {
+          return (
+            <div className="absolute inset-0 bg-primary-bg-light flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-8 h-8 border-2 border-accent-orange border-t-transparent rounded-full animate-spin mb-2"></div>
+                <span className="font-tech text-text-secondary text-sm">
+                  [LOADING...]
+                </span>
+              </div>
             </div>
-          </div>
-          
-          {/* Central loading indicator */}
-          <div className="relative z-10">
-            {/* Pixel loading animation */}
-            <div className="grid grid-cols-8 gap-1 opacity-80 mb-4">
-              {Array.from({ length: 64 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-2 h-2 bg-accent-orange animate-pulse"
-                  style={{
-                    animationDelay: `${(i % 8) * 100 + Math.floor(i / 8) * 50}ms`,
-                    animationDuration: '1.5s'
-                  }}
-                />
-              ))}
-            </div>
-            
-            {/* Loading text with typewriter effect */}
-            <div className="text-center">
-              <span className="font-tech text-text-secondary text-sm animate-pulse">
-                [LOADING_IMAGE...]
-              </span>
-              <div className="mt-2 flex justify-center gap-1">
-                {Array.from({ length: 3 }).map((_, i) => (
+          );
+        }
+        
+        // Full animated placeholder for capable devices
+        return (
+          <div className="absolute inset-0 bg-primary-bg-light flex items-center justify-center overflow-hidden">
+            {/* Animated pixel grid background */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="grid grid-cols-8 gap-px h-full w-full">
+                {Array.from({ length: 64 }).map((_, i) => (
                   <div
                     key={i}
-                    className="w-1 h-1 bg-accent-green animate-bounce"
+                    className="bg-accent-orange animate-pulse"
                     style={{
-                      animationDelay: `${i * 200}ms`,
-                      animationDuration: '1s'
+                      animationDelay: `${(i % 8) * 100 + Math.floor(i / 8) * 50}ms`,
+                      animationDuration: '2s'
                     }}
                   />
                 ))}
               </div>
             </div>
+            
+            {/* Central loading indicator */}
+            <div className="relative z-10">
+              {/* Pixel loading animation */}
+              <div className="grid grid-cols-6 gap-1 opacity-80 mb-4">
+                {Array.from({ length: 36 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-2 h-2 bg-accent-orange animate-pulse"
+                    style={{
+                      animationDelay: `${(i % 6) * 100 + Math.floor(i / 6) * 50}ms`,
+                      animationDuration: '1.5s'
+                    }}
+                  />
+                ))}
+              </div>
+              
+              {/* Loading text with typewriter effect */}
+              <div className="text-center">
+                <span className="font-tech text-text-secondary text-sm animate-pulse">
+                  [LOADING_IMAGE...]
+                </span>
+                <div className="mt-2 flex justify-center gap-1">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-1 h-1 bg-accent-green animate-bounce"
+                      style={{
+                        animationDelay: `${i * 200}ms`,
+                        animationDuration: '1s'
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Scanning line effect */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div 
+                className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-accent-orange to-transparent opacity-60 animate-scan"
+                style={{
+                  animation: 'scan 3s linear infinite'
+                }}
+              />
+            </div>
           </div>
-          
-          {/* Scanning line effect */}
-          <div className="absolute inset-0 pointer-events-none">
-            <div 
-              className="absolute w-full h-0.5 bg-gradient-to-r from-transparent via-accent-orange to-transparent opacity-60 animate-scan"
-              style={{
-                animation: 'scan 3s linear infinite'
-              }}
-            />
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Error state */}
       {hasError && (

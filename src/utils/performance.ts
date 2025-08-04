@@ -61,36 +61,58 @@ export class PerformanceMonitor {
     return measurements.reduce((sum, val) => sum + val, 0) / measurements.length;
   }
 
-  // Check if device has limited processing power
+  // Enhanced low-end device detection with more indicators
   isLowEndDevice(): boolean {
     // Check various indicators of device performance
     const checks = [
+      // CPU cores
       navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2,
+      // RAM (if available)
       navigator.deviceMemory && navigator.deviceMemory <= 2,
+      // Mobile devices with low pixel density
       /Android.*Chrome\/[.0-9]*\s(Mobile|$)/.test(navigator.userAgent),
-      window.screen.width <= 768 && window.devicePixelRatio <= 1
+      window.screen.width <= 768 && window.devicePixelRatio <= 1,
+      // Connection speed indicators
+      (navigator as any).connection?.effectiveType === 'slow-2g' || 
+      (navigator as any).connection?.effectiveType === '2g',
+      // Battery level (if available and low)
+      (navigator as any).getBattery && (navigator as any).battery?.level < 0.2,
+      // Older browsers
+      !window.IntersectionObserver || !window.requestIdleCallback
     ];
 
     return checks.filter(Boolean).length >= 2;
   }
 
-  // Get performance recommendations
+  // Enhanced performance recommendations with more granular control
   getPerformanceRecommendations(): {
     reduceAnimations: boolean;
     disableParallax: boolean;
     simplifyEffects: boolean;
+    useWebP: boolean;
+    preloadImages: boolean;
+    enableServiceWorker: boolean;
+    reducedMotion: boolean;
   } {
     const isLowEnd = this.isLowEndDevice();
     const hasSlowAnimations = Array.from(this.metrics.values())
       .some(measurements => {
+        if (measurements.length === 0) return false;
         const avg = measurements.reduce((sum, val) => sum + val, 0) / measurements.length;
         return avg > 16.67;
       });
 
+    // Check user's motion preferences
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     return {
-      reduceAnimations: isLowEnd || hasSlowAnimations,
-      disableParallax: isLowEnd,
-      simplifyEffects: isLowEnd || hasSlowAnimations
+      reduceAnimations: isLowEnd || hasSlowAnimations || prefersReducedMotion,
+      disableParallax: isLowEnd || prefersReducedMotion,
+      simplifyEffects: isLowEnd || hasSlowAnimations,
+      useWebP: !isLowEnd, // Only use WebP on capable devices
+      preloadImages: !isLowEnd, // Only preload on capable devices
+      enableServiceWorker: 'serviceWorker' in navigator,
+      reducedMotion: prefersReducedMotion
     };
   }
 }

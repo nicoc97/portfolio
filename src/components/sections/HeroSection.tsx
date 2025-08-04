@@ -4,36 +4,41 @@ import { WaveBackground } from '../ui/WaveBackground';
 import { useTypingAnimation } from '../../hooks/useTypingAnimation';
 import { HERO_CONSTANTS } from '../../constants/hero';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
+import { usePerformanceOptimization } from '../../utils/performanceOptimizer';
 
 interface HeroSectionProps {
   onNavigateToSection?: (sectionId: string) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection }) => {
+  const { shouldUseAnimation } = usePerformanceOptimization();
+  
   const displayedText = useTypingAnimation({
     strings: HERO_CONSTANTS.TYPING_STRINGS,
   });
 
-  // Animation hooks for staggered content appearance
+  // Performance-aware animation hooks for staggered content appearance
+  const useComplexAnimations = shouldUseAnimation('complex');
+  
   const { ref: nameTagRef, isVisible: nameTagVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
-    delay: 200,
-    animationType: 'pixel'
+    delay: useComplexAnimations ? 200 : 100,
+    animationType: useComplexAnimations ? 'pixel' : 'fade'
   });
   const { ref: headingRef, isVisible: headingVisible } = useScrollAnimation<HTMLHeadingElement>({ 
     threshold: 0.3, 
-    delay: 400,
-    animationType: 'slide'
+    delay: useComplexAnimations ? 400 : 150,
+    animationType: useComplexAnimations ? 'slide' : 'fade'
   });
   const { ref: subtitleRef, isVisible: subtitleVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
-    delay: 600,
+    delay: useComplexAnimations ? 600 : 200,
     animationType: 'fade'
   });
   const { ref: buttonsRef, isVisible: buttonsVisible } = useScrollAnimation<HTMLDivElement>({ 
     threshold: 0.3, 
-    delay: 800,
-    animationType: 'scale'
+    delay: useComplexAnimations ? 800 : 250,
+    animationType: useComplexAnimations ? 'scale' : 'fade'
   });
 
   // Handle navigation - use parent's navigation function if available
@@ -54,8 +59,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
 
   return (
     <section id="hero" className="section-fullscreen relative bg-primary-bg overflow-hidden">
-      {/* Wave background */}
-      <WaveBackground />
+      {/* Wave background - conditionally render based on performance */}
+      {shouldUseAnimation('complex') && <WaveBackground />}
 
       <div className="relative z-10 pt-20 md:pt-8 mobile-padding">
         <div className="flex flex-col justify-center min-h-[80vh] md:min-h-[85vh] lg:min-h-[85vh] xl:min-h-[90vh] 2xl:min-h-[95vh]">

@@ -11,6 +11,7 @@ import { ToastProvider } from './hooks/useToast';
 import { usePreloadAnimations, useCriticalPreload } from './components/lazy/LazyAnimations';
 
 import { performanceReporter } from './utils/performanceReporter';
+import { performanceMonitor } from './utils/performance';
 
 /**
  * Main App Component
@@ -64,51 +65,61 @@ function App() {
     return sections.indexOf(activeSection);
   };
 
-  // Custom easing function for smoother scrolling
+  // Optimized easing function for smoother scrolling
   const easeInOutCubic = (t: number): number => {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   };
 
-  // Smooth scroll to section with enhanced easing
+  // Optimized smooth scroll to section with performance monitoring
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (!element) return;
 
     setIsScrolling(true);
 
-    // Use custom smooth scrolling for Safari
+    // Check device capabilities for adaptive scrolling
+    const recommendations = performanceMonitor.getPerformanceRecommendations();
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const isLowEnd = recommendations.reduceAnimations;
 
-    if (isSafari) {
-      // Custom smooth scroll implementation for Safari
-      const startPosition = window.pageYOffset;
+    if (isSafari || isLowEnd) {
+      // Optimized scroll implementation for Safari and low-end devices
+      const startPosition = window.scrollY; // Use scrollY instead of deprecated pageYOffset
       const targetPosition = element.offsetTop;
       const distance = targetPosition - startPosition;
-      const duration = 800; // ms
+      const duration = isLowEnd ? 400 : 800; // Faster on low-end devices
       let start: number | null = null;
+      let rafId: number;
 
       const animateScroll = (timestamp: number) => {
         if (!start) start = timestamp;
         const progress = timestamp - start;
         const percentage = Math.min(progress / duration, 1);
 
-        // Apply easing
-        const easedPercentage = easeInOutCubic(percentage);
+        // Apply easing only on higher-end devices
+        const easedPercentage = isLowEnd ? percentage : easeInOutCubic(percentage);
 
         window.scrollTo(0, startPosition + distance * easedPercentage);
 
         if (progress < duration) {
-          requestAnimationFrame(animateScroll);
+          rafId = requestAnimationFrame(animateScroll);
         } else {
           // Ensure we're exactly at the target position
           window.scrollTo(0, targetPosition);
           setTimeout(() => {
             setIsScrolling(false);
-          }, 100);
+          }, 50); // Reduced timeout for better responsiveness
         }
       };
 
-      requestAnimationFrame(animateScroll);
+      rafId = requestAnimationFrame(animateScroll);
+
+      // Cleanup function to prevent memory leaks
+      return () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+      };
     } else {
       // Use native smooth scrolling for other browsers
       element.scrollIntoView({
@@ -119,7 +130,7 @@ function App() {
       // Reset scrolling state after animation
       setTimeout(() => {
         setIsScrolling(false);
-      }, 1000);
+      }, 600); // Reduced timeout
     }
   };
 
@@ -199,25 +210,35 @@ function App() {
     let lastDeltaY = 0;
     let consecutiveSmallDeltas = 0;
 
-    // More precise device detection - only enable scroll hijacking on 3xl screens (1920px+)
+    // Performance-aware device detection
+    const recommendations = performanceMonitor.getPerformanceRecommendations();
     const isMobileDevice = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
       (window.innerWidth <= 768 && 'ontouchstart' in window);
 
-    // Only enable scroll hijacking on 3xl screens (1920px+) and larger - very large desktop monitors
+    // Only enable scroll hijacking on 3xl screens (1920px+) and higher-end devices
     const isVeryLargeDesktop = window.innerWidth >= 1920;
-    const shouldHijackScroll = !isMobileDevice && isVeryLargeDesktop;
+    const shouldHijackScroll = !isMobileDevice && isVeryLargeDesktop && !recommendations.reduceAnimations;
 
     // Safari detection for scroll sensitivity adjustment
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     // Safari-specific scroll optimization
-    if (isSafari) {
+    if (isSafari && shouldHijackScroll) {
       // Disable elastic scrolling which can interfere
       document.documentElement.style.overscrollBehavior = 'none';
       document.body.style.overscrollBehavior = 'none';
     }
 
-    console.log('Mobile device detected:', isMobileDevice, 'Window width:', window.innerWidth, 'Very large desktop:', isVeryLargeDesktop, 'Should hijack scroll:', shouldHijackScroll, 'Safari:', isSafari);
+    if (import.meta.env.DEV) {
+      console.log('Device capabilities:', {
+        isMobile: isMobileDevice,
+        windowWidth: window.innerWidth,
+        isVeryLargeDesktop,
+        shouldHijackScroll,
+        isSafari,
+        reduceAnimations: recommendations.reduceAnimations
+      });
+    }
 
     const handleWheel = (e: WheelEvent) => {
       // Only hijack scroll on 3xl screens (1920px+) and larger

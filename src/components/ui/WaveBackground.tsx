@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useParallaxScroll } from '../../hooks/useScrollAnimation';
+import { usePerformanceOptimization } from '../../utils/performanceOptimizer';
 
 /**
  * WaveBackground Component
@@ -9,13 +10,16 @@ import { useParallaxScroll } from '../../hooks/useScrollAnimation';
  * featuring deep, symmetrical waves that flow horizontally across the screen
  */
 export const WaveBackground = () => {
+  const { shouldUseAnimation, shouldSimplifyUI } = usePerformanceOptimization();
+  
   // Generate unique IDs to avoid conflicts when component remounts
   const uniqueId = React.useId();
   
-  // Parallax effects for each wave layer with intense speeds (negative for reverse effect)
-  const wave1Parallax = useParallaxScroll(-0.6); // Background layer - dramatic movement
-  const wave2Parallax = useParallaxScroll(-0.8); // Middle layer - more intense
-  const wave3Parallax = useParallaxScroll(-1.2); // Foreground layer - most dramatic movement
+  // Performance-aware parallax effects
+  const enableParallax = shouldUseAnimation('complex') && !shouldSimplifyUI();
+  const wave1Parallax = useParallaxScroll(enableParallax ? -0.3 : 0); // Reduced intensity for performance
+  const wave2Parallax = useParallaxScroll(enableParallax ? -0.4 : 0); // Reduced intensity for performance
+  const wave3Parallax = useParallaxScroll(enableParallax ? -0.6 : 0); // Reduced intensity for performance
   
   // Detect if we're on mobile/tablet
   const [isMobile, setIsMobile] = React.useState(false);
@@ -30,6 +34,11 @@ export const WaveBackground = () => {
     
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+  
+  // Skip rendering entirely on low-end devices
+  if (!shouldUseAnimation('complex')) {
+    return null;
+  }
   
   // Wave paths for mobile (2 peaks) vs desktop (multiple peaks)
   const getWavePaths = (waveNumber: number): { initial: string; animate: string[] } => {
@@ -146,9 +155,9 @@ export const WaveBackground = () => {
             <motion.path
               fill={`url(#wave1-${uniqueId})`}
               initial={{ d: getWavePaths(1).initial }}
-              animate={{ d: getWavePaths(1).animate }}
+              animate={shouldUseAnimation('complex') ? { d: getWavePaths(1).animate } : {}}
               transition={{
-                duration: 10,
+                duration: shouldSimplifyUI() ? 15 : 10, // Slower on low-end devices
                 repeat: Infinity,
                 ease: "easeInOut",
                 repeatType: "loop"
@@ -177,9 +186,9 @@ export const WaveBackground = () => {
             <motion.path
               fill={`url(#wave2-${uniqueId})`}
               initial={{ d: getWavePaths(2).initial }}
-              animate={{ d: getWavePaths(2).animate }}
+              animate={shouldUseAnimation('complex') ? { d: getWavePaths(2).animate } : {}}
               transition={{
-                duration: 12,
+                duration: shouldSimplifyUI() ? 18 : 12, // Slower on low-end devices
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 0.5,
@@ -209,9 +218,9 @@ export const WaveBackground = () => {
             <motion.path
               fill={`url(#wave3-${uniqueId})`}
               initial={{ d: getWavePaths(3).initial }}
-              animate={{ d: getWavePaths(3).animate }}
+              animate={shouldUseAnimation('complex') ? { d: getWavePaths(3).animate } : {}}
               transition={{
-                duration: 14,
+                duration: shouldSimplifyUI() ? 20 : 14, // Slower on low-end devices
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 1,

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { performanceMonitor } from '../utils/performance';
 
 interface UseScrollAnimationOptions {
   threshold?: number;
@@ -34,6 +35,21 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
     const element = elementRef.current;
     if (!element) return;
 
+    const recommendations = performanceMonitor.getPerformanceRecommendations();
+    
+    // Skip animations entirely on low-end devices with reduced motion preference
+    if (recommendations.reducedMotion) {
+      setIsVisible(true);
+      if (triggerOnce) {
+        setHasTriggered(true);
+      }
+      return;
+    }
+
+    // Use simpler threshold for low-end devices
+    const optimizedThreshold = recommendations.reduceAnimations ? 0.2 : threshold;
+    const optimizedRootMargin = recommendations.reduceAnimations ? '0px' : rootMargin;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         // Clear any pending timeout
@@ -43,13 +59,16 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
         }
 
         if (entry.isIntersecting) {
-          if (delay > 0) {
+          // Reduce delay on low-end devices
+          const optimizedDelay = recommendations.reduceAnimations ? Math.min(delay, 100) : delay;
+          
+          if (optimizedDelay > 0) {
             timeoutRef.current = setTimeout(() => {
               setIsVisible(true);
               if (triggerOnce) {
                 setHasTriggered(true);
               }
-            }, delay);
+            }, optimizedDelay);
           } else {
             setIsVisible(true);
             if (triggerOnce) {
@@ -57,19 +76,23 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
             }
           }
         } else if (!triggerOnce && !hasTriggered) {
-          // Handle exit animation
-          if (reverseOnExit && exitDelay > 0) {
-            timeoutRef.current = setTimeout(() => {
+          // Handle exit animation (skip on low-end devices)
+          if (reverseOnExit && !recommendations.reduceAnimations) {
+            const optimizedExitDelay = recommendations.reduceAnimations ? 0 : exitDelay;
+            
+            if (optimizedExitDelay > 0) {
+              timeoutRef.current = setTimeout(() => {
+                setIsVisible(false);
+              }, optimizedExitDelay);
+            } else {
               setIsVisible(false);
-            }, exitDelay);
-          } else if (reverseOnExit) {
-            setIsVisible(false);
+            }
           }
         }
       },
       {
-        threshold,
-        rootMargin,
+        threshold: optimizedThreshold,
+        rootMargin: optimizedRootMargin,
       }
     );
 
@@ -83,9 +106,23 @@ export const useScrollAnimation = <T extends HTMLElement = HTMLElement>(options:
     };
   }, [threshold, rootMargin, triggerOnce, hasTriggered, delay, reverseOnExit, exitDelay]);
 
-  // Generate CSS classes based on animation type and visibility
+  // Generate performance-aware CSS classes based on animation type and visibility
   const getAnimationClasses = useCallback(() => {
-    const baseClasses = 'transition-all duration-700 ease-out';
+    const recommendations = performanceMonitor.getPerformanceRecommendations();
+    
+    // Skip animations entirely for reduced motion
+    if (recommendations.reducedMotion) {
+      return isVisible ? 'opacity-100' : 'opacity-50';
+    }
+
+    // Use faster transitions on low-end devices
+    const duration = recommendations.reduceAnimations ? 'duration-300' : 'duration-700';
+    const baseClasses = `transition-all ${duration} ease-out`;
+
+    // Simplify animations on low-end devices
+    if (recommendations.reduceAnimations) {
+      return `${baseClasses} ${isVisible ? 'opacity-100' : 'opacity-0'}`;
+    }
 
     switch (animationType) {
       case 'slide':
