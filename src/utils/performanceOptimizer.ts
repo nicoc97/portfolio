@@ -91,9 +91,9 @@ export class PerformanceOptimizer {
     else if (this.deviceCapabilities.connectionType === '2g') score -= 30;
     else if (this.deviceCapabilities.connectionType === '3g') score -= 15;
 
-    // Display penalty for low-resolution devices
-    if (this.deviceCapabilities.screenWidth <= 768 && this.deviceCapabilities.pixelRatio <= 1) {
-      score -= 20;
+    // Display penalty only for very low-resolution devices (reduce penalty for modern mobile)
+    if (this.deviceCapabilities.screenWidth <= 480 && this.deviceCapabilities.pixelRatio <= 1) {
+      score -= 15; // Reduced penalty for mobile devices
     }
 
     // User preference penalties
@@ -170,11 +170,11 @@ export class PerformanceOptimizer {
     const { isLowEnd, performanceScore, prefersReducedMotion, prefersReducedData } = this.deviceCapabilities;
 
     this.optimizationSettings = {
-      // Animation settings
-      enableAnimations: !prefersReducedMotion && performanceScore > 30,
-      animationDuration: isLowEnd ? 200 : 400,
-      enableComplexAnimations: performanceScore > 60,
-      enableParallax: performanceScore > 70 && !prefersReducedMotion,
+      // Animation settings - more lenient for better visual experience
+      enableAnimations: !prefersReducedMotion && performanceScore > 20, // Lowered threshold
+      animationDuration: isLowEnd ? 300 : 400, // Slightly longer for smoother feel
+      enableComplexAnimations: performanceScore > 40, // Lowered threshold for complex animations
+      enableParallax: performanceScore > 30 && !prefersReducedMotion, // Much more lenient for parallax
       
       // Image settings
       useWebP: this.deviceCapabilities.supportsWebP && performanceScore > 40,

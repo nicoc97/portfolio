@@ -59,8 +59,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
 
   return (
     <section id="hero" className="section-fullscreen relative bg-primary-bg overflow-hidden">
-      {/* Wave background - conditionally render based on performance */}
-      {shouldUseAnimation('complex') && <WaveBackground />}
+      {/* Wave background - show on all devices except very low-end */}
+      <WaveBackground />
 
       <div className="relative z-10 pt-20 md:pt-8 mobile-padding">
         <div className="flex flex-col justify-center min-h-[80vh] md:min-h-[85vh] lg:min-h-[85vh] xl:min-h-[90vh] 2xl:min-h-[95vh]">

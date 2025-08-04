@@ -10,16 +10,10 @@ import { usePerformanceOptimization } from '../../utils/performanceOptimizer';
  * featuring deep, symmetrical waves that flow horizontally across the screen
  */
 export const WaveBackground = () => {
-  const { shouldUseAnimation, shouldSimplifyUI } = usePerformanceOptimization();
+  const { shouldUseAnimation, shouldSimplifyUI, getDeviceCapabilities } = usePerformanceOptimization();
   
   // Generate unique IDs to avoid conflicts when component remounts
   const uniqueId = React.useId();
-  
-  // Performance-aware parallax effects
-  const enableParallax = shouldUseAnimation('complex') && !shouldSimplifyUI();
-  const wave1Parallax = useParallaxScroll(enableParallax ? -0.3 : 0); // Reduced intensity for performance
-  const wave2Parallax = useParallaxScroll(enableParallax ? -0.4 : 0); // Reduced intensity for performance
-  const wave3Parallax = useParallaxScroll(enableParallax ? -0.6 : 0); // Reduced intensity for performance
   
   // Detect if we're on mobile/tablet
   const [isMobile, setIsMobile] = React.useState(false);
@@ -34,11 +28,24 @@ export const WaveBackground = () => {
     
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  // More nuanced performance logic - keep waves on mobile unless device is really struggling
+  const deviceCapabilities = getDeviceCapabilities();
+  const isVeryLowEnd = deviceCapabilities && deviceCapabilities.performanceScore < 30;
+  const prefersReducedMotion = deviceCapabilities?.prefersReducedMotion || false;
   
-  // Skip rendering entirely on low-end devices
-  if (!shouldUseAnimation('complex')) {
+  // Only skip rendering on very low-end devices or if user prefers reduced motion
+  if (isVeryLowEnd || prefersReducedMotion) {
     return null;
   }
+
+  // Smart parallax configuration based on device and screen size
+  const enableParallax = shouldUseAnimation('simple'); // Use 'simple' instead of 'complex' for broader support
+  const parallaxIntensity = isMobile ? 0.5 : 1.0; // Reduce intensity on mobile for better performance
+  
+  const wave1Parallax = useParallaxScroll(enableParallax ? -0.3 * parallaxIntensity : 0);
+  const wave2Parallax = useParallaxScroll(enableParallax ? -0.4 * parallaxIntensity : 0);
+  const wave3Parallax = useParallaxScroll(enableParallax ? -0.6 * parallaxIntensity : 0);
   
   // Wave paths for mobile (2 peaks) vs desktop (multiple peaks)
   const getWavePaths = (waveNumber: number): { initial: string; animate: string[] } => {
@@ -155,9 +162,9 @@ export const WaveBackground = () => {
             <motion.path
               fill={`url(#wave1-${uniqueId})`}
               initial={{ d: getWavePaths(1).initial }}
-              animate={shouldUseAnimation('complex') ? { d: getWavePaths(1).animate } : {}}
+              animate={{ d: getWavePaths(1).animate }}
               transition={{
-                duration: shouldSimplifyUI() ? 15 : 10, // Slower on low-end devices
+                duration: isMobile ? 12 : shouldSimplifyUI() ? 15 : 10, // Slightly slower on mobile for smoother performance
                 repeat: Infinity,
                 ease: "easeInOut",
                 repeatType: "loop"
@@ -186,9 +193,9 @@ export const WaveBackground = () => {
             <motion.path
               fill={`url(#wave2-${uniqueId})`}
               initial={{ d: getWavePaths(2).initial }}
-              animate={shouldUseAnimation('complex') ? { d: getWavePaths(2).animate } : {}}
+              animate={{ d: getWavePaths(2).animate }}
               transition={{
-                duration: shouldSimplifyUI() ? 18 : 12, // Slower on low-end devices
+                duration: isMobile ? 14 : shouldSimplifyUI() ? 18 : 12, // Slightly slower on mobile for smoother performance
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 0.5,
@@ -218,9 +225,9 @@ export const WaveBackground = () => {
             <motion.path
               fill={`url(#wave3-${uniqueId})`}
               initial={{ d: getWavePaths(3).initial }}
-              animate={shouldUseAnimation('complex') ? { d: getWavePaths(3).animate } : {}}
+              animate={{ d: getWavePaths(3).animate }}
               transition={{
-                duration: shouldSimplifyUI() ? 20 : 14, // Slower on low-end devices
+                duration: isMobile ? 16 : shouldSimplifyUI() ? 20 : 14, // Slightly slower on mobile for smoother performance
                 repeat: Infinity,
                 ease: "easeInOut",
                 delay: 1,
