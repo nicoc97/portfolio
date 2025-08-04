@@ -36,7 +36,6 @@
     -webkit-text-size-adjust: 100%;
     /* Performance optimizations for low-end devices */
     will-change: auto; /* Reset will-change to prevent unnecessary compositing */
-    transform: translateZ(0); /* Force hardware acceleration only when needed */
   }
 
   /* Hide scrollbar while keeping scroll functionality */
