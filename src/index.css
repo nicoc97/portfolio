@@ -575,3 +575,59 @@
     backface-visibility: hidden;
   }
 }
+
+/* Wavy Timeline Animations */
+@keyframes waveDraw {
+  0% {
+    stroke-dasharray: 0 1000;
+  }
+  100% {
+    stroke-dasharray: 1000 0;
+  }
+}
+
+@keyframes timelinePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes timelineFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.wavy-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: waveDraw 2s ease-in-out forwards;
+}
+
+.timeline-dot-pulse {
+  animation: timelinePulse 2s ease-in-out infinite;
+}
+
+.timeline-card-float {
+  animation: timelineFloat 3s ease-in-out infinite;
+}
+
+.timeline-card-float:nth-child(2n) {
+  animation-delay: -1.5s;
+}
+
+.timeline-card-float:nth-child(3n) {
+  animation-delay: -1s;
+}
+
+.timeline-card-float:nth-child(4n) {
+  animation-delay: -0.5s;
+}

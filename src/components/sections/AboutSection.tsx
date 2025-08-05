@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
+import { WavyTimeline } from '../ui/WavyTimeline';
 
 /**
  * Counter Hook for animated numbers
@@ -295,14 +296,15 @@ export const AboutSection: React.FC = () => {
 
                 {/* Third Column - Site Details */}
                 <div className="space-y-16 lg:space-y-20 xl:space-y-24 lg:mt-6 xl:mt-8 lg:col-span-1">
-                  <div className="lg:max-w-xs xl:max-w-sm">
+                  <div className="w-full">
                     <h3 className="text-lg md:text-xl font-bold text-accent-green font-tech mb-6 uppercase tracking-wide">
                       This Site
                     </h3>
 
-                    {/* Built With glass box - offset to create asymmetry */}
-                    <div className="lg:ml-4 xl:ml-6 mb-8 lg:mb-12">
-                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 shadow-lg shadow-accent-orange/10 hover:border-accent-orange/30 transition-all duration-300">
+                    {/* Boxes container - side by side */}
+                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+                      {/* Built With glass box */}
+                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 shadow-lg shadow-accent-orange/10 hover:border-accent-orange/30 transition-all duration-300 flex-1">
                         <h4 className="text-base font-bold text-accent-orange font-tech mb-4 uppercase tracking-wide">
                           Built With
                         </h4>
@@ -315,11 +317,9 @@ export const AboutSection: React.FC = () => {
                           <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Accessibility Focused</div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Features glass box - different offset for asymmetry */}
-                    <div className="lg:mr-2 xl:mr-4">
-                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-green/20 rounded-lg p-6 shadow-lg shadow-accent-green/10 hover:border-accent-green/30 transition-all duration-300">
+                      {/* Features glass box with margin top */}
+                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-green/20 rounded-lg p-6 shadow-lg shadow-accent-green/10 hover:border-accent-green/30 transition-all duration-300 flex-1 lg:mt-8">
                         <h4 className="text-base font-bold text-accent-green font-tech mb-4 uppercase tracking-wide">
                           Features
                         </h4>
@@ -338,6 +338,8 @@ export const AboutSection: React.FC = () => {
               </div>
             </div>
           </div>
+          {/* Wavy Timeline */}
+          <WavyTimeline />
         </div>
       </div>
     </section>
