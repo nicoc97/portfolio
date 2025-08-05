@@ -203,7 +203,7 @@ export const getSkillByName = (name: string): TechSkill | undefined => {
 
 export const skillCategories = [
   { key: 'frontend' as const, label: 'Frontend', color: 'accent-orange' },
-  { key: 'backend' as const, label: 'Backend & CMS', color: 'accent-green' },
+  { key: 'backend' as const, label: 'Backend & CMS', color: 'accent-orange' },
   { key: 'database' as const, label: 'Database', color: 'accent-green' },
   { key: 'data-science' as const, label: 'Data Science', color: 'accent-green' },
   { key: 'tools' as const, label: 'Tools', color: 'accent-green' }

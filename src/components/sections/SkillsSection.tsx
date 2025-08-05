@@ -27,7 +27,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -227,8 +227,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
             {skillCategories.map((category) => {
               const categorySkills = getSkillsByCategory(category.key);
               const isSelected = selectedCategory === category.key;
-              const isOrange = category.key === 'frontend';
-              
+              const isOrange = category.color === 'accent-orange';
+
               return (
                 <div key={category.key} className="overflow-hidden rounded-lg">
                   <button
@@ -302,8 +302,8 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
 
                   {skillCategories.map((category) => {
                     const categorySkills = getSkillsByCategory(category.key);
-                    const isOrange = category.key === 'frontend';
-                    
+                    const isOrange = category.color === 'accent-orange';
+
                     return (
                       <button
                         key={category.key}
@@ -311,7 +311,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                         className={`
                           w-full px-4 py-3 rounded-lg font-tech text-lg border-2 transition-all duration-200 text-left skills-filter-button
                           ${selectedCategory === category.key
-                            ? isOrange 
+                            ? isOrange
                               ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
                               : 'bg-accent-green text-primary-bg border-accent-green shadow-lg transform translate-x-2'
                             : isOrange
@@ -461,7 +461,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                     hover:scale-105
                     group cursor-pointer
                     ${getSummaryClasses(index, 'slide')}
-                    ${category.key === 'frontend' ? 'hover:border-accent-orange/50 hover:shadow-lg hover:shadow-accent-orange/10' : 'hover:border-accent-green/50 hover:shadow-lg hover:shadow-accent-green/10'}
+                    ${category.color === 'accent-orange' ? 'hover:border-accent-orange/50 hover:shadow-lg hover:shadow-accent-orange/10' : 'hover:border-accent-green/50 hover:shadow-lg hover:shadow-accent-green/10'}
                   `}
                   style={{
                     animationDelay: `${index * 150}ms`
@@ -469,7 +469,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ className = '' }) 
                 >
                   <h3 className={`
                     font-tech text-gray-400 text-sm mb-2 uppercase tracking-wider transition-colors duration-300
-                    ${category.key === 'frontend' ? 'group-hover:text-accent-orange' : 'group-hover:text-accent-green'}
+                    ${category.color === 'accent-orange' ? 'group-hover:text-accent-orange' : 'group-hover:text-accent-green'}
                   `}>
                     {category.label}
                   </h3>

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import type { TechBadgeProps } from '../../types';
+import { skillCategories } from '../../constants/skills';
 
 export const TechBadge: React.FC<TechBadgeProps> = ({ 
   skill, 
@@ -39,33 +40,28 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
 
   // Category-based styling with pixel aesthetic
   const getCategoryStyles = () => {
-    switch (skill.category) {
-      case 'frontend':
-        return {
-          border: 'border-accent-orange',
-          bg: 'bg-accent-orange-dark/20',
-          text: 'text-accent-orange',
-          iconBg: 'bg-accent-orange',
-          iconText: 'text-primary-bg',
-          glow: 'shadow-accent-orange/30',
-          tooltipBorder: 'border-accent-green',
-          tooltipText: 'text-accent-orange'
-        };
-      case 'backend':
-      case 'database':
-      case 'tools':
-      default:
-        return {
-          border: 'border-accent-green',
-          bg: 'bg-accent-green-dark/20',
-          text: 'text-accent-green',
-          iconBg: 'bg-accent-green',
-          iconText: 'text-primary-bg',
-          glow: 'shadow-accent-green/30',
-          tooltipBorder: 'border-accent-green',
-          tooltipText: 'text-accent-green'
-        };
-    }
+    const categoryConfig = skillCategories.find(cat => cat.key === skill.category);
+    const isOrange = categoryConfig?.color === 'accent-orange';
+    
+    return isOrange ? {
+      border: 'border-accent-orange',
+      bg: 'bg-accent-orange-dark/20',
+      text: 'text-accent-orange',
+      iconBg: 'bg-accent-orange',
+      iconText: 'text-primary-bg',
+      glow: 'shadow-accent-orange/30',
+      tooltipBorder: 'border-accent-orange',
+      tooltipText: 'text-accent-orange'
+    } : {
+      border: 'border-accent-green',
+      bg: 'bg-accent-green-dark/20',
+      text: 'text-accent-green',
+      iconBg: 'bg-accent-green',
+      iconText: 'text-primary-bg',
+      glow: 'shadow-accent-green/30',
+      tooltipBorder: 'border-accent-green',
+      tooltipText: 'text-accent-green'
+    };
   };
 
   const styles = getCategoryStyles();
@@ -103,7 +99,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
         ${getInteractionClasses()}
         ${getAnimationClasses()}
         focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-primary-bg
-        ${skill.category === 'frontend' ? 'focus:ring-accent-orange' : 'focus:ring-accent-green'}
+        ${skillCategories.find(cat => cat.key === skill.category)?.color === 'accent-orange' ? 'focus:ring-accent-orange' : 'focus:ring-accent-green'}
         ${className}
       `}
       onMouseEnter={() => setIsHovered(true)}
@@ -124,7 +120,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
           className={`
             w-8 h-8 flex items-center justify-center text-sm font-bold
             rounded border-2 ${styles.iconBg} ${styles.iconText}
-            ${skill.category === 'frontend' ? 'border-accent-orange-soft' : 'border-accent-green-soft'}
+            ${skillCategories.find(cat => cat.key === skill.category)?.color === 'accent-orange' ? 'border-accent-orange-soft' : 'border-accent-green-soft'}
             transition-transform duration-200
             ${isHovered || isFocused ? 'scale-110' : ''}
           `}
@@ -189,7 +185,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
             <div 
               className={`
                 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-transparent
-                ${skill.category === 'frontend' ? 'border-t-accent-orange' : 'border-t-accent-green'}
+                ${skillCategories.find(cat => cat.key === skill.category)?.color === 'accent-orange' ? 'border-t-accent-orange' : 'border-t-accent-green'}
               `}
             />
           </div>

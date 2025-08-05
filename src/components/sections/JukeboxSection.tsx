@@ -296,7 +296,10 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
 
                       {/* Center colored label */}
                       <div
-                        className="absolute inset-[16px] lg:inset-[24px] rounded-full shadow-inner"
+                        className={`
+                          absolute inset-[16px] lg:inset-[24px] rounded-full shadow-inner
+                          ${selectedAlbum.id === album.id ? 'ring-2 ring-white/80 ring-offset-1 ring-offset-black' : ''}
+                        `}
                         style={{
                           backgroundColor: album.labelColor,
                           boxShadow: `inset 0 2px 4px rgba(0,0,0,0.3)`
