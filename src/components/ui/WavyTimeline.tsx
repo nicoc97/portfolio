@@ -77,7 +77,9 @@ const timelineData: TimelineItem[] = [
 
 export const WavyTimeline: React.FC = () => {
   const svgRef = useRef<SVGSVGElement>(null);
+  const mobileSvgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const { ref: timelineRef, isVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.2,
@@ -85,46 +87,65 @@ export const WavyTimeline: React.FC = () => {
   });
 
   // Generate wavy path with multiple sine waves for more organic feel
-  const generateWavyPath = (width: number, height: number) => {
-    const amplitude1 = 25;
-    const amplitude2 = 15;
-    const frequency1 = 0.008;
-    const frequency2 = 0.015;
-    const points: string[] = [];
-    
-    for (let x = 0; x <= width; x += 8) {
-      const wave1 = Math.sin(x * frequency1) * amplitude1;
-      const wave2 = Math.sin(x * frequency2 + Math.PI / 4) * amplitude2;
-      const y = height / 2 + wave1 + wave2;
-      points.push(`${x},${y}`);
+  const generateWavyPath = (width: number, height: number, isVertical: boolean = false) => {
+    if (isVertical) {
+      const amplitude1 = 15;
+      const amplitude2 = 10;
+      const frequency1 = 0.01;
+      const frequency2 = 0.02;
+      const points: string[] = [];
+      
+      for (let y = 0; y <= height; y += 8) {
+        const wave1 = Math.sin(y * frequency1) * amplitude1;
+        const wave2 = Math.sin(y * frequency2 + Math.PI / 4) * amplitude2;
+        const x = width / 2 + wave1 + wave2;
+        points.push(`${x},${y}`);
+      }
+      
+      return `M ${points.join(' L ')}`;
+    } else {
+      const amplitude1 = 25;
+      const amplitude2 = 15;
+      const frequency1 = 0.008;
+      const frequency2 = 0.015;
+      const points: string[] = [];
+      
+      for (let x = 0; x <= width; x += 8) {
+        const wave1 = Math.sin(x * frequency1) * amplitude1;
+        const wave2 = Math.sin(x * frequency2 + Math.PI / 4) * amplitude2;
+        const y = height / 2 + wave1 + wave2;
+        points.push(`${x},${y}`);
+      }
+      
+      return `M ${points.join(' L ')}`;
     }
-    
-    return `M ${points.join(' L ')}`;
-  };
-
-  // Generate vertical path for mobile
-  const generateVerticalPath = (width: number, height: number) => {
-    const x = width / 2;
-    return `M ${x},0 L ${x},${height}`;
   };
 
   useEffect(() => {
-    if (!svgRef.current || !containerRef.current) return;
-    
-    const container = containerRef.current;
-    const svg = svgRef.current;
-    const rect = container.getBoundingClientRect();
-    const path = svg.querySelector('.wavy-path') as SVGPathElement;
-    const mobilePath = svg.querySelector('.mobile-path') as SVGPathElement;
-    
-    if (path) {
-      const wavyPath = generateWavyPath(rect.width, rect.height);
-      path.setAttribute('d', wavyPath);
+    // Desktop path
+    if (svgRef.current && containerRef.current) {
+      const container = containerRef.current;
+      const svg = svgRef.current;
+      const rect = container.getBoundingClientRect();
+      const path = svg.querySelector('.wavy-path') as SVGPathElement;
+      
+      if (path) {
+        const wavyPath = generateWavyPath(rect.width, rect.height, false);
+        path.setAttribute('d', wavyPath);
+      }
     }
     
-    if (mobilePath) {
-      const verticalPath = generateVerticalPath(rect.width, rect.height);
-      mobilePath.setAttribute('d', verticalPath);
+    // Mobile path
+    if (mobileSvgRef.current && mobileContainerRef.current) {
+      const container = mobileContainerRef.current;
+      const svg = mobileSvgRef.current;
+      const rect = container.getBoundingClientRect();
+      const path = svg.querySelector('.mobile-wavy-path') as SVGPathElement;
+      
+      if (path) {
+        const verticalWavyPath = generateWavyPath(rect.width, rect.height, true);
+        path.setAttribute('d', verticalWavyPath);
+      }
     }
   }, [isVisible]);
 
@@ -135,32 +156,28 @@ export const WavyTimeline: React.FC = () => {
           dot: 'bg-accent-orange border-accent-orange shadow-accent-orange/30',
           text: 'text-accent-orange',
           border: 'border-accent-orange/20 hover:border-accent-orange/40',
-          shadow: 'shadow-accent-orange/10',
-          gradient: '#ff6b35'
+          shadow: 'shadow-accent-orange/10'
         };
       case 'green':
         return {
           dot: 'bg-accent-green border-accent-green shadow-accent-green/30',
           text: 'text-accent-green',
           border: 'border-accent-green/20 hover:border-accent-green/40',
-          shadow: 'shadow-accent-green/10',
-          gradient: '#4ade80'
+          shadow: 'shadow-accent-green/10'
         };
       case 'blue':
         return {
           dot: 'bg-blue-400 border-blue-400 shadow-blue-400/30',
           text: 'text-blue-400',
           border: 'border-blue-400/20 hover:border-blue-400/40',
-          shadow: 'shadow-blue-400/10',
-          gradient: '#60a5fa'
+          shadow: 'shadow-blue-400/10'
         };
       default:
         return {
           dot: 'bg-text-primary border-text-primary shadow-text-primary/30',
           text: 'text-text-primary',
           border: 'border-text-primary/20 hover:border-text-primary/40',
-          shadow: 'shadow-text-primary/10',
-          gradient: '#ffffff'
+          shadow: 'shadow-text-primary/10'
         };
     }
   };
@@ -170,38 +187,62 @@ export const WavyTimeline: React.FC = () => {
       ref={timelineRef}
       className={`mt-32 animate-slide-up ${isVisible ? 'visible' : ''} w-full overflow-hidden`}
     >
-      {/* Mobile Layout - Vertical Timeline */}
+      {/* Mobile Layout - Vertical Timeline with Wavy Center Line */}
       <div className="lg:hidden">
-        <div ref={containerRef} className="relative">
-          {/* Vertical line for mobile */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent-orange via-accent-green to-blue-400 opacity-30"></div>
+        {/* Career Timeline Tag - Mobile Only */}
+        <div className="text-center mb-8">
+          <span className="inline-block text-sm font-tech uppercase tracking-wider text-accent-green bg-accent-green/20 px-4 py-2 rounded-full border border-accent-green/30">
+            Career Timeline
+          </span>
+        </div>
+
+        <div ref={mobileContainerRef} className="relative">
+          {/* Vertical Wavy SVG for mobile - behind content */}
+          <svg
+            ref={mobileSvgRef}
+            className="absolute inset-0 w-full h-full pointer-events-none"
+            preserveAspectRatio="none"
+            style={{ height: `${timelineData.length * 320}px` }}
+          >
+            <path
+              className="mobile-wavy-path"
+              stroke="url(#mobile-gradient)"
+              strokeWidth="2"
+              fill="none"
+              opacity="0.4"
+            />
+            <defs>
+              <linearGradient id="mobile-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#ff6b35" />
+                <stop offset="33%" stopColor="#4ade80" />
+                <stop offset="66%" stopColor="#60a5fa" />
+                <stop offset="100%" stopColor="#ff6b35" />
+              </linearGradient>
+            </defs>
+          </svg>
           
-          {/* Timeline Items - Vertical Layout */}
-          <div className="relative space-y-8 py-8">
+          {/* Timeline Items - Full Width Stacked */}
+          <div className="relative space-y-6 py-4">
             {timelineData.map((item) => {
               const colors = getColorClasses(item.color);
-              const isActive = activeItem === item.id;
               
               return (
                 <div
                   key={item.id}
-                  className="relative flex items-start gap-6"
+                  className="relative"
                   onMouseEnter={() => setActiveItem(item.id)}
                   onMouseLeave={() => setActiveItem(null)}
                 >
-                  {/* Timeline Dot */}
-                  <div className={`relative flex-shrink-0 w-4 h-4 rounded-full border-2 ${colors.dot} shadow-lg transition-all duration-300 timeline-dot-pulse ${isActive ? 'scale-125' : ''} ml-6 mt-6`} />
-                  
-                  {/* Content Card */}
-                  <div className={`flex-1 bg-primary-bg/80 backdrop-blur-sm border ${colors.border} ${colors.shadow} rounded-lg p-4 shadow-lg transition-all duration-300 ${isActive ? 'scale-105' : ''}`}>
+                  {/* Content Card - Full Width */}
+                  <div className={`bg-primary-bg/80 backdrop-blur-sm border ${colors.border} ${colors.shadow} rounded-lg p-5 shadow-lg transition-all duration-300`}>
                     <div className="mb-3">
                       <h4 className={`font-bold ${colors.text} font-tech text-xs uppercase tracking-wide mb-1`}>
                         {item.company}
                       </h4>
-                      <h5 className="text-text-primary font-retro text-base font-bold mb-2">
+                      <h5 className="text-text-primary font-retro text-lg font-bold mb-2">
                         {item.role}
                       </h5>
-                      <p className="text-text-secondary text-xs mb-1">
+                      <p className="text-text-secondary text-sm mb-1">
                         {item.period}
                       </p>
                       <p className="text-text-secondary text-xs">
@@ -209,22 +250,17 @@ export const WavyTimeline: React.FC = () => {
                       </p>
                     </div>
                     
-                    <p className="text-text-secondary text-xs mb-3 leading-relaxed">
+                    <p className="text-text-secondary text-sm mb-4 leading-relaxed">
                       {item.description}
                     </p>
                     
                     <div className="space-y-1">
-                      {item.highlights.slice(0, 2).map((highlight, idx) => (
+                      {item.highlights.map((highlight, idx) => (
                         <div key={idx} className="text-xs text-text-secondary flex items-start">
                           <span className={`${colors.text} mr-2 mt-0.5`}>•</span>
                           <span>{highlight}</span>
                         </div>
                       ))}
-                      {item.highlights.length > 2 && (
-                        <div className="text-xs text-text-secondary/70 mt-2">
-                          +{item.highlights.length - 2} more...
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
