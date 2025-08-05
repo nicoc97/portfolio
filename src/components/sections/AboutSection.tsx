@@ -44,7 +44,7 @@ export const AboutSection: React.FC = () => {
     reverseOnExit: true,
     exitDelay: 100
   });
-  const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation<HTMLDivElement>(4, 200, {
+  const { triggerRef: contentTriggerRef, visibleItems: contentVisible } = useStaggeredAnimation<HTMLDivElement>(5, 200, {
     triggerOnce: false,
     reverseOnExit: true
   });
@@ -78,16 +78,7 @@ export const AboutSection: React.FC = () => {
         {/* Main Content */}
         <div ref={contentTriggerRef} className="space-y-20">
 
-          {/* Brief Introduction */}
-          <div className={`animate-slide-up ${contentVisible[0] ? 'visible' : ''}`}>
-            <div className="max-w-4xl">
-              <p className="text-lg md:text-xl lg:text-2xl xl:text-2xl 2xl:text-3xl text-text-primary leading-relaxed font-light">
-                Collaborative web developer focused on delivering results through
-                <span className="text-accent-orange font-medium"> teamwork</span> and
-                <span className="text-accent-green font-medium"> innovation</span>.
-              </p>
-            </div>
-          </div>
+
 
           {/* Mobile Layout - Traditional Stacked */}
           <div className="lg:hidden">
@@ -143,7 +134,7 @@ export const AboutSection: React.FC = () => {
 
             {/* Core Stack Section - Mobile */}
             <div className={`animate-slide-up ${contentVisible[3] ? 'visible' : ''}`}>
-              <div>
+              <div className="mb-16">
                 <h3 className="text-lg md:text-xl font-bold text-accent-orange font-tech mb-6 uppercase tracking-wide">
                   Core Stack
                 </h3>
@@ -159,15 +150,77 @@ export const AboutSection: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* This Site Section - Mobile */}
+            <div className={`animate-slide-up ${contentVisible[4] ? 'visible' : ''}`}>
+              <div>
+                <h3 className="text-lg md:text-xl font-bold text-accent-green font-tech mb-6 uppercase tracking-wide">
+                  This Site
+                </h3>
+
+                {/* Built With glass box */}
+                <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 mb-6 shadow-lg shadow-accent-orange/10">
+                  <h4 className="text-base font-bold text-accent-orange font-tech mb-4 uppercase tracking-wide">
+                    Built With
+                  </h4>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-3 group">
+                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">⚛</span>
+                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">React & TypeScript</span>
+                    </div>
+
+                    <div className="flex items-center space-x-3 group">
+                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">⚡</span>
+                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Vite Build Tool</span>
+                    </div>
+
+                    <div className="flex items-center space-x-3 group">
+                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">🎨</span>
+                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Tailwind CSS</span>
+                    </div>
+
+                    <div className="flex items-center space-x-3 group">
+                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">📱</span>
+                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Responsive Design</span>
+                    </div>
+
+                    <div className="flex items-center space-x-3 group">
+                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">🚀</span>
+                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Performance Optimized</span>
+                    </div>
+
+                    <div className="flex items-center space-x-3 group">
+                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">♿</span>
+                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Accessibility Focused</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Features glass box */}
+                <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-green/20 rounded-lg p-6 shadow-lg shadow-accent-green/10">
+                  <h4 className="text-base font-bold text-accent-green font-tech mb-4 uppercase tracking-wide">
+                    Features
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Smooth scroll navigation</div>
+                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Interactive project filtering</div>
+                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Music jukebox integration</div>
+                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Performance monitoring</div>
+                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Service worker caching</div>
+                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Animated skill showcase</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* Desktop Layout - Original Side-by-Side */}
+          {/* Desktop Layout - Three Column Layout */}
           <div className="hidden lg:block">
             <div className={`animate-slide-up ${contentVisible[1] ? 'visible' : ''}`}>
-              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 items-start">
+              <div className="grid lg:grid-cols-3 gap-8 lg:gap-12 xl:gap-16 items-start">
 
                 {/* Left Column - Stats Counters */}
-                <div className="space-y-12 lg:space-y-16 xl:space-y-20">
+                <div className="space-y-12 lg:space-y-16 xl:space-y-20 lg:col-span-1">
                   <div className="flex items-center gap-8">
                     <div className="text-4xl md:text-5xl lg:text-6xl xl:text-6xl 2xl:text-7xl 3xl:text-8xl font-bold font-retro">
                       {yearsCount}+
@@ -185,7 +238,7 @@ export const AboutSection: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-text-secondary text-lg font-tech uppercase tracking-wide">
-                      Team COLLABORATIONS
+                        Team COLLABORATIONS
                       </p>
                     </div>
                   </div>
@@ -196,14 +249,14 @@ export const AboutSection: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-text-secondary text-lg font-tech uppercase tracking-wide">
-                      Technologies Mastered
+                        Technologies Mastered
                       </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Right Column - Content Sections */}
-                <div className="space-y-16 lg:space-y-20 xl:space-y-24 lg:mt-6 xl:mt-8">
+                <div className="space-y-16 lg:space-y-20 xl:space-y-24 lg:mt-6 xl:mt-8 lg:col-span-1">
 
                   {/* Currently */}
                   <div className="max-w-md">
@@ -226,7 +279,7 @@ export const AboutSection: React.FC = () => {
                     <h3 className="text-lg md:text-xl font-bold text-accent-orange font-tech mb-6 uppercase tracking-wide">
                       Core Stack
                     </h3>
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-3">
                       {['React', 'WordPress', 'PHP', 'JavaScript', 'C#', '.NET'].map((tech) => (
                         <span
                           key={tech}
@@ -238,6 +291,49 @@ export const AboutSection: React.FC = () => {
                     </div>
                   </div>
 
+                </div>
+
+                {/* Third Column - Site Details */}
+                <div className="space-y-16 lg:space-y-20 xl:space-y-24 lg:mt-6 xl:mt-8 lg:col-span-1">
+                  <div className="lg:max-w-xs xl:max-w-sm">
+                    <h3 className="text-lg md:text-xl font-bold text-accent-green font-tech mb-6 uppercase tracking-wide">
+                      This Site
+                    </h3>
+
+                    {/* Built With glass box - offset to create asymmetry */}
+                    <div className="lg:ml-4 xl:ml-6 mb-8 lg:mb-12">
+                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 shadow-lg shadow-accent-orange/10 hover:border-accent-orange/30 transition-all duration-300">
+                        <h4 className="text-base font-bold text-accent-orange font-tech mb-4 uppercase tracking-wide">
+                          Built With
+                        </h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• React & TypeScript</div>
+                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Vite Build Tool</div>
+                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Tailwind CSS</div>
+                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Responsive Design</div>
+                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Performance Optimized</div>
+                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Accessibility Focused</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Features glass box - different offset for asymmetry */}
+                    <div className="lg:mr-2 xl:mr-4">
+                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-green/20 rounded-lg p-6 shadow-lg shadow-accent-green/10 hover:border-accent-green/30 transition-all duration-300">
+                        <h4 className="text-base font-bold text-accent-green font-tech mb-4 uppercase tracking-wide">
+                          Features
+                        </h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Smooth scroll navigation</div>
+                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Interactive project filtering</div>
+                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Music jukebox integration</div>
+                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Performance monitoring</div>
+                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Service worker caching</div>
+                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Animated skill showcase</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
