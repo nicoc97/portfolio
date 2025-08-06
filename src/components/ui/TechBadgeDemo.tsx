@@ -8,6 +8,9 @@ import { techSkills, skillCategories } from '../../constants/skills';
  */
 export const TechBadgeDemo: React.FC = () => {
   const handleBadgeClick = (skillName: string) => {
+    if (import.meta.env.DEV) {
+      console.log(`Clicked on ${skillName} skill badge`);
+    }
     // Badge click handler - could be used for analytics
   };
 

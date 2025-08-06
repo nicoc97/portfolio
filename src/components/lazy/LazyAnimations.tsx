@@ -13,7 +13,9 @@ const ScrollAnimations = React.lazy(() => {
   return import('../animations/ScrollAnimations').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('scroll-animations-load', () => {
-      // ScrollAnimations loaded successfully
+      if (import.meta.env.DEV) {
+        console.log(`ScrollAnimations loaded in ${loadTime.toFixed(2)}ms`);
+      }
     });
     return { default: module.ScrollReveal };
   }).catch(error => {
@@ -31,7 +33,9 @@ const ThreeJSComponents = React.lazy(() => {
   return import('../ui/WaveBackground').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('threejs-load', () => {
-      // Three.js components loaded successfully
+      if (import.meta.env.DEV) {
+        console.log(`Three.js components loaded in ${loadTime.toFixed(2)}ms`);
+      }
     });
     return { default: module.WaveBackground };
   }).catch(error => {
@@ -49,7 +53,9 @@ const SwiperComponents = React.lazy(() => {
   return import('swiper/react').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('swiper-load', () => {
-      // Swiper components loaded successfully
+      if (import.meta.env.DEV) {
+        console.log(`Swiper components loaded in ${loadTime.toFixed(2)}ms`);
+      }
     });
     return { default: module.Swiper };
   }).catch(error => {

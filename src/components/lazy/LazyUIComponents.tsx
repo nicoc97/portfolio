@@ -12,7 +12,9 @@ const VinylRecordComponent = React.lazy(() => {
   return import('../ui/VinylRecord').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('vinyl-record-load', () => {
-      // VinylRecord loaded successfully
+      if (import.meta.env.DEV) {
+        console.log(`VinylRecord loaded in ${loadTime.toFixed(2)}ms`);
+      }
     });
     return { default: module.VinylRecord };
   }).catch(error => {
@@ -33,7 +35,9 @@ const VintageTVDialComponent = React.lazy(() => {
   return import('../ui/VintageTVDial').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('tv-dial-load', () => {
-      // VintageTVDial loaded successfully
+      if (import.meta.env.DEV) {
+        console.log(`VintageTVDial loaded in ${loadTime.toFixed(2)}ms`);
+      }
     });
     return { default: module.VintageTVDial };
   }).catch(error => {
@@ -54,7 +58,9 @@ const VinylLightboxComponent = React.lazy(() => {
   return import('../ui/VinylLightbox').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('vinyl-lightbox-load', () => {
-      // VinylLightbox loaded successfully
+      if (import.meta.env.DEV) {
+        console.log(`VinylLightbox loaded in ${loadTime.toFixed(2)}ms`);
+      }
     });
     return { default: module.VinylLightbox };
   }).catch(error => {
