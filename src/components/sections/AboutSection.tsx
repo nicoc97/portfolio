@@ -160,55 +160,17 @@ export const AboutSection: React.FC = () => {
                 </h3>
 
                 {/* Built With glass box */}
-                <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 mb-6 shadow-lg shadow-accent-orange/10">
+                <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 shadow-lg shadow-accent-orange/10 hover:border-accent-orange/30 transition-all duration-300 w-fit">
                   <h4 className="text-base font-bold text-accent-orange font-tech mb-4 uppercase tracking-wide">
                     Built With
                   </h4>
-                  <div className="space-y-4">
-                    <div className="flex items-center space-x-3 group">
-                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">⚛</span>
-                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">React & TypeScript</span>
-                    </div>
-
-                    <div className="flex items-center space-x-3 group">
-                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">⚡</span>
-                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Vite Build Tool</span>
-                    </div>
-
-                    <div className="flex items-center space-x-3 group">
-                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">🎨</span>
-                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Tailwind CSS</span>
-                    </div>
-
-                    <div className="flex items-center space-x-3 group">
-                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">📱</span>
-                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Responsive Design</span>
-                    </div>
-
-                    <div className="flex items-center space-x-3 group">
-                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">🚀</span>
-                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Performance Optimized</span>
-                    </div>
-
-                    <div className="flex items-center space-x-3 group">
-                      <span className="text-accent-orange text-lg transition-transform duration-200 group-hover:scale-110">♿</span>
-                      <span className="text-text-secondary text-base group-hover:text-accent-orange transition-colors duration-200">Accessibility Focused</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Features glass box */}
-                <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-green/20 rounded-lg p-6 shadow-lg shadow-accent-green/10">
-                  <h4 className="text-base font-bold text-accent-green font-tech mb-4 uppercase tracking-wide">
-                    Features
-                  </h4>
                   <div className="space-y-2 text-sm">
-                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Smooth scroll navigation</div>
-                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Interactive project filtering</div>
-                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Music jukebox integration</div>
-                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Performance monitoring</div>
-                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Service worker caching</div>
-                    <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Animated skill showcase</div>
+                    <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• React & TypeScript</div>
+                    <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Vite Build Tool</div>
+                    <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Tailwind CSS</div>
+                    <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Responsive Design</div>
+                    <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Performance Optimized</div>
+                    <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Accessibility Focused</div>
                   </div>
                 </div>
               </div>
@@ -301,36 +263,18 @@ export const AboutSection: React.FC = () => {
                       This Site
                     </h3>
 
-                    {/* Boxes container - side by side */}
-                    <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-                      {/* Built With glass box */}
-                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 shadow-lg shadow-accent-orange/10 hover:border-accent-orange/30 transition-all duration-300 flex-1">
-                        <h4 className="text-base font-bold text-accent-orange font-tech mb-4 uppercase tracking-wide">
-                          Built With
-                        </h4>
-                        <div className="space-y-2 text-sm">
-                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• React & TypeScript</div>
-                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Vite Build Tool</div>
-                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Tailwind CSS</div>
-                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Responsive Design</div>
-                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Performance Optimized</div>
-                          <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Accessibility Focused</div>
-                        </div>
-                      </div>
-
-                      {/* Features glass box with margin top */}
-                      <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-green/20 rounded-lg p-6 shadow-lg shadow-accent-green/10 hover:border-accent-green/30 transition-all duration-300 flex-1 lg:mt-8">
-                        <h4 className="text-base font-bold text-accent-green font-tech mb-4 uppercase tracking-wide">
-                          Features
-                        </h4>
-                        <div className="space-y-2 text-sm">
-                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Smooth scroll navigation</div>
-                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Interactive project filtering</div>
-                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Music jukebox integration</div>
-                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Performance monitoring</div>
-                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Service worker caching</div>
-                          <div className="text-text-secondary hover:text-accent-green transition-colors duration-200 cursor-default">• Animated skill showcase</div>
-                        </div>
+                    {/* Built With glass box */}
+                    <div className="bg-primary-bg/50 backdrop-blur-sm border border-accent-orange/20 rounded-lg p-6 shadow-lg shadow-accent-orange/10 hover:border-accent-orange/30 transition-all duration-300 w-fit">
+                      <h4 className="text-base font-bold text-accent-orange font-tech mb-4 uppercase tracking-wide">
+                        Built With
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• React & TypeScript</div>
+                        <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Vite Build Tool</div>
+                        <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Tailwind CSS</div>
+                        <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Responsive Design</div>
+                        <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Performance Optimized</div>
+                        <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Accessibility Focused</div>
                       </div>
                     </div>
                   </div>

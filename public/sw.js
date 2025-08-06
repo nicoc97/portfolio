@@ -434,15 +434,18 @@ self.addEventListener('notificationclick', (event) => {
 });
 
 // Enhanced performance monitoring and reporting
-self.addEventListener('message', (event) => {
+self.addEventListener('message', async (event) => {
   if (event.data && event.data.type === 'GET_PERFORMANCE_METRICS') {
+
+    const cacheSize = await getCacheSize();
+
     event.ports[0].postMessage({
       type: 'PERFORMANCE_METRICS',
       data: {
         ...performanceMetrics,
         cacheHitRate: performanceMetrics.cacheHits / (performanceMetrics.cacheHits + performanceMetrics.cacheMisses) || 0,
         timestamp: Date.now(),
-        cacheSize: getCacheSize(),
+        cacheSize: cacheSize,
         version: CACHE_VERSION
       }
     });
