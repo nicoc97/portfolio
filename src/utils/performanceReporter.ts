@@ -186,15 +186,11 @@ class PerformanceReporter {
   public recordComponentLoadTime(componentName: string, loadTime: number): void {
     const report = this.getCurrentReport();
     report.metrics.componentLoadTime = (report.metrics.componentLoadTime || 0) + loadTime;
-    
-    console.log(`Component ${componentName} loaded in ${loadTime}ms`);
   }
 
   public recordImageLoadTime(imageUrl: string, loadTime: number): void {
     const report = this.getCurrentReport();
     report.metrics.imageLoadTime = (report.metrics.imageLoadTime || 0) + loadTime;
-    
-    console.log(`Image ${imageUrl} loaded in ${loadTime}ms`);
   }
 
   public recordAnimationFrameRate(fps: number): void {
@@ -237,8 +233,6 @@ class PerformanceReporter {
     const reports = this.generateReport();
     
     // In a real application, you would send this to your analytics service
-    console.log('Performance Report:', reports);
-    
     // Example: Send to analytics service
     // await fetch('/api/analytics/performance', {
     //   method: 'POST',

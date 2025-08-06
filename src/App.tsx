@@ -229,16 +229,7 @@ function App() {
       document.body.style.overscrollBehavior = 'none';
     }
 
-    if (import.meta.env.DEV) {
-      console.log('Device capabilities:', {
-        isMobile: isMobileDevice,
-        windowWidth: window.innerWidth,
-        isVeryLargeDesktop,
-        shouldHijackScroll,
-        isSafari,
-        reduceAnimations: recommendations.reduceAnimations
-      });
-    }
+
 
     const handleWheel = (e: WheelEvent) => {
       // Only hijack scroll on 3xl screens (1920px+) and larger
@@ -371,7 +362,6 @@ function App() {
 
       const currentSection = detectCurrentSection();
       if (currentSection !== activeSection) {
-        console.log('Natural scroll: Updating active section from', activeSection, 'to', currentSection);
         setActiveSection(currentSection as typeof activeSection);
       }
     };
@@ -441,7 +431,6 @@ function App() {
       // Use the same detection logic for consistency
       const currentSection = detectCurrentSection();
       if (currentSection !== activeSection) {
-        console.log('Intersection Observer: Updating active section to', currentSection);
         setActiveSection(currentSection as typeof activeSection);
       }
     }, observerOptions);

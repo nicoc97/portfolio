@@ -307,7 +307,7 @@ export class ServiceWorkerManager {
   async monitorCachePerformance(): Promise<void> {
     const metrics = await this.getPerformanceMetrics();
     
-    if (metrics) {
+    if (metrics && import.meta.env.DEV) {
       console.group('Service Worker Performance');
       console.log('Cache Hit Rate:', `${(metrics.cacheHitRate * 100).toFixed(1)}%`);
       console.log('Cache Hits:', metrics.cacheHits);

@@ -13,7 +13,7 @@ const ScrollAnimations = React.lazy(() => {
   return import('../animations/ScrollAnimations').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('scroll-animations-load', () => {
-      console.log(`ScrollAnimations loaded in ${loadTime.toFixed(2)}ms`);
+      // ScrollAnimations loaded successfully
     });
     return { default: module.ScrollReveal };
   }).catch(error => {
@@ -31,7 +31,7 @@ const ThreeJSComponents = React.lazy(() => {
   return import('../ui/WaveBackground').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('threejs-load', () => {
-      console.log(`Three.js components loaded in ${loadTime.toFixed(2)}ms`);
+      // Three.js components loaded successfully
     });
     return { default: module.WaveBackground };
   }).catch(error => {
@@ -49,7 +49,7 @@ const SwiperComponents = React.lazy(() => {
   return import('swiper/react').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('swiper-load', () => {
-      console.log(`Swiper components loaded in ${loadTime.toFixed(2)}ms`);
+      // Swiper components loaded successfully
     });
     return { default: module.Swiper };
   }).catch(error => {
@@ -138,7 +138,6 @@ export const preloadAnimations = () => {
 
   // Only preload if device can handle it
   if (recommendations.reduceAnimations) {
-    console.log('Skipping animation preload on low-end device');
     return;
   }
 
@@ -162,7 +161,6 @@ export const usePreloadAnimations = () => {
 
     // Skip preloading entirely on very low-end devices
     if (recommendations.reduceAnimations && recommendations.simplifyEffects) {
-      console.log('Skipping animation preload on low-end device');
       return;
     }
 
@@ -195,7 +193,6 @@ export const preloadCriticalComponents = () => {
   
   // Skip preloading on low-end devices to save memory
   if (recommendations.reduceAnimations) {
-    console.log('Skipping critical component preload on low-end device');
     return;
   }
 

@@ -12,7 +12,7 @@ const VinylRecordComponent = React.lazy(() => {
   return import('../ui/VinylRecord').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('vinyl-record-load', () => {
-      console.log(`VinylRecord loaded in ${loadTime.toFixed(2)}ms`);
+      // VinylRecord loaded successfully
     });
     return { default: module.VinylRecord };
   }).catch(error => {
@@ -33,7 +33,7 @@ const VintageTVDialComponent = React.lazy(() => {
   return import('../ui/VintageTVDial').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('tv-dial-load', () => {
-      console.log(`VintageTVDial loaded in ${loadTime.toFixed(2)}ms`);
+      // VintageTVDial loaded successfully
     });
     return { default: module.VintageTVDial };
   }).catch(error => {
@@ -54,7 +54,7 @@ const VinylLightboxComponent = React.lazy(() => {
   return import('../ui/VinylLightbox').then(module => {
     const loadTime = performance.now() - startTime;
     performanceMonitor.trackAnimationPerformance('vinyl-lightbox-load', () => {
-      console.log(`VinylLightbox loaded in ${loadTime.toFixed(2)}ms`);
+      // VinylLightbox loaded successfully
     });
     return { default: module.VinylLightbox };
   }).catch(error => {
@@ -142,7 +142,6 @@ export const preloadUIComponents = () => {
 
   // Only preload if device can handle it
   if (recommendations.simplifyEffects) {
-    console.log('Skipping UI component preload on low-end device');
     return;
   }
 

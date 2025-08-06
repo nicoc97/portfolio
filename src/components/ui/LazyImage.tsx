@@ -120,7 +120,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     
     // Track image loading performance
     performanceMonitor.trackAnimationPerformance('image-load', () => {
-      console.log(`Image loaded: ${src}`);
+      // Image loaded successfully
     });
     
     onLoad?.();

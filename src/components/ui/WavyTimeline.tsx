@@ -94,14 +94,14 @@ export const WavyTimeline: React.FC = () => {
       const frequency1 = 0.01;
       const frequency2 = 0.02;
       const points: string[] = [];
-      
+
       for (let y = 0; y <= height; y += 8) {
         const wave1 = Math.sin(y * frequency1) * amplitude1;
         const wave2 = Math.sin(y * frequency2 + Math.PI / 4) * amplitude2;
         const x = width / 2 + wave1 + wave2;
         points.push(`${x},${y}`);
       }
-      
+
       return `M ${points.join(' L ')}`;
     } else {
       const amplitude1 = 25;
@@ -109,14 +109,14 @@ export const WavyTimeline: React.FC = () => {
       const frequency1 = 0.008;
       const frequency2 = 0.015;
       const points: string[] = [];
-      
+
       for (let x = 0; x <= width; x += 8) {
         const wave1 = Math.sin(x * frequency1) * amplitude1;
         const wave2 = Math.sin(x * frequency2 + Math.PI / 4) * amplitude2;
         const y = height / 2 + wave1 + wave2;
         points.push(`${x},${y}`);
       }
-      
+
       return `M ${points.join(' L ')}`;
     }
   };
@@ -128,20 +128,20 @@ export const WavyTimeline: React.FC = () => {
       const svg = svgRef.current;
       const rect = container.getBoundingClientRect();
       const path = svg.querySelector('.wavy-path') as SVGPathElement;
-      
+
       if (path) {
         const wavyPath = generateWavyPath(rect.width, rect.height, false);
         path.setAttribute('d', wavyPath);
       }
     }
-    
+
     // Mobile path
     if (mobileSvgRef.current && mobileContainerRef.current) {
       const container = mobileContainerRef.current;
       const svg = mobileSvgRef.current;
       const rect = container.getBoundingClientRect();
       const path = svg.querySelector('.mobile-wavy-path') as SVGPathElement;
-      
+
       if (path) {
         const verticalWavyPath = generateWavyPath(rect.width, rect.height, true);
         path.setAttribute('d', verticalWavyPath);
@@ -176,7 +176,7 @@ export const WavyTimeline: React.FC = () => {
   };
 
   return (
-    <div 
+    <div
       ref={timelineRef}
       className={`mt-32 animate-slide-up ${isVisible ? 'visible' : ''} w-full overflow-hidden`}
     >
@@ -211,12 +211,12 @@ export const WavyTimeline: React.FC = () => {
               </linearGradient>
             </defs>
           </svg>
-          
+
           {/* Timeline Items - Full Width Stacked */}
           <div className="relative space-y-6 py-4">
             {timelineData.map((item) => {
               const colors = getColorClasses(item.color);
-              
+
               return (
                 <div
                   key={item.id}
@@ -240,11 +240,11 @@ export const WavyTimeline: React.FC = () => {
                         {item.location}
                       </p>
                     </div>
-                    
+
                     <p className="text-text-secondary text-sm mb-4 leading-relaxed">
                       {item.description}
                     </p>
-                    
+
                     <div className="space-y-1">
                       {item.highlights.map((highlight, idx) => (
                         <div key={idx} className="text-xs text-text-secondary flex items-start">
@@ -292,7 +292,7 @@ export const WavyTimeline: React.FC = () => {
             {timelineData.map((item, index) => {
               const colors = getColorClasses(item.color);
               const isActive = activeItem === item.id;
-              
+
               return (
                 <div
                   key={item.id}
@@ -316,11 +316,11 @@ export const WavyTimeline: React.FC = () => {
                         {item.location}
                       </p>
                     </div>
-                    
+
                     <p className="text-text-secondary text-xs lg:text-sm mb-4 leading-relaxed">
                       {item.description}
                     </p>
-                  
+
                   </div>
                 </div>
               );
