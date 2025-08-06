@@ -56,7 +56,7 @@ const timelineData: TimelineItem[] = [
       'Cross-functional team collaboration',
       'Stakeholder communication'
     ],
-    color: 'blue'
+    color: 'orange'
   },
   {
     id: '4',
@@ -71,7 +71,7 @@ const timelineData: TimelineItem[] = [
       'Customer interaction and support',
       'Marketing strategy development'
     ],
-    color: 'orange'
+    color: 'green'
   }
 ];
 
@@ -165,13 +165,6 @@ export const WavyTimeline: React.FC = () => {
           border: 'border-accent-green/20 hover:border-accent-green/40',
           shadow: 'shadow-accent-green/10'
         };
-      case 'blue':
-        return {
-          dot: 'bg-blue-400 border-blue-400 shadow-blue-400/30',
-          text: 'text-blue-400',
-          border: 'border-blue-400/20 hover:border-blue-400/40',
-          shadow: 'shadow-blue-400/10'
-        };
       default:
         return {
           dot: 'bg-text-primary border-text-primary shadow-text-primary/30',
@@ -214,9 +207,7 @@ export const WavyTimeline: React.FC = () => {
             <defs>
               <linearGradient id="mobile-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stopColor="#ff6b35" />
-                <stop offset="33%" stopColor="#4ade80" />
-                <stop offset="66%" stopColor="#60a5fa" />
-                <stop offset="100%" stopColor="#ff6b35" />
+                <stop offset="100%" stopColor="#4ade80" />
               </linearGradient>
             </defs>
           </svg>
@@ -291,9 +282,7 @@ export const WavyTimeline: React.FC = () => {
             <defs>
               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#ff6b35" />
-                <stop offset="33%" stopColor="#4ade80" />
-                <stop offset="66%" stopColor="#60a5fa" />
-                <stop offset="100%" stopColor="#ff6b35" />
+                <stop offset="100%" stopColor="#4ade80" />
               </linearGradient>
             </defs>
           </svg>
@@ -311,9 +300,6 @@ export const WavyTimeline: React.FC = () => {
                   onMouseEnter={() => setActiveItem(item.id)}
                   onMouseLeave={() => setActiveItem(null)}
                 >
-                  {/* Timeline Dot */}
-                  <div className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full border-2 ${colors.dot} shadow-lg transition-all duration-300 timeline-dot-pulse ${isActive ? 'scale-125' : ''}`} />
-                  
                   {/* Content Card */}
                   <div className={`bg-primary-bg/80 backdrop-blur-sm border ${colors.border} ${colors.shadow} rounded-lg p-4 lg:p-6 shadow-lg transition-all duration-300 hover:scale-105 timeline-card-float ${isActive ? 'scale-105' : ''}`}>
                     <div className="mb-4">
@@ -334,20 +320,7 @@ export const WavyTimeline: React.FC = () => {
                     <p className="text-text-secondary text-xs lg:text-sm mb-4 leading-relaxed">
                       {item.description}
                     </p>
-                    
-                    <div className="space-y-1">
-                      {item.highlights.slice(0, 2).map((highlight, idx) => (
-                        <div key={idx} className="text-xs text-text-secondary flex items-start">
-                          <span className={`${colors.text} mr-2 mt-0.5`}>•</span>
-                          <span>{highlight}</span>
-                        </div>
-                      ))}
-                      {item.highlights.length > 2 && (
-                        <div className="text-xs text-text-secondary/70 mt-2">
-                          +{item.highlights.length - 2} more...
-                        </div>
-                      )}
-                    </div>
+                  
                   </div>
                 </div>
               );
