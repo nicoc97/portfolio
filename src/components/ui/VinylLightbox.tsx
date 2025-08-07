@@ -200,8 +200,20 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
   // Update album texture with new pixelation level
   const updateAlbumTexture = async (pixelLevel: number) => {
-    if (sceneRef.current) {
+    // Early exit if no scene or component is unmounting
+    if (!sceneRef.current || !sceneRef.current.sleeve3D) {
+      return;
+    }
+    
+    try {
       const newTexture = await createPixelatedAlbumArt(album, pixelLevel);
+      
+      // Double-check scene still exists after async operation
+      if (!sceneRef.current || !sceneRef.current.sleeve3D) {
+        newTexture.dispose();
+        return;
+      }
+      
       const materials = sceneRef.current.sleeve3D.material;
 
       // Check if materials is an array (BoxGeometry uses material array)
@@ -216,6 +228,8 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       }
 
       setDisplayPixelLevel(pixelLevel);
+    } catch (error) {
+      console.warn('Error updating album texture:', error);
     }
   };
 
@@ -223,15 +237,27 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
   const init3DScene = async () => {
     if (!canvasRef.current) return;
 
-    // Get actual canvas dimensions
+    // Wait for next frame to ensure DOM is ready
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    // Get actual canvas dimensions with fallback
     const canvasRect = canvasRef.current.getBoundingClientRect();
+    const width = canvasRect.width || window.innerWidth;
+    const height = canvasRect.height || window.innerHeight * 0.5;
+
+    // Don't initialize if dimensions are invalid
+    if (width === 0 || height === 0) {
+      console.warn('Canvas has invalid dimensions, retrying...');
+      setTimeout(() => init3DScene(), 100);
+      return;
+    }
 
     // Scene setup
     const scene = new THREE.Scene();
     scene.background = null;
 
     // Camera setup - adjust aspect ratio based on actual canvas size
-    const camera = new THREE.PerspectiveCamera(45, canvasRect.width / canvasRect.height, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(0, 0, 6.5);
 
     // Renderer setup - use actual canvas dimensions
@@ -240,10 +266,10 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       antialias: false,
       alpha: true
     });
-    renderer.setSize(canvasRect.width, canvasRect.height);
+    renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap;
-    renderer.setPixelRatio(0.5);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     // Warm 70s lighting
     const ambientLight = new THREE.AmbientLight(0xd4c4a0, 0.4);
@@ -344,29 +370,52 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     }, 2000);
   };
 
+  // Add a ref to track if component is mounted
+  const isMountedRef = useRef(true);
+
   // Animation loop
   const animate = () => {
-    if (sceneRef.current && isOpen) {
-      // Smooth rotation for sleeve using refs
-      currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.1;
-      currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.1;
-
-      sceneRef.current.sleeveGroup.rotation.y = currentRotationRef.current.y;
-      sceneRef.current.sleeveGroup.rotation.x = currentRotationRef.current.x;
-
-      // Smooth pixelation transition
-      currentPixelLevelRef.current += (targetPixelLevelRef.current - currentPixelLevelRef.current) * 0.05;
-
-      // Update texture when pixelation changes significantly
-      const roundedLevel = Math.round(currentPixelLevelRef.current);
-      if (Math.abs(currentPixelLevel - roundedLevel) > 4 && roundedLevel !== currentPixelLevel) {
-        setCurrentPixelLevel(roundedLevel);
-        updateAlbumTexture(roundedLevel);
-      }
-
-      sceneRef.current.renderer.render(sceneRef.current.scene, sceneRef.current.camera);
+    // Stop animation if lightbox is closed, scene is null, or component unmounted
+    if (!isOpen || !sceneRef.current || !isMountedRef.current) {
+      animationFrameRef.current = undefined;
+      return;
     }
-    animationFrameRef.current = requestAnimationFrame(animate);
+
+    // Double-check scene exists before accessing properties
+    if (sceneRef.current && sceneRef.current.sleeveGroup && sceneRef.current.renderer) {
+      try {
+        // Smooth rotation for sleeve using refs
+        currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.1;
+        currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.1;
+
+        sceneRef.current.sleeveGroup.rotation.y = currentRotationRef.current.y;
+        sceneRef.current.sleeveGroup.rotation.x = currentRotationRef.current.x;
+
+        // Smooth pixelation transition
+        currentPixelLevelRef.current += (targetPixelLevelRef.current - currentPixelLevelRef.current) * 0.05;
+
+        // Update texture when pixelation changes significantly
+        const roundedLevel = Math.round(currentPixelLevelRef.current);
+        if (Math.abs(currentPixelLevel - roundedLevel) > 4 && roundedLevel !== currentPixelLevel) {
+          setCurrentPixelLevel(roundedLevel);
+          // Only update texture if still mounted
+          if (isMountedRef.current && isOpen) {
+            updateAlbumTexture(roundedLevel);
+          }
+        }
+
+        sceneRef.current.renderer.render(sceneRef.current.scene, sceneRef.current.camera);
+      } catch (error) {
+        console.warn('Error in animation loop:', error);
+        animationFrameRef.current = undefined;
+        return;
+      }
+    }
+    
+    // Only continue animation if still mounted
+    if (isMountedRef.current && isOpen) {
+      animationFrameRef.current = requestAnimationFrame(animate);
+    }
   };
 
   // Mouse controls
@@ -443,6 +492,9 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
   // Initialize scene when opened and handle body scroll
   useEffect(() => {
     if (isOpen) {
+      // Mark component as mounted
+      isMountedRef.current = true;
+      
       // Reset rotation and pixelation refs when opening
       targetRotationRef.current = { x: 0, y: 0 };
       currentRotationRef.current = { x: 0, y: 0 };
@@ -477,12 +529,21 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
 
-      init3DScene();
-      animate();
-      startPixelationProgression();
+      // Delay initialization to ensure DOM is ready
+      setTimeout(() => {
+        init3DScene().then(() => {
+          if (isMountedRef.current) {
+            animate();
+            startPixelationProgression();
+          }
+        });
+      }, 50);
 
       // Cleanup function
       return () => {
+        // Mark component as unmounting immediately
+        isMountedRef.current = false;
+        
         // Clear timeouts
         if (progressionTimeoutRef.current) {
           clearTimeout(progressionTimeoutRef.current);
@@ -493,40 +554,64 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
           idleTimeoutRef.current = null;
         }
 
-        // Cancel animation frame
+        // Cancel animation frame FIRST
         if (animationFrameRef.current) {
           cancelAnimationFrame(animationFrameRef.current);
           animationFrameRef.current = undefined;
         }
 
-        // Dispose of Three.js resources
-        if (sceneRef.current) {
-          sceneRef.current.renderer.dispose();
-          sceneRef.current = null;
-        }
-
-        // Restore body styles explicitly
-        document.body.style.position = originalBodyStyle.position;
-        document.body.style.top = originalBodyStyle.top;
-        document.body.style.left = originalBodyStyle.left;
-        document.body.style.right = originalBodyStyle.right;
-        document.body.style.overflow = originalBodyStyle.overflow;
-        document.body.style.paddingRight = originalBodyStyle.paddingRight;
-
-        // Force a reflow before scrolling
-        document.body.offsetHeight;
-
-        // Restore scroll position with a small delay to ensure DOM is ready
-        requestAnimationFrame(() => {
-          window.scrollTo(0, scrollPositionRef.current);
-          
-          // Double-check scroll restoration for mobile
-          setTimeout(() => {
-            if (window.scrollY !== scrollPositionRef.current) {
-              window.scrollTo(0, scrollPositionRef.current);
+        // Small delay to ensure animation has stopped
+        setTimeout(() => {
+          // Dispose of Three.js resources
+          if (sceneRef.current) {
+            try {
+              // Dispose of textures
+              if (sceneRef.current.sleeve3D) {
+                const materials = sceneRef.current.sleeve3D.material;
+                if (Array.isArray(materials)) {
+                  materials.forEach(material => {
+                    // Type guard to check if material has a map property
+                    if (material instanceof THREE.MeshPhongMaterial && material.map) {
+                      material.map.dispose();
+                    }
+                    material.dispose();
+                  });
+                }
+                sceneRef.current.sleeve3D.geometry.dispose();
+              }
+              
+              sceneRef.current.renderer.dispose();
+              sceneRef.current.renderer.forceContextLoss();
+            } catch (error) {
+              console.warn('Error during cleanup:', error);
+            } finally {
+              sceneRef.current = null;
             }
-          }, 0);
-        });
+          }
+
+          // Restore body styles explicitly
+          document.body.style.position = originalBodyStyle.position;
+          document.body.style.top = originalBodyStyle.top;
+          document.body.style.left = originalBodyStyle.left;
+          document.body.style.right = originalBodyStyle.right;
+          document.body.style.overflow = originalBodyStyle.overflow;
+          document.body.style.paddingRight = originalBodyStyle.paddingRight;
+
+          // Force a reflow before scrolling
+          document.body.offsetHeight;
+
+          // Restore scroll position with a small delay to ensure DOM is ready
+          requestAnimationFrame(() => {
+            window.scrollTo(0, scrollPositionRef.current);
+            
+            // Double-check scroll restoration for mobile
+            setTimeout(() => {
+              if (window.scrollY !== scrollPositionRef.current) {
+                window.scrollTo(0, scrollPositionRef.current);
+              }
+            }, 0);
+          });
+        }, 0);
       };
     }
   }, [isOpen]);
@@ -576,10 +661,10 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         }}
       >
         {/* 3D Container */}
-        <div className="w-[500px] h-[500px] max-w-[calc(100vw-4rem)] max-h-[50vh] relative mb-4">
+        <div className="w-full max-w-[500px] aspect-square max-h-[50vh] relative mb-4">
           <canvas
             ref={canvasRef}
-            className={`w-full h-full ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
+            className={`w-full h-full block ${isMouseDown ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{
               touchAction: 'none',
               WebkitTouchCallout: 'none',
