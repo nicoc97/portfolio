@@ -1,0 +1,42 @@
+NICO CRUICKSHANK - WEB DEVELOPER PORTFOLIO
+
+=== ABOUT ===
+Full Stack Web Developer specializing in modern web technologies including React, TypeScript, Node.js, and responsive design. Passionate about creating performant, accessible, and user-friendly web applications.
+
+=== TECHNICAL SKILLS ===
+Frontend Technologies:
+- React & React Hooks
+- TypeScript & JavaScript (ES6+)
+- HTML5 & CSS3
+- Tailwind CSS & Responsive Design
+- Vite & Modern Build Tools
+
+Backend Technologies:
+- Node.js & Express
+- RESTful APIs
+- Database Design & Management
+
+Development Tools:
+- Git & Version Control
+- Performance Optimization
+- Accessibility (WCAG)
+- Testing & Debugging
+
+=== PROJECTS ===
+[This section would be populated with your actual projects]
+
+=== CONTACT ===
+Available for freelance work and full-time opportunities.
+Portfolio: https://your-domain.com
+Email: your-email@example.com
+GitHub: https://github.com/your-github
+LinkedIn: https://linkedin.com/in/your-linkedin
+
+=== SITE FEATURES ===
+This portfolio website features:
+- Responsive design optimized for all devices
+- Smooth scrolling navigation
+- Interactive project showcase
+- Performance optimizations
+- Accessibility compliance
+- Modern React architecture with TypeScript

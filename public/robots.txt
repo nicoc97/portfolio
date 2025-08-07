@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /ai-readable-content.txt
+
+# AI-specific bots
+User-agent: ChatGPT-User
+Allow: /
+Allow: /ai-readable-content.txt
+
+User-agent: Claude-Web
+Allow: /
+Allow: /ai-readable-content.txt
+
+User-agent: GPTBot
+Allow: /
+Allow: /ai-readable-content.txt
+
+Sitemap: https://your-domain.com/sitemap.xml

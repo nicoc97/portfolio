@@ -9,6 +9,7 @@ import { DotPagination } from './components/ui/DotPagination';
 import { MobileMenu } from './components/ui/MobileMenu';
 import { ToastProvider } from './hooks/useToast';
 import { usePreloadAnimations, useCriticalPreload } from './components/lazy/LazyAnimations';
+import { MetaTags } from './components/SEO/MetaTags';
 
 import { performanceReporter } from './utils/performanceReporter';
 import { performanceMonitor } from './utils/performance';
@@ -447,8 +448,42 @@ function App() {
     };
   }, [activeSection, isScrolling, sections, isInitialized]);
 
+  // Get section-specific meta data
+  const getSectionMetaData = (section: string) => {
+    const metaData = {
+      hero: {
+        title: "Nico Cruickshank - Web Developer Portfolio",
+        description: "Full Stack Web Developer specializing in React, TypeScript, Node.js, and modern web technologies"
+      },
+      projects: {
+        title: "Projects - Nico Cruickshank",
+        description: "View my web development projects showcasing React, TypeScript, and modern web technologies"
+      },
+      about: {
+        title: "About - Nico Cruickshank",
+        description: "Learn about my background as a Full Stack Web Developer and my passion for modern web technologies"
+      },
+      skills: {
+        title: "Skills - Nico Cruickshank", 
+        description: "My technical skills including React, TypeScript, Node.js, and modern web development tools"
+      },
+      contact: {
+        title: "Contact - Nico Cruickshank",
+        description: "Get in touch for freelance work or full-time opportunities in web development"
+      }
+    };
+    return metaData[section as keyof typeof metaData] || metaData.hero;
+  };
+
+  const currentMeta = getSectionMetaData(activeSection);
+
   return (
     <ToastProvider>
+      <MetaTags 
+        title={currentMeta.title}
+        description={currentMeta.description}
+        section={activeSection}
+      />
       <div className="min-h-screen bg-primary-bg">
         {/* All sections rendered at once for scrolling */}
         <HeroSection onNavigateToSection={navigateToSection} />

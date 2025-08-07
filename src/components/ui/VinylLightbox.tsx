@@ -204,16 +204,16 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     if (!sceneRef.current || !sceneRef.current.sleeve3D) {
       return;
     }
-    
+
     try {
       const newTexture = await createPixelatedAlbumArt(album, pixelLevel);
-      
+
       // Double-check scene still exists after async operation
       if (!sceneRef.current || !sceneRef.current.sleeve3D) {
         newTexture.dispose();
         return;
       }
-      
+
       const materials = sceneRef.current.sleeve3D.material;
 
       // Check if materials is an array (BoxGeometry uses material array)
@@ -411,7 +411,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
         return;
       }
     }
-    
+
     // Only continue animation if still mounted
     if (isMountedRef.current && isOpen) {
       animationFrameRef.current = requestAnimationFrame(animate);
@@ -494,7 +494,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
     if (isOpen) {
       // Mark component as mounted
       isMountedRef.current = true;
-      
+
       // Reset rotation and pixelation refs when opening
       targetRotationRef.current = { x: 0, y: 0 };
       currentRotationRef.current = { x: 0, y: 0 };
@@ -523,7 +523,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       document.body.style.left = '0';
       document.body.style.right = '0';
       document.body.style.overflow = 'hidden';
-      
+
       // Prevent layout shift from scrollbar
       if (scrollbarWidth > 0) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
@@ -543,7 +543,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
       return () => {
         // Mark component as unmounting immediately
         isMountedRef.current = false;
-        
+
         // Clear timeouts
         if (progressionTimeoutRef.current) {
           clearTimeout(progressionTimeoutRef.current);
@@ -579,7 +579,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
                 }
                 sceneRef.current.sleeve3D.geometry.dispose();
               }
-              
+
               sceneRef.current.renderer.dispose();
               sceneRef.current.renderer.forceContextLoss();
             } catch (error) {
@@ -603,7 +603,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
           // Restore scroll position with a small delay to ensure DOM is ready
           requestAnimationFrame(() => {
             window.scrollTo(0, scrollPositionRef.current);
-            
+
             // Double-check scroll restoration for mobile
             setTimeout(() => {
               if (window.scrollY !== scrollPositionRef.current) {
@@ -691,7 +691,7 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
           <p className="text-center text-accent-orange/60 text-xs mb-3 font-tech uppercase tracking-wider">
             ↔ Drag to Rotate ↔
           </p>
-          
+
           {/* Info Card */}
           <div className="bg-primary-bg/50 backdrop-blur-sm rounded-lg border border-accent-orange/10 p-6 mb-4">
             <div className="text-center space-y-2">
