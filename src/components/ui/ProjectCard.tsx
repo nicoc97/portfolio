@@ -141,7 +141,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
           ${isExpanded ? 'scale-105 bg-opacity-90' : ''}
         `}>
           {project.category === 'data' ? 'DATA_SCI' :
-            project.category === 'fullstack' ? 'FULL_STK' : 'WEB_APP'}
+            project.category === 'fullstack' ? 'FULL_STK' : 'WORDPRESS'}
         </span>
       </div>
 

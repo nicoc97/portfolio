@@ -170,7 +170,7 @@ interface TechBadgeProps {
 **Purpose:** Showcase projects with filtering
 
 **Features:**
-- Filter buttons (All, Web Apps, Data Science, Full-Stack)
+- Filter buttons (All, WordPress, Data Science, Full-Stack)
 - Grid layout that adapts to screen size
 - Sample project data (replace with real projects)
 
@@ -184,7 +184,7 @@ interface Project {
   imageUrl: string;
   liveUrl?: string;
   githubUrl: string;
-  category: 'web' | 'data' | 'fullstack';
+  category: 'wordpress' | 'data' | 'fullstack';
   featured: boolean;
   completedDate: Date;
 }
@@ -209,7 +209,7 @@ interface Project {
   imageUrl: '/path/to/image.jpg',
   liveUrl: 'https://yourproject.com',
   githubUrl: 'https://github.com/username/project',
-  category: 'web', // or 'data' or 'fullstack'
+  category: 'wordpress', // or 'data' or 'fullstack'
   featured: true,
   completedDate: new Date('2024-07-15')
 }

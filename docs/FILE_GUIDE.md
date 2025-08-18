@@ -71,7 +71,7 @@ const sampleProjects: Project[] = [
     imageUrl: '/images/project1.jpg',
     liveUrl: 'https://project.com',
     githubUrl: 'https://github.com/user/project',
-    category: 'web', // 'web' | 'data' | 'fullstack'
+    category: 'wordpress', // 'wordpress' | 'data' | 'fullstack'
     featured: true,
     completedDate: new Date('2024-01-01')
   }
@@ -80,7 +80,7 @@ const sampleProjects: Project[] = [
 // Line ~105: Filter categories
 const filterButtons = [
   { key: 'all', label: 'ALL PROJECTS' },
-  { key: 'web', label: 'WEB APPS' },
+  { key: 'wordpress', label: 'WORDPRESS' },
   // Add/modify as needed
 ];
 

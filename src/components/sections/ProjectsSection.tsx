@@ -15,15 +15,15 @@ import '../../styles/swiper-custom.css';
  * ProjectsSection Component
  * 
  * Displays a filterable grid of projects with:
- * - Category filtering (All, Web Apps, Data Science, Full-Stack)
+ * - Category filtering (All, WordPress, Data Science, Full-Stack)
  * - Responsive grid layout
  * - Project cards with hover effects
  * - Vintage TV dial navigation
  * - Sample data (replace with real projects)
  */
 
-// 🔧 UPDATE: Replace this sample data with actual projects
-const sampleProjects: Project[] = [
+// Portfolio projects including WordPress sites from previous employers
+const portfolioProjects: Project[] = [
   {
     id: '1',
     title: 'Interactive Data Dashboard',
@@ -61,45 +61,45 @@ const sampleProjects: Project[] = [
   },
   {
     id: '4',
-    title: 'Task Management App',
-    description: 'Collaborative task management application with real-time updates, file sharing, and team collaboration features.',
-    techStack: ['React', 'Node.js', 'Socket.io', 'MongoDB', 'JWT'],
+    title: 'Denham Youd Photography',
+    description: 'Custom WordPress site developed from ground up featuring portfolio galleries, client booking system, and responsive design optimized for showcasing photography work.',
+    techStack: ['WordPress', 'PHP', 'JavaScript', 'CSS3', 'MySQL'],
     imageUrl: '',
-    liveUrl: 'https://example.com/tasks',
-    githubUrl: 'https://github.com/username/task-app',
-    category: 'web',
-    status: 'wip',
-    completedDate: new Date('2024-04-05')
+    liveUrl: 'https://denhamyoud.com/',
+    githubUrl: 'https://github.com/username/denham-youd-wp',
+    category: 'wordpress',
+    status: 'completed',
+    completedDate: new Date('2023-08-15')
   },
   {
     id: '5',
-    title: 'API Documentation Portal',
-    description: 'Modern API documentation site with interactive examples, authentication testing, and automated endpoint discovery.',
-    techStack: ['Next.js', 'TypeScript', 'Swagger', 'Prism', 'Docker'],
+    title: 'Golspie Golf Club',
+    description: 'Complete WordPress site design and development featuring membership management, event booking system, and course information with mobile-responsive layout.',
+    techStack: ['WordPress', 'PHP', 'JavaScript', 'CSS3', 'MySQL'],
     imageUrl: '',
-    liveUrl: 'https://example.com/api-docs',
-    githubUrl: 'https://github.com/username/api-docs',
-    category: 'web',
-    status: 'wip',
-    completedDate: new Date('2024-05-12')
+    liveUrl: 'https://www.golspiegolfclub.co.uk/',
+    githubUrl: 'https://github.com/username/golspie-golf-wp',
+    category: 'wordpress',
+    status: 'completed',
+    completedDate: new Date('2023-11-20')
   },
   {
     id: '6',
-    title: 'Creative Coding Experiment',
-    description: 'Interactive WebGL experience with particle systems, procedural generation, and audio-reactive animations.',
-    techStack: ['Three.js', 'WebGL', 'GLSL', 'Web Audio API'],
+    title: 'Tera Racing WooCommerce Optimization',
+    description: 'Performance optimization and vehicle parts search enhancement for WooCommerce store. Built custom queries and spreadsheet automation for product imports.',
+    techStack: ['WordPress', 'WooCommerce', 'PHP', 'MySQL', 'Excel/CSV'],
     imageUrl: '',
-    liveUrl: 'https://example.com/creative',
-    githubUrl: 'https://github.com/username/creative-coding',
-    category: 'web',
-    status: 'wip',
-    completedDate: new Date('2024-06-18')
+    liveUrl: 'https://www.teracing.co.uk',
+    githubUrl: 'https://github.com/username/tera-racing-optimization',
+    category: 'wordpress',
+    status: 'completed',
+    completedDate: new Date('2024-02-10')
   }
 ];
 
 export const ProjectsSection: React.FC = () => {
   // State management
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'web' | 'data' | 'fullstack'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'wordpress' | 'data' | 'fullstack'>('all');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -132,8 +132,8 @@ export const ProjectsSection: React.FC = () => {
 
   // Filter projects
   const filteredProjects = selectedFilter === 'all'
-    ? sampleProjects
-    : sampleProjects.filter(project => project.category === selectedFilter);
+    ? portfolioProjects
+    : portfolioProjects.filter(project => project.category === selectedFilter);
 
   // Hi-Fi Control Functions
   const handlePlayPause = () => {
@@ -161,7 +161,7 @@ export const ProjectsSection: React.FC = () => {
   // 🔧 UPDATE: Modify filter categories here if you have different project types
   const filterButtons = [
     { key: 'all', label: 'ALL PROJECTS' },
-    { key: 'web', label: 'WEB APPS' },
+    { key: 'wordpress', label: 'WORDPRESS' },
     { key: 'data', label: 'DATA SCIENCE' },
     { key: 'fullstack', label: 'FULL-STACK' }
   ] as const;
@@ -224,7 +224,7 @@ export const ProjectsSection: React.FC = () => {
                     <div className="flex items-center gap-1">
                       <span>{label}</span>
                       <span className="text-xs opacity-70">
-                        ({key === 'all' ? sampleProjects.length : sampleProjects.filter(p => p.category === key).length})
+                        ({key === 'all' ? portfolioProjects.length : portfolioProjects.filter(p => p.category === key).length})
                       </span>
                     </div>
                   </button>
@@ -251,7 +251,7 @@ export const ProjectsSection: React.FC = () => {
                     <div className="flex justify-between items-center">
                       <span>{label}</span>
                       <span className="text-sm opacity-70">
-                        ({key === 'all' ? sampleProjects.length : sampleProjects.filter(p => p.category === key).length})
+                        ({key === 'all' ? portfolioProjects.length : portfolioProjects.filter(p => p.category === key).length})
                       </span>
                     </div>
                   </button>
