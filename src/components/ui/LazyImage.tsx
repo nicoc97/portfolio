@@ -236,26 +236,37 @@ export const LazyImage: React.FC<LazyImageProps> = ({
         </div>
       )}
 
-      {/* Enhanced responsive image with fallback */}
+      {/* Enhanced responsive image with WebP fallback */}
       {isInView && (
-        <img
-          ref={imgRef}
-          src={src}
-          alt={alt}
-          className={`
-            w-full h-full object-cover transition-all duration-700
-            ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105 blur-sm'}
-            ${pixelated ? 'pixelated-image' : ''}
-          `}
-          style={{
-            imageRendering: pixelated ? 'pixelated' : 'auto',
-            ...style
-          }}
-          onLoad={handleLoad}
-          onError={handleError}
-          loading="lazy"
-          decoding="async"
-        />
+        <picture>
+          {/* WebP source for supported browsers */}
+          {!src.includes('.webp') && (src.startsWith('/') || src.startsWith('./')) && (
+            <source 
+              srcSet={getOptimizedSrc(src)} 
+              type="image/webp" 
+            />
+          )}
+          
+          {/* Fallback image */}
+          <img
+            ref={imgRef}
+            src={src}
+            alt={alt}
+            className={`
+              w-full h-full object-cover transition-all duration-700
+              ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105 blur-sm'}
+              ${pixelated ? 'pixelated-image' : ''}
+            `}
+            style={{
+              imageRendering: pixelated ? 'pixelated' : 'auto',
+              ...style
+            }}
+            onLoad={handleLoad}
+            onError={handleError}
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
       )}
     </div>
   );

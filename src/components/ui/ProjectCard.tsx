@@ -203,10 +203,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
         />
       </div>
 
-      {/* Minimal overlay for readability - always present but subtle */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-      {/* Dark overlay on hover - matches the sliding window gradient */}
+      {/* Dark overlay on hover only - matches the sliding window gradient */}
       <div className={`
         absolute inset-0 z-10 pointer-events-none
         bg-gradient-to-t from-black/95 via-black/80 to-black/20
@@ -377,7 +374,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
       {/* Minimal title overlay - always visible at bottom */}
       <div className={`
         absolute inset-x-0 bottom-0 p-4 z-10
-        bg-gradient-to-t from-black/60 to-transparent
+        bg-gradient-to-t from-black/70 via-black/30 to-transparent backdrop-blur-sm
         transition-all duration-500
         ${isExpanded ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}
       `}>
