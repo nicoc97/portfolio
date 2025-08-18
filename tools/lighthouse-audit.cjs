@@ -111,7 +111,7 @@ async function runLighthouseAudit(url) {
       const reportHtml = runnerResult.report;
 
       // Create reports directory
-      const reportsDir = path.join(process.cwd(), 'lighthouse-reports');
+      const reportsDir = path.join(process.cwd(), 'reports', 'lighthouse-reports');
       if (!fs.existsSync(reportsDir)) {
         fs.mkdirSync(reportsDir, { recursive: true });
       }

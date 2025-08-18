@@ -16,7 +16,7 @@ async function runEnhancedLighthouseAudit(url, options = {}) {
   
   const {
     saveReport = false,
-    outputDir = './lighthouse-reports',
+    outputDir = './reports/lighthouse-reports',
     minScores = { performance: 90, accessibility: 90, 'best-practices': 90, seo: 90 }
   } = options;
 
@@ -234,7 +234,7 @@ async function main() {
   const options = {
     saveReport: args.includes('--save-report'),
     outputDir: args.includes('--output-dir') ? 
-      args[args.indexOf('--output-dir') + 1] : './lighthouse-reports',
+      args[args.indexOf('--output-dir') + 1] : './reports/lighthouse-reports',
     minScores: {
       performance: parseInt(args[args.indexOf('--min-performance') + 1]) || 90,
       accessibility: parseInt(args[args.indexOf('--min-accessibility') + 1]) || 90,
@@ -252,7 +252,7 @@ Usage: node simple-lighthouse.cjs [url] [options]
 
 Options:
   --save-report              Save detailed HTML and JSON reports
-  --output-dir <dir>         Directory to save reports (default: ./lighthouse-reports)
+  --output-dir <dir>         Directory to save reports (default: ./reports/lighthouse-reports)
   --min-performance <score>  Minimum performance score (default: 90)
   --min-accessibility <score> Minimum accessibility score (default: 90)
   --min-best-practices <score> Minimum best practices score (default: 90)

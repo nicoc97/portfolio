@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:ai-optimized": "npm run build && node scripts/prerender.js",
+    "build:ai-optimized": "npm run build && node tools/prerender.js",
     "lint": "eslint .",
     "preview": "vite preview",
-    "lighthouse": "node scripts/simple-lighthouse.cjs",
-    "lighthouse:save": "node scripts/simple-lighthouse.cjs --save-report",
+    "lighthouse": "node tools/simple-lighthouse.cjs",
+    "lighthouse:save": "node tools/simple-lighthouse.cjs --save-report",
     "lighthouse:ci": "npm run build && npm run preview & sleep 5 && npm run lighthouse http://localhost:4173 --save-report && kill %1",
-    "lighthouse:strict": "node scripts/simple-lighthouse.cjs --min-performance 95 --min-accessibility 95 --min-best-practices 95 --min-seo 95",
+    "lighthouse:strict": "node tools/simple-lighthouse.cjs --min-performance 95 --min-accessibility 95 --min-best-practices 95 --min-seo 95",
     "analyze": "npm run build && npx vite-bundle-analyzer dist"
   },
   "dependencies": {
