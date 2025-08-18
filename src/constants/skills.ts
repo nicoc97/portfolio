@@ -147,13 +147,6 @@ export const techSkills: TechSkill[] = [
     pixelIcon: '⚡',
     description: 'Fast build tool and development server for modern web apps'
   },
-  {
-    name: 'Hardware Troubleshooting',
-    category: 'tools',
-    proficiency: 4,
-    pixelIcon: '🔧',
-    description: 'Diagnosing and repairing computer hardware and mobility equipment'
-  },
 
   // Data Science & Analysis
   {

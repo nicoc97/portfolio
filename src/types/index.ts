@@ -6,10 +6,10 @@ export interface Project {
   techStack: string[];
   imageUrl: string;
   liveUrl?: string;
-  githubUrl: string;
+  githubUrl?: string;
   category: 'wordpress' | 'data' | 'fullstack';
   status: 'wip' | 'completed';
-  completedDate: Date;
+  company?: string;
 }
 
 export interface TechSkill {

@@ -7,6 +7,8 @@ interface LazyImageProps {
   className?: string;
   onLoad?: () => void;
   onError?: () => void;
+  style?: React.CSSProperties;
+  pixelated?: boolean;
 }
 
 /**
@@ -24,7 +26,9 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   alt,
   className = '',
   onLoad,
-  onError
+  onError,
+  style,
+  pixelated = false
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -36,15 +40,17 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   const getOptimizedSrc = (originalSrc: string, width?: number): string => {
     if (!originalSrc) return '';
     
+    // If it's already WebP or AVIF, return as-is regardless of device performance
+    if (originalSrc.includes('.webp') || originalSrc.includes('.avif')) {
+      return originalSrc;
+    }
+    
     const recommendations = performanceMonitor.getPerformanceRecommendations();
     
     // Skip optimization on low-end devices to reduce processing
     if (!recommendations.useWebP) {
       return originalSrc;
     }
-    
-    // Check if it's already WebP
-    if (originalSrc.includes('.webp')) return originalSrc;
     
     // For local images, try to use WebP version with size optimization
     if (originalSrc.startsWith('/') || originalSrc.startsWith('./')) {
@@ -77,22 +83,6 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     return originalSrc;
   };
 
-  // Performance-aware responsive srcSet generation
-  const generateSrcSet = (originalSrc: string): string => {
-    if (!originalSrc || originalSrc.includes('data:')) return '';
-    
-    const recommendations = performanceMonitor.getPerformanceRecommendations();
-    
-    // Reduce srcSet complexity on low-end devices
-    const sizes = recommendations.reduceAnimations ? [400, 800] : [400, 800, 1200, 1600];
-    const srcSet = sizes.map(size => {
-      const optimizedSrc = getOptimizedSrc(originalSrc, size);
-      return `${optimizedSrc} ${size}w`;
-    }).join(', ');
-    
-    return srcSet;
-  };
-
   // Intersection Observer for lazy loading
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -117,6 +107,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
 
   const handleLoad = () => {
     setIsLoaded(true);
+    console.log(`Successfully loaded image: ${src}`);
     
     // Track image loading performance
     performanceMonitor.trackAnimationPerformance('image-load', () => {
@@ -128,7 +119,13 @@ export const LazyImage: React.FC<LazyImageProps> = ({
 
   const handleError = () => {
     setHasError(true);
-    console.warn(`Failed to load image: ${src}`);
+    console.error(`Failed to load image: ${src}`);
+    console.error('Image error details:', {
+      originalSrc: src,
+      optimizedSrc: src.includes('.webp') ? src : getOptimizedSrc(src),
+      isWebP: src.includes('.webp'),
+      performanceRecommendations: performanceMonitor.getPerformanceRecommendations()
+    });
     onError?.();
   };
 
@@ -239,38 +236,26 @@ export const LazyImage: React.FC<LazyImageProps> = ({
         </div>
       )}
 
-      {/* Enhanced responsive image with multiple formats */}
+      {/* Enhanced responsive image with fallback */}
       {isInView && (
-        <picture>
-          {/* WebP format with responsive sizes */}
-          <source 
-            srcSet={generateSrcSet(src)} 
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            type="image/webp" 
-          />
-          {/* AVIF format for modern browsers (even better compression) */}
-          <source 
-            srcSet={generateSrcSet(src.replace(/\.(jpg|jpeg|png|webp)$/i, '.avif'))} 
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            type="image/avif" 
-          />
-          {/* Fallback to original format */}
-          <img
-            ref={imgRef}
-            src={getOptimizedSrc(src)}
-            srcSet={generateSrcSet(src)}
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            alt={alt}
-            className={`
-              w-full h-full object-cover transition-all duration-700
-              ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105 blur-sm'}
-            `}
-            onLoad={handleLoad}
-            onError={handleError}
-            loading="lazy"
-            decoding="async"
-          />
-        </picture>
+        <img
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          className={`
+            w-full h-full object-cover transition-all duration-700
+            ${isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105 blur-sm'}
+            ${pixelated ? 'pixelated-image' : ''}
+          `}
+          style={{
+            imageRendering: pixelated ? 'pixelated' : 'auto',
+            ...style
+          }}
+          onLoad={handleLoad}
+          onError={handleError}
+          loading="lazy"
+          decoding="async"
+        />
       )}
     </div>
   );

@@ -33,8 +33,7 @@ const portfolioProjects: Project[] = [
     liveUrl: 'https://example.com/dashboard',
     githubUrl: 'https://github.com/username/dashboard',
     category: 'data',
-    status: 'wip',
-    completedDate: new Date('2024-01-15')
+    status: 'wip'
   },
   {
     id: '2',
@@ -45,8 +44,7 @@ const portfolioProjects: Project[] = [
     liveUrl: 'https://example.com/shop',
     githubUrl: 'https://github.com/username/ecommerce',
     category: 'fullstack',
-    status: 'wip',
-    completedDate: new Date('2024-02-20')
+    status: 'wip'
   },
   {
     id: '3',
@@ -56,44 +54,40 @@ const portfolioProjects: Project[] = [
     imageUrl: '',
     githubUrl: 'https://github.com/username/ml-viz',
     category: 'data',
-    status: 'wip',
-    completedDate: new Date('2024-03-10')
+    status: 'wip'
   },
   {
     id: '4',
-    title: 'Denham Youd Photography',
-    description: 'Custom WordPress site developed from ground up featuring portfolio galleries, client booking system, and responsive design optimized for showcasing photography work.',
-    techStack: ['WordPress', 'PHP', 'JavaScript', 'CSS3', 'MySQL'],
-    imageUrl: '',
+    title: 'Denham Youd Website',
+    description: 'Custom WordPress site developed from ground up at Scoot Digital.',
+    techStack: ['WordPress', 'PHP w/ Twig', 'JavaScript', 'SCSS', 'ACF'],
+    imageUrl: '/images/denhamyoud.png',
     liveUrl: 'https://denhamyoud.com/',
-    githubUrl: 'https://github.com/username/denham-youd-wp',
     category: 'wordpress',
     status: 'completed',
-    completedDate: new Date('2023-08-15')
+    company: 'Scoot Digital'
   },
   {
     id: '5',
-    title: 'Golspie Golf Club',
-    description: 'Complete WordPress site design and development featuring membership management, event booking system, and course information with mobile-responsive layout.',
-    techStack: ['WordPress', 'PHP', 'JavaScript', 'CSS3', 'MySQL'],
+    title: 'Golspie Golf Club Website',
+    description: 'Complete WordPress site design and development at PlanIt Scotland.',
+    techStack: ['WordPress', 'PHP', 'JavaScript', 'Elemenor'],
     imageUrl: '',
     liveUrl: 'https://www.golspiegolfclub.co.uk/',
-    githubUrl: 'https://github.com/username/golspie-golf-wp',
     category: 'wordpress',
     status: 'completed',
-    completedDate: new Date('2023-11-20')
+    company: 'Planit Scotland'
   },
   {
     id: '6',
-    title: 'Tera Racing WooCommerce Optimization',
+    title: 'T&E Racing WooCommerce Optimization',
     description: 'Performance optimization and vehicle parts search enhancement for WooCommerce store. Built custom queries and spreadsheet automation for product imports.',
-    techStack: ['WordPress', 'WooCommerce', 'PHP', 'MySQL', 'Excel/CSV'],
+    techStack: ['WordPress', 'WooCommerce', 'PHP', 'Excel/CSV', 'Python'],
     imageUrl: '',
     liveUrl: 'https://www.teracing.co.uk',
-    githubUrl: 'https://github.com/username/tera-racing-optimization',
     category: 'wordpress',
     status: 'completed',
-    completedDate: new Date('2024-02-10')
+    company: 'Freelance'
   }
 ];
 

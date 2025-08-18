@@ -10,6 +10,23 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { showToast } = useToast();
 
+  // Add CRT image filter styles
+  useEffect(() => {
+    const styleId = 'crt-image-styles';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        .crt-image-filter {
+          image-rendering: pixelated;
+          image-rendering: -moz-crisp-edges;
+          image-rendering: crisp-edges;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
+
   // Detect if device supports touch
   useEffect(() => {
     setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
@@ -32,7 +49,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
     if (isTouchDevice) {
       const newExpandedState = !isExpanded;
       setIsExpanded(newExpandedState);
-      
+
       // Pause swiper when expanding card
       if (newExpandedState && onCardExpand) {
         onCardExpand();
@@ -83,16 +100,20 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
       {/* Background Image - fills entire card */}
       <div className="absolute inset-0 w-full h-full">
         {project.imageUrl ? (
-          <LazyImage
-            src={project.imageUrl}
-            alt={project.title}
-            className={`
-              w-full h-full object-cover transition-all duration-700
-              ${imageLoaded ? 'opacity-100' : 'opacity-0'}
-              ${isExpanded ? 'scale-110' : 'scale-100'}
-            `}
-            onLoad={() => setImageLoaded(true)}
-          />
+          <div className="relative w-full h-full overflow-hidden pixel-grid-overlay pixel-grid-heavy">
+            <LazyImage
+              src={project.imageUrl}
+              alt={project.title}
+              pixelated={true}
+              className={`
+                w-full h-full object-cover transition-all duration-700
+                ${imageLoaded ? 'opacity-100' : 'opacity-0'}
+                ${isExpanded ? 'scale-110' : 'scale-100'}
+                crt-image-filter pixelated-extreme
+              `}
+              onLoad={() => setImageLoaded(true)}
+            />
+          </div>
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary-bg-light to-primary-bg">
             <div className="text-text-secondary/60 font-tech text-lg">
@@ -102,8 +123,96 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
         )}
       </div>
 
+      {/* CRT Screen Effect - RGB separation and noise */}
+      <div className={`
+        absolute inset-0 z-5 pointer-events-none
+        transition-opacity duration-300
+        ${imageLoaded ? 'opacity-100' : 'opacity-0'}
+      `}>
+        {/* Enhanced RGB Chromatic aberration effect */}
+        <div
+          className="absolute inset-0 mix-blend-screen opacity-40"
+          style={{
+            background: `
+              radial-gradient(circle at 20% 30%, rgba(255, 0, 0, 0.25) 0%, transparent 60%),
+              radial-gradient(circle at 80% 70%, rgba(0, 255, 0, 0.25) 0%, transparent 60%),
+              radial-gradient(circle at 50% 50%, rgba(0, 0, 255, 0.2) 0%, transparent 70%)
+            `
+          }}
+        />
+
+        {/* Stronger CRT Curvature simulation with vignette */}
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            background: `
+              radial-gradient(ellipse 90% 90% at center, 
+                transparent 0%, 
+                transparent 100%, 
+                rgba(0, 0, 0, 0.2) 75%, 
+                rgba(0, 0, 0, 0.5) 90%,
+                rgba(0, 0, 0, 0.8) 100%
+              )
+            `
+          }}
+        />
+
+        {/* More visible noise texture */}
+        <div
+          className="absolute inset-0 opacity-25 mix-blend-overlay"
+          style={{
+            backgroundImage: `
+              repeating-conic-gradient(from 0deg at 50% 50%, 
+                transparent 0deg, 
+                rgba(255, 255, 255, 0.08) 1deg, 
+                transparent 2deg
+              )
+            `,
+            backgroundSize: '5px 4px'
+          }}
+        />
+
+        {/* Additional horizontal scanlines for CRT effect */}
+        <div
+          className="absolute inset-0 opacity-15"
+          style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                transparent 1px,
+                rgba(0, 0, 0, 0.3) 1px,
+                rgba(0, 0, 0, 0.3) 2px
+              )
+            `,
+            backgroundSize: '100% 5px'
+          }}
+        />
+
+        {/* Phosphor glow effect */}
+        <div
+          className="absolute inset-0 opacity-20 mix-blend-soft-light"
+          style={{
+            background: `
+              radial-gradient(ellipse 150% 150% at center, 
+                rgba(0, 255, 100, 0.1) 0%, 
+                transparent 90%
+              )
+            `
+          }}
+        />
+      </div>
+
       {/* Minimal overlay for readability - always present but subtle */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+      {/* Dark overlay on hover - matches the sliding window gradient */}
+      <div className={`
+        absolute inset-0 z-10 pointer-events-none
+        bg-gradient-to-t from-black/95 via-black/80 to-black/20
+        transition-opacity duration-500 ease-out
+        ${isExpanded ? 'opacity-100' : 'opacity-0'}
+      `} />
 
       {/* Scanline effect - only visible on hover */}
       <div className={`
@@ -130,8 +239,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
         </div>
       </div>
 
-      {/* Category badge - floating on image */}
-      <div className="absolute top-4 right-4 z-20">
+      {/* Category badge and company tag - floating on image */}
+      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
         <span className={`
           text-xs font-tech font-bold px-3 py-1 rounded-xl uppercase tracking-wide backdrop-blur-sm
           transition-all duration-300
@@ -143,10 +252,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
           {project.category === 'data' ? 'DATA_SCI' :
             project.category === 'fullstack' ? 'FULL_STK' : 'WORDPRESS'}
         </span>
+
+        {/* Company tag for WordPress projects */}
+        {project.company && (
+          <span className="text-xs font-tech px-2 py-1 rounded-lg bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
+            {project.company}
+          </span>
+        )}
       </div>
 
       {/* Quick action buttons - top right, always visible but subtle */}
-      <div className="absolute top-16 right-4 flex flex-col gap-2 z-20">
+      <div className="absolute top-20 right-4 flex flex-col gap-2 z-20">
         {project.liveUrl && (
           <button
             onClick={(e) => handleLinkClick(e, project.liveUrl)}
@@ -161,17 +277,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
           </button>
         )}
 
-        <button
-          onClick={(e) => handleLinkClick(e, project.githubUrl)}
-          className={`
-            bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg backdrop-blur-sm
-            transition-all duration-300 hover:scale-110
-            ${isExpanded ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
-          `}
-          title="View Source Code"
-        >
-          <Github className="w-4 h-4" />
-        </button>
+        {project.githubUrl && (
+          <button
+            onClick={(e) => handleLinkClick(e, project.githubUrl)}
+            className={`
+              bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg backdrop-blur-sm
+              transition-all duration-300 hover:scale-110
+              ${isExpanded ? 'opacity-100 translate-x-0' : 'opacity-60 translate-x-2'}
+            `}
+            title="View Source Code"
+          >
+            <Github className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Content overlay - slides up from bottom on hover */}
@@ -244,13 +362,15 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
             </button>
           )}
 
-          <button
-            onClick={(e) => handleLinkClick(e, project.githubUrl)}
-            className="text-white/70 hover:text-accent-green text-sm font-tech font-bold flex items-center gap-2 transition-all duration-200 hover:gap-3"
-          >
-            SOURCE
-            <Github className="w-4 h-4" />
-          </button>
+          {project.githubUrl && (
+            <button
+              onClick={(e) => handleLinkClick(e, project.githubUrl)}
+              className="text-white/70 hover:text-accent-green text-sm font-tech font-bold flex items-center gap-2 transition-all duration-200 hover:gap-3"
+            >
+              SOURCE
+              <Github className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
 
