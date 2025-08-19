@@ -239,7 +239,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
       {/* Category badge and company tag - floating on image */}
       <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
         <span className={`
-          text-xs font-tech font-bold px-3 py-1 rounded-xl uppercase tracking-wide backdrop-blur-sm
+          text-sm font-tech font-bold px-3 py-1 rounded-xl uppercase tracking-wide backdrop-blur-sm
           transition-all duration-300
           ${project.category === 'data' ? 'bg-accent-green/20 text-accent-green border border-accent-green/50' :
             project.category === 'fullstack' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/50' :
@@ -252,7 +252,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
 
         {/* Company tag for WordPress projects */}
         {project.company && (
-          <span className="text-xs font-tech px-2 py-1 rounded-lg bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
+          <span className="text-sm font-tech px-2 py-1 rounded-lg bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
             {project.company}
           </span>
         )}
@@ -314,7 +314,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
             <span
               key={techIndex}
               className={`
-                text-xs px-2 py-1 rounded-lg font-tech
+                text-sm px-2 py-1 rounded-lg font-tech
                 bg-white/10 border border-white/20 text-white backdrop-blur-sm
                 transition-all duration-200 transform hover:scale-105
                 ${isExpanded ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'}

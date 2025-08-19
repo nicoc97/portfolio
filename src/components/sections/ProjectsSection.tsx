@@ -70,9 +70,9 @@ const portfolioProjects: Project[] = [
   {
     id: '5',
     title: 'Golspie Golf Club Website',
-    description: 'Complete WordPress site design and development at PlanIt Scotland.',
-    techStack: ['WordPress', 'PHP', 'JavaScript', 'Elemenor'],
-    imageUrl: '',
+    description: 'Complete WordPress site designed and developed at PlanIt Scotland.',
+    techStack: ['WordPress', 'PHP', 'JavaScript', 'Elementor'],
+    imageUrl: '/images/golspiegolf.webp',
     liveUrl: 'https://www.golspiegolfclub.co.uk/',
     category: 'wordpress',
     status: 'completed',
@@ -81,7 +81,7 @@ const portfolioProjects: Project[] = [
   {
     id: '6',
     title: 'T&E Racing WooCommerce Optimization',
-    description: 'Performance optimization and vehicle parts search enhancement for WooCommerce store. Built custom queries and spreadsheet automation for product imports.',
+    description: 'Vehicle parts search enhancement for WooCommerce store. Built custom queries and spreadsheet automation for product imports.',
     techStack: ['WordPress', 'WooCommerce', 'PHP', 'Excel/CSV', 'Python'],
     imageUrl: '',
     liveUrl: 'https://www.teracing.co.uk',
