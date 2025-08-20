@@ -252,7 +252,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, onCardExpand 
 
         {/* Company tag for WordPress projects */}
         {project.company && (
-          <span className="text-sm font-tech px-2 py-1 rounded-lg bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
+          <span className="text-xs font-tech px-2 py-1 rounded-lg bg-white/10 text-white/80 border border-white/20 backdrop-blur-sm">
             {project.company}
           </span>
         )}

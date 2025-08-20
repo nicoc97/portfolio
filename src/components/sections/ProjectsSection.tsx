@@ -76,7 +76,7 @@ const portfolioProjects: Project[] = [
     liveUrl: 'https://www.golspiegolfclub.co.uk/',
     category: 'wordpress',
     status: 'completed',
-    company: 'Planit Scotland'
+    company: 'Freelance'
   },
   {
     id: '6',
