@@ -32,6 +32,10 @@ function App() {
   const [isScrolling, setIsScrolling] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // Refs for scroll timing and debouncing
+  const lastScrollTime = useRef<number>(0);
+  const scrollTimeoutRef = useRef<number | null>(null);
+
   // Preload animations and monitor performance
   usePreloadAnimations();
   useCriticalPreload();
