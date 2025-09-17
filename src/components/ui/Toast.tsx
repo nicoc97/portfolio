@@ -51,9 +51,14 @@ export const Toast: React.FC<ToastProps> = ({
     }
   };
 
+  const role = type === 'error' || type === 'warning' ? 'alert' : 'status';
+  const ariaLive = type === 'error' || type === 'warning' ? 'assertive' : 'polite';
+
   return (
     <div className="fixed top-4 right-4 z-50">
       <div
+        role={role}
+        aria-live={ariaLive}
         className={`
           flex items-center gap-3 px-4 py-3 rounded-lg border backdrop-blur-sm
           font-tech text-sm transition-all duration-300 transform
@@ -61,13 +66,14 @@ export const Toast: React.FC<ToastProps> = ({
           ${isAnimating ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}
         `}
       >
-        <AlertCircle className="w-4 h-4 flex-shrink-0" />
+        <AlertCircle className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
         <span className="flex-1">{message}</span>
         <button
           onClick={handleClose}
           className="text-current hover:opacity-70 transition-opacity"
+          aria-label="Close notification"
         >
-          <X className="w-4 h-4" />
+          <X className="w-4 h-4" aria-hidden="true" />
         </button>
       </div>
     </div>

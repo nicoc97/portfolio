@@ -22,6 +22,7 @@ export const DotPagination: React.FC<DotPaginationProps> = ({
 }) => {
   return (
     <nav
+      aria-label="Section pagination"
       className={`fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-3 transition-opacity duration-300 ${isLightboxOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
     >
@@ -37,15 +38,17 @@ export const DotPagination: React.FC<DotPaginationProps> = ({
               : 'bg-white/20 hover:bg-accent-orange/50 border border-white/30'
               }`}
             aria-label={`Go to ${section} section`}
+            aria-current={isActive ? 'page' : undefined}
           >
             {/* Tooltip */}
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 px-2 py-1 bg-primary-bg/90 backdrop-blur-sm border border-white/20 rounded-lg font-tech text-xs text-text-primary whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none safari-tooltip">
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 px-2 py-1 bg-primary-bg/90 backdrop-blur-sm border border-white/20 rounded-lg font-tech text-xs text-text-primary whitespace-nowrap opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-200 pointer-events-none safari-tooltip">
               {section.toUpperCase()}
             </div>
+            <span className="sr-only">{section}</span>
 
             {/* Active indicator ring */}
             {isActive && (
-              <div className="absolute inset-0 rounded-full border-2 border-accent-orange animate-pulse"></div>
+              <div className="absolute inset-0 rounded-full border-2 border-accent-orange animate-pulse" aria-hidden="true"></div>
             )}
           </button>
         );

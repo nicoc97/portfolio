@@ -30,8 +30,6 @@ function App() {
   const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'jukebox' | 'skills' | 'contact'>('hero');
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
-  const scrollTimeoutRef = useRef<number | null>(null);
-  const lastScrollTime = useRef(0);
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Preload animations and monitor performance
@@ -367,30 +365,22 @@ function App() {
       }
     };
 
-    // Add wheel listener with proper passive setting
-    window.addEventListener('wheel', handleWheel, { passive: false });
-
-    // Add keyboard navigation only for 3xl screens with scroll hijacking
+    // Add event listeners conditionally based on hijack state
     if (shouldHijackScroll) {
+      window.addEventListener('wheel', handleWheel, { passive: false });
       window.addEventListener('keydown', handleKeyDown);
-    }
-
-    // Add scroll tracking for screens without scroll hijacking
-    if (!shouldHijackScroll) {
+    } else {
+      // Track active section without blocking scroll
       window.addEventListener('scroll', handleScroll, { passive: true });
       setTimeout(handleScroll, 100);
     }
 
     return () => {
-      window.removeEventListener('wheel', handleWheel);
       if (shouldHijackScroll) {
+        window.removeEventListener('wheel', handleWheel);
         window.removeEventListener('keydown', handleKeyDown);
-      }
-      if (!shouldHijackScroll) {
+      } else {
         window.removeEventListener('scroll', handleScroll);
-      }
-      if (scrollTimeoutRef.current !== null) {
-        clearTimeout(scrollTimeoutRef.current);
       }
       if (rafId) {
         cancelAnimationFrame(rafId);
