@@ -46,8 +46,8 @@
     /* Internet Explorer 10+ */
   }
 
-  /* Smooth scrolling for screens below 3xl (1920px) - 3xl and above use scroll hijacking */
-  @media (max-width: 1919px) {
+  /* Smooth scrolling for screens below 2560px - 2560px and above use scroll hijacking */
+  @media (max-width: 2559px) {
     html {
       scroll-behavior: smooth;
     }
@@ -63,8 +63,8 @@
     /* Prevent horizontal scrolling */
   }
 
-  /* Scroll improvements for screens below 3xl (natural scrolling) */
-  @media (max-width: 1919px) {
+  /* Scroll improvements for screens below 2560px (natural scrolling) */
+  @media (max-width: 2559px) {
     body {
       /* Enable momentum scrolling on iOS */
       -webkit-overflow-scrolling: touch;
@@ -73,7 +73,7 @@
     }
   }
 
-  /* Full viewport height sections for scroll hijacking (3xl screens and above) */
+  /* Full viewport height sections for scroll hijacking (2560px+ screens) */
   .section-fullscreen {
     /* Default: Allow natural content height */
     height: auto;
@@ -81,8 +81,8 @@
     scroll-snap-align: start;
   }
 
-  /* 3XL screens and above: Minimum viewport height for scroll hijacking */
-  @media (min-width: 1920px) {
+  /* 2560px and above: Minimum viewport height for scroll hijacking */
+  @media (min-width: 2560px) {
     .section-fullscreen {
       min-height: 100vh;
       /* Allow sections to grow beyond 100vh if content requires it */
