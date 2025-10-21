@@ -47,7 +47,7 @@ export class PerformanceMonitor {
       }
 
       // Log warning if performance is poor
-      if (duration > 16.67) { // 60fps threshold
+      if (duration > 16.67 && import.meta.env.DEV) { // 60fps threshold
         console.warn(`Performance warning: ${name} took ${duration.toFixed(2)}ms`);
       }
     });
@@ -274,7 +274,9 @@ export const CodeSplitter = {
         try {
           return await importFn();
         } catch (error) {
-          console.error('Failed to load component:', error);
+          if (import.meta.env.DEV) {
+            console.error('Failed to load component:', error);
+          }
           return { default: fallback as T };
         }
       });
@@ -299,11 +301,8 @@ export const BundleAnalyzer = {
   // Log bundle information in development
   logBundleInfo(): void {
     if (import.meta.env.DEV) {
-      console.group('Bundle Information');
-      console.log('React version:', React.version);
-      console.log('Build mode:', import.meta.env.MODE);
-      console.log('Base URL:', import.meta.env.BASE_URL);
-      console.groupEnd();
+      // Bundle information available for debugging
+      // Uncomment to view: console.log('React version:', React.version);
     }
   },
 
@@ -319,7 +318,7 @@ export const BundleAnalyzer = {
         const renderEnd = performance.now();
         const renderTime = renderEnd - renderStart;
 
-        if (renderTime > 16) {
+        if (renderTime > 16 && import.meta.env.DEV) {
           console.warn(`Slow render: ${name} took ${renderTime.toFixed(2)}ms`);
         }
       });

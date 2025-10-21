@@ -30,10 +30,12 @@ export function register(config?: Config) {
       if (isLocalhost) {
         checkValidServiceWorker(swUrl, config);
         navigator.serviceWorker.ready.then(() => {
-          console.log(
-            'This web app is being served cache-first by a service ' +
-            'worker. To learn more, visit https://cra.link/PWA'
-          );
+          if (import.meta.env.DEV) {
+            console.log(
+              'This web app is being served cache-first by a service ' +
+              'worker. To learn more, visit https://cra.link/PWA'
+            );
+          }
         });
       } else {
         registerValidSW(swUrl, config);
@@ -54,16 +56,20 @@ function registerValidSW(swUrl: string, config?: Config) {
         installingWorker.onstatechange = () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
-              console.log(
-                'New content is available and will be used when all ' +
-                'tabs for this page are closed. See https://cra.link/PWA.'
-              );
+              if (import.meta.env.DEV) {
+                console.log(
+                  'New content is available and will be used when all ' +
+                  'tabs for this page are closed. See https://cra.link/PWA.'
+                );
+              }
 
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
               }
             } else {
-              console.log('Content is cached for offline use.');
+              if (import.meta.env.DEV) {
+                console.log('Content is cached for offline use.');
+              }
 
               if (config && config.onSuccess) {
                 config.onSuccess(registration);
@@ -74,7 +80,9 @@ function registerValidSW(swUrl: string, config?: Config) {
       };
     })
     .catch((error) => {
-      console.error('Error during service worker registration:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error during service worker registration:', error);
+      }
     });
 }
 
@@ -98,9 +106,11 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
       }
     })
     .catch(() => {
-      console.log(
-        'No internet connection found. App is running in offline mode.'
-      );
+      if (import.meta.env.DEV) {
+        console.log(
+          'No internet connection found. App is running in offline mode.'
+        );
+      }
     });
 }
 
@@ -111,7 +121,9 @@ export function unregister() {
         registration.unregister();
       })
       .catch((error) => {
-        console.error(error.message);
+        if (import.meta.env.DEV) {
+          console.error(error.message);
+        }
       });
   }
 }
@@ -306,30 +318,18 @@ export class ServiceWorkerManager {
   // Monitor cache performance
   async monitorCachePerformance(): Promise<void> {
     const metrics = await this.getPerformanceMetrics();
-    
+
     if (metrics && import.meta.env.DEV) {
-      console.group('Service Worker Performance');
-      console.log('Cache Hit Rate:', `${(metrics.cacheHitRate * 100).toFixed(1)}%`);
-      console.log('Cache Hits:', metrics.cacheHits);
-      console.log('Cache Misses:', metrics.cacheMisses);
-      console.log('Network Requests:', metrics.networkRequests);
-      console.log('Failed Requests:', metrics.failedRequests);
-      
-      if (metrics.cacheSize) {
-        console.log('Cache Usage:', `${metrics.cacheSize.percentage}% (${(metrics.cacheSize.used / 1024 / 1024).toFixed(1)}MB)`);
-      }
-      
-      console.groupEnd();
+      // Service Worker performance metrics available for debugging
+      // Uncomment to view detailed metrics
 
       // Trigger optimization if cache hit rate is low
       if (metrics.cacheHitRate < 0.7) {
-        console.warn('Low cache hit rate detected, optimizing cache...');
         await this.optimizeCache();
       }
 
       // Trigger optimization if cache usage is high
       if (metrics.cacheSize && metrics.cacheSize.percentage > 80) {
-        console.warn('High cache usage detected, optimizing cache...');
         await this.optimizeCache();
       }
     }

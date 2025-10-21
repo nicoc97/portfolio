@@ -229,7 +229,9 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
       setDisplayPixelLevel(pixelLevel);
     } catch (error) {
-      console.warn('Error updating album texture:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Error updating album texture:', error);
+      }
     }
   };
 
@@ -247,7 +249,9 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
     // Don't initialize if dimensions are invalid
     if (width === 0 || height === 0) {
-      console.warn('Canvas has invalid dimensions, retrying...');
+      if (import.meta.env.DEV) {
+        console.warn('Canvas has invalid dimensions, retrying...');
+      }
       setTimeout(() => init3DScene(), 100);
       return;
     }
@@ -406,7 +410,9 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
 
         sceneRef.current.renderer.render(sceneRef.current.scene, sceneRef.current.camera);
       } catch (error) {
-        console.warn('Error in animation loop:', error);
+        if (import.meta.env.DEV) {
+          console.warn('Error in animation loop:', error);
+        }
         animationFrameRef.current = undefined;
         return;
       }
@@ -583,7 +589,9 @@ export const VinylLightbox: React.FC<VinylLightboxProps> = ({ album, isOpen, onC
               sceneRef.current.renderer.dispose();
               sceneRef.current.renderer.forceContextLoss();
             } catch (error) {
-              console.warn('Error during cleanup:', error);
+              if (import.meta.env.DEV) {
+                console.warn('Error during cleanup:', error);
+              }
             } finally {
               sceneRef.current = null;
             }

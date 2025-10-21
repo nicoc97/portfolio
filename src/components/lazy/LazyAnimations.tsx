@@ -19,9 +19,11 @@ const ScrollAnimations = React.lazy(() => {
     });
     return { default: module.ScrollReveal };
   }).catch(error => {
-    console.warn('Failed to load ScrollAnimations:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load ScrollAnimations:', error);
+    }
     performanceMonitor.trackAnimationPerformance('scroll-animations-error', () => {
-      console.error('ScrollAnimations load failed');
+      // Track error silently
     });
     return { default: () => null };
   });
@@ -39,9 +41,11 @@ const ThreeJSComponents = React.lazy(() => {
     });
     return { default: module.WaveBackground };
   }).catch(error => {
-    console.warn('Failed to load Three.js components:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load Three.js components:', error);
+    }
     performanceMonitor.trackAnimationPerformance('threejs-error', () => {
-      console.error('Three.js components load failed');
+      // Track error silently
     });
     return { default: () => React.createElement('div', { className: 'w-full h-full bg-primary-bg-light' }) };
   });
@@ -59,9 +63,11 @@ const SwiperComponents = React.lazy(() => {
     });
     return { default: module.Swiper };
   }).catch(error => {
-    console.warn('Failed to load Swiper components:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load Swiper components:', error);
+    }
     performanceMonitor.trackAnimationPerformance('swiper-error', () => {
-      console.error('Swiper components load failed');
+      // Track error silently
     });
     return { default: () => null };
   });
@@ -149,13 +155,17 @@ export const preloadAnimations = () => {
 
   // Preload scroll animations
   import('../animations/ScrollAnimations').catch(error => {
-    console.warn('Failed to preload ScrollAnimations:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to preload ScrollAnimations:', error);
+    }
   });
 
   // Preload Three.js components on high-end devices only
   if (!recommendations.simplifyEffects && navigator.hardwareConcurrency && navigator.hardwareConcurrency > 4) {
     import('../ui/WaveBackground').catch(error => {
-      console.warn('Failed to preload Three.js components:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Failed to preload Three.js components:', error);
+      }
     });
   }
 };
@@ -211,7 +221,7 @@ export const preloadCriticalComponents = () => {
 
   Promise.allSettled(criticalImports).then(results => {
     results.forEach((result, index) => {
-      if (result.status === 'rejected') {
+      if (result.status === 'rejected' && import.meta.env.DEV) {
         console.warn(`Failed to preload critical component ${index}:`, result.reason);
       }
     });

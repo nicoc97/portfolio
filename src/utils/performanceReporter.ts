@@ -64,7 +64,9 @@ class PerformanceReporter {
         // Observe different types of performance entries
         this.observer.observe({ entryTypes: ['navigation', 'paint', 'largest-contentful-paint', 'layout-shift'] });
       } catch (error) {
-        console.warn('PerformanceObserver not supported:', error);
+        if (import.meta.env.DEV) {
+          console.warn('PerformanceObserver not supported:', error);
+        }
       }
     }
 
@@ -130,7 +132,9 @@ class PerformanceReporter {
     try {
       observer.observe({ type: 'first-input', buffered: true });
     } catch (error) {
-      console.warn('First Input Delay observation not supported:', error);
+      if (import.meta.env.DEV) {
+        console.warn('First Input Delay observation not supported:', error);
+      }
     }
   }
 

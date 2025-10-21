@@ -107,25 +107,26 @@ export const LazyImage: React.FC<LazyImageProps> = ({
 
   const handleLoad = () => {
     setIsLoaded(true);
-    console.log(`Successfully loaded image: ${src}`);
-    
+
     // Track image loading performance
     performanceMonitor.trackAnimationPerformance('image-load', () => {
       // Image loaded successfully
     });
-    
+
     onLoad?.();
   };
 
   const handleError = () => {
     setHasError(true);
-    console.error(`Failed to load image: ${src}`);
-    console.error('Image error details:', {
-      originalSrc: src,
-      optimizedSrc: src.includes('.webp') ? src : getOptimizedSrc(src),
-      isWebP: src.includes('.webp'),
-      performanceRecommendations: performanceMonitor.getPerformanceRecommendations()
-    });
+    if (import.meta.env.DEV) {
+      console.error(`Failed to load image: ${src}`);
+      console.error('Image error details:', {
+        originalSrc: src,
+        optimizedSrc: src.includes('.webp') ? src : getOptimizedSrc(src),
+        isWebP: src.includes('.webp'),
+        performanceRecommendations: performanceMonitor.getPerformanceRecommendations()
+      });
+    }
     onError?.();
   };
 

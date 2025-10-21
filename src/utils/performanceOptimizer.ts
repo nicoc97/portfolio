@@ -118,7 +118,9 @@ export class PerformanceOptimizer {
       const webpSupport = await this.checkImageFormatSupport('webp');
       this.deviceCapabilities.supportsWebP = webpSupport;
     } catch (error) {
-      console.warn('Failed to detect WebP support:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Failed to detect WebP support:', error);
+      }
     }
 
     // Check AVIF support
@@ -126,7 +128,9 @@ export class PerformanceOptimizer {
       const avifSupport = await this.checkImageFormatSupport('avif');
       this.deviceCapabilities.supportsAVIF = avifSupport;
     } catch (error) {
-      console.warn('Failed to detect AVIF support:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Failed to detect AVIF support:', error);
+      }
     }
 
     // Check battery status
@@ -139,7 +143,9 @@ export class PerformanceOptimizer {
         // Recalculate performance metrics with battery info
         this.calculatePerformanceMetrics();
       } catch (error) {
-        console.warn('Failed to get battery status:', error);
+        if (import.meta.env.DEV) {
+          console.warn('Failed to get battery status:', error);
+        }
       }
     }
 
@@ -260,24 +266,23 @@ export class PerformanceOptimizer {
   reportPerformanceMetrics(): void {
     if (!this.deviceCapabilities || !this.optimizationSettings) return;
 
-    const metrics = {
-      deviceScore: this.deviceCapabilities.performanceScore,
-      isLowEnd: this.deviceCapabilities.isLowEnd,
-      cores: this.deviceCapabilities.cores,
-      memory: this.deviceCapabilities.memory,
-      connectionType: this.deviceCapabilities.connectionType,
-      optimizationsEnabled: {
-        animations: this.optimizationSettings.enableAnimations,
-        webp: this.optimizationSettings.useWebP,
-        preloading: this.optimizationSettings.enablePreloading,
-        simplifiedUI: this.optimizationSettings.simplifyUI
-      }
-    };
-
     if (import.meta.env.DEV) {
-      console.group('Performance Optimizer Report');
-      console.table(metrics);
-      console.groupEnd();
+      // Performance metrics available for debugging
+      const metrics = {
+        deviceScore: this.deviceCapabilities.performanceScore,
+        isLowEnd: this.deviceCapabilities.isLowEnd,
+        cores: this.deviceCapabilities.cores,
+        memory: this.deviceCapabilities.memory,
+        connectionType: this.deviceCapabilities.connectionType,
+        optimizationsEnabled: {
+          animations: this.optimizationSettings.enableAnimations,
+          webp: this.optimizationSettings.useWebP,
+          preloading: this.optimizationSettings.enablePreloading,
+          simplifiedUI: this.optimizationSettings.simplifyUI
+        }
+      };
+      // Uncomment to view: console.table(metrics);
+      void metrics; // Mark as intentionally unused
     }
 
     // Report to performance monitor

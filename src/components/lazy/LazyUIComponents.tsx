@@ -18,7 +18,9 @@ const VinylRecordComponent = React.lazy(() => {
     });
     return { default: module.VinylRecord };
   }).catch(error => {
-    console.warn('Failed to load VinylRecord:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load VinylRecord:', error);
+    }
     return { 
       default: () => (
         <div className="w-32 h-32 bg-primary-bg-light rounded-full border-2 border-accent-orange/30 flex items-center justify-center">
@@ -41,7 +43,9 @@ const VintageTVDialComponent = React.lazy(() => {
     });
     return { default: module.VintageTVDial };
   }).catch(error => {
-    console.warn('Failed to load VintageTVDial:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load VintageTVDial:', error);
+    }
     return { 
       default: () => (
         <div className="w-16 h-16 bg-primary-bg-light rounded-full border-2 border-accent-green/30 flex items-center justify-center">
@@ -64,7 +68,9 @@ const VinylLightboxComponent = React.lazy(() => {
     });
     return { default: module.VinylLightbox };
   }).catch(error => {
-    console.warn('Failed to load VinylLightbox:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load VinylLightbox:', error);
+    }
     return { default: () => null };
   });
 });
@@ -153,17 +159,23 @@ export const preloadUIComponents = () => {
 
   // Preload vinyl components
   import('../ui/VinylRecord').catch(error => {
-    console.warn('Failed to preload VinylRecord:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to preload VinylRecord:', error);
+    }
   });
 
   import('../ui/VintageTVDial').catch(error => {
-    console.warn('Failed to preload VintageTVDial:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to preload VintageTVDial:', error);
+    }
   });
 
   // Preload lightbox only on high-end devices
   if (navigator.hardwareConcurrency && navigator.hardwareConcurrency > 4) {
     import('../ui/VinylLightbox').catch(error => {
-      console.warn('Failed to preload VinylLightbox:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Failed to preload VinylLightbox:', error);
+      }
     });
   }
 };
