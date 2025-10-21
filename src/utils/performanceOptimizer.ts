@@ -266,23 +266,23 @@ export class PerformanceOptimizer {
   reportPerformanceMetrics(): void {
     if (!this.deviceCapabilities || !this.optimizationSettings) return;
 
-    const metrics = {
-      deviceScore: this.deviceCapabilities.performanceScore,
-      isLowEnd: this.deviceCapabilities.isLowEnd,
-      cores: this.deviceCapabilities.cores,
-      memory: this.deviceCapabilities.memory,
-      connectionType: this.deviceCapabilities.connectionType,
-      optimizationsEnabled: {
-        animations: this.optimizationSettings.enableAnimations,
-        webp: this.optimizationSettings.useWebP,
-        preloading: this.optimizationSettings.enablePreloading,
-        simplifiedUI: this.optimizationSettings.simplifyUI
-      }
-    };
-
     if (import.meta.env.DEV) {
       // Performance metrics available for debugging
+      const metrics = {
+        deviceScore: this.deviceCapabilities.performanceScore,
+        isLowEnd: this.deviceCapabilities.isLowEnd,
+        cores: this.deviceCapabilities.cores,
+        memory: this.deviceCapabilities.memory,
+        connectionType: this.deviceCapabilities.connectionType,
+        optimizationsEnabled: {
+          animations: this.optimizationSettings.enableAnimations,
+          webp: this.optimizationSettings.useWebP,
+          preloading: this.optimizationSettings.enablePreloading,
+          simplifiedUI: this.optimizationSettings.simplifyUI
+        }
+      };
       // Uncomment to view: console.table(metrics);
+      void metrics; // Mark as intentionally unused
     }
 
     // Report to performance monitor
