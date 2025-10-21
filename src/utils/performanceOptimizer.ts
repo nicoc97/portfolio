@@ -118,7 +118,9 @@ export class PerformanceOptimizer {
       const webpSupport = await this.checkImageFormatSupport('webp');
       this.deviceCapabilities.supportsWebP = webpSupport;
     } catch (error) {
-      console.warn('Failed to detect WebP support:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Failed to detect WebP support:', error);
+      }
     }
 
     // Check AVIF support
@@ -126,7 +128,9 @@ export class PerformanceOptimizer {
       const avifSupport = await this.checkImageFormatSupport('avif');
       this.deviceCapabilities.supportsAVIF = avifSupport;
     } catch (error) {
-      console.warn('Failed to detect AVIF support:', error);
+      if (import.meta.env.DEV) {
+        console.warn('Failed to detect AVIF support:', error);
+      }
     }
 
     // Check battery status
@@ -139,7 +143,9 @@ export class PerformanceOptimizer {
         // Recalculate performance metrics with battery info
         this.calculatePerformanceMetrics();
       } catch (error) {
-        console.warn('Failed to get battery status:', error);
+        if (import.meta.env.DEV) {
+          console.warn('Failed to get battery status:', error);
+        }
       }
     }
 
@@ -275,9 +281,8 @@ export class PerformanceOptimizer {
     };
 
     if (import.meta.env.DEV) {
-      console.group('Performance Optimizer Report');
-      console.table(metrics);
-      console.groupEnd();
+      // Performance metrics available for debugging
+      // Uncomment to view: console.table(metrics);
     }
 
     // Report to performance monitor

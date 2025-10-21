@@ -90,7 +90,9 @@ export const ContactSection: React.FC = () => {
       setPixelAnimation('success');
       setTimeout(() => setPixelAnimation('idle'), 2000);
     } catch (error) {
-      console.error('Download failed:', error);
+      if (import.meta.env.DEV) {
+        console.error('Download failed:', error);
+      }
       setPixelAnimation('error');
       setTimeout(() => setPixelAnimation('idle'), 2000);
     } finally {

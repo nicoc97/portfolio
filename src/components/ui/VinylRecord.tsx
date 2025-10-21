@@ -243,7 +243,9 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
           sceneRef.current.sleeve.material.needsUpdate = true;
         }
       } catch (error) {
-        console.error('Error updating album texture:', error);
+        if (import.meta.env.DEV) {
+          console.error('Error updating album texture:', error);
+        }
       }
     }
   };
@@ -418,9 +420,11 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
 
       // Initial render
       renderer.render(scene, camera);
-      
+
     } catch (error) {
-      console.error('Error initializing Three.js scene:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error initializing Three.js scene:', error);
+      }
     } finally {
       isInitializingRef.current = false;
     }
