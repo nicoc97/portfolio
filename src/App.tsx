@@ -1,15 +1,17 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { HeroSection } from './components/sections/HeroSection';
-import { ProjectsSection } from './components/sections/ProjectsSection';
-import { AboutSection } from './components/sections/AboutSection';
-import { JukeboxSection } from './components/sections/JukeboxSection';
-import { SkillsSection } from './components/sections/SkillsSection';
-import { ContactSection } from './components/sections/ContactSection';
 import { DotPagination } from './components/ui/DotPagination';
 import { MobileMenu } from './components/ui/MobileMenu';
 import { ToastProvider } from './hooks/useToast';
 import { usePreloadAnimations, useCriticalPreload } from './components/lazy/LazyAnimations';
 import { MetaTags } from './components/SEO/MetaTags';
+
+// Lazy load sections below the fold for better initial load performance
+const ProjectsSection = lazy(() => import('./components/sections/ProjectsSection').then(m => ({ default: m.ProjectsSection })));
+const AboutSection = lazy(() => import('./components/sections/AboutSection').then(m => ({ default: m.AboutSection })));
+const JukeboxSection = lazy(() => import('./components/sections/JukeboxSection').then(m => ({ default: m.JukeboxSection })));
+const SkillsSection = lazy(() => import('./components/sections/SkillsSection').then(m => ({ default: m.SkillsSection })));
+const ContactSection = lazy(() => import('./components/sections/ContactSection').then(m => ({ default: m.ContactSection })));
 
 import { performanceReporter } from './utils/performanceReporter';
 import { performanceMonitor } from './utils/performance';
@@ -479,13 +481,19 @@ function App() {
         section={activeSection}
       />
       <div className="min-h-screen bg-primary-bg">
-        {/* All sections rendered at once for scrolling */}
+        {/* Hero section loads immediately */}
         <HeroSection onNavigateToSection={navigateToSection} />
-        <ProjectsSection />
-        <AboutSection />
-        <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
-        <SkillsSection />
-        <ContactSection />
+
+        {/* Lazy load sections below the fold with Suspense */}
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-primary-bg">
+          <div className="font-tech text-accent-orange animate-pulse">[LOADING_SECTION...]</div>
+        </div>}>
+          <ProjectsSection />
+          <AboutSection />
+          <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
+          <SkillsSection />
+          <ContactSection />
+        </Suspense>
 
         {/* Desktop Dot Pagination - Right side */}
         <DotPagination

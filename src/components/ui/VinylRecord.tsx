@@ -1,5 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
+import {
+  Scene,
+  PerspectiveCamera,
+  WebGLRenderer,
+  Mesh,
+  Texture,
+  CanvasTexture,
+  NearestFilter,
+  MeshLambertMaterial,
+  AmbientLight,
+  DirectionalLight,
+  BoxGeometry,
+  CylinderGeometry,
+  CircleGeometry,
+  RingGeometry,
+  FrontSide
+} from 'three';
 
 interface AlbumData {
   id: string;
@@ -20,12 +36,12 @@ interface VinylRecordProps {
 
 export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<{ 
-    scene: THREE.Scene; 
-    camera: THREE.PerspectiveCamera; 
-    renderer: THREE.WebGLRenderer;
-    sleeve: THREE.Mesh;
-    record: THREE.Mesh;
+  const sceneRef = useRef<{
+    scene: Scene;
+    camera: PerspectiveCamera;
+    renderer: WebGLRenderer;
+    sleeve: Mesh;
+    record: Mesh;
   } | null>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const isInitializingRef = useRef(false);
@@ -37,7 +53,7 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
   const currentPixelationRef = useRef(32);
 
   // Create pixelated album art
-  const createPixelatedAlbumArt = (albumData: AlbumData, pixelSize: number): Promise<THREE.Texture> => {
+  const createPixelatedAlbumArt = (albumData: AlbumData, pixelSize: number): Promise<Texture> => {
     return new Promise((resolve) => {
       const canvas = document.createElement('canvas');
       canvas.width = 256; // Higher res than original 64x64 for better pixelation
@@ -69,18 +85,18 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
           ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
           ctx.fillRect(0, 0, 256, 256);
           
-          const texture = new THREE.CanvasTexture(canvas);
-          texture.magFilter = THREE.NearestFilter;
-          texture.minFilter = THREE.NearestFilter;
+          const texture = new CanvasTexture(canvas);
+          texture.magFilter = NearestFilter;
+          texture.minFilter = NearestFilter;
           resolve(texture);
         };
         
         img.onerror = () => {
           // Fallback to procedural art
           createProceduralArt(ctx, albumData, 256);
-          const texture = new THREE.CanvasTexture(canvas);
-          texture.magFilter = THREE.NearestFilter;
-          texture.minFilter = THREE.NearestFilter;
+          const texture = new CanvasTexture(canvas);
+          texture.magFilter = NearestFilter;
+          texture.minFilter = NearestFilter;
           resolve(texture);
         };
         
@@ -88,9 +104,9 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
       } else {
         // Use procedural art if no URL provided
         createProceduralArt(ctx, albumData, 256);
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.magFilter = THREE.NearestFilter;
-        texture.minFilter = THREE.NearestFilter;
+        const texture = new CanvasTexture(canvas);
+        texture.magFilter = NearestFilter;
+        texture.minFilter = NearestFilter;
         resolve(texture);
       }
     });
@@ -220,7 +236,7 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
     ctx.arc(128, 128, 12, 0, Math.PI * 2);
     ctx.fill();
 
-    const texture = new THREE.CanvasTexture(canvas);
+    const texture = new CanvasTexture(canvas);
     texture.needsUpdate = true;
     return texture;
   };
@@ -235,7 +251,7 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
         if (!isMountedRef.current || !sceneRef.current) return;
         
         // Update sleeve texture
-        if (sceneRef.current.sleeve.material instanceof THREE.MeshLambertMaterial) {
+        if (sceneRef.current.sleeve.material instanceof MeshLambertMaterial) {
           if (sceneRef.current.sleeve.material.map) {
             sceneRef.current.sleeve.material.map.dispose();
           }
@@ -260,7 +276,7 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
     if (sceneRef.current) {
       // Dispose of geometries, materials, and textures
       sceneRef.current.scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
+        if (child instanceof Mesh) {
           if (child.geometry) child.geometry.dispose();
           if (child.material) {
             if (Array.isArray(child.material)) {
@@ -317,18 +333,18 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
       const mobileScale = isMobile ? 0.75 : 1.0;
 
       // Scene setup
-      const scene = new THREE.Scene();
+      const scene = new Scene();
       scene.background = null;
 
       // Camera setup
       const containerWidth = containerRef.current.offsetWidth || 800;
       const containerHeight = 320;
-      const camera = new THREE.PerspectiveCamera(50, containerWidth / containerHeight, 0.1, 1000);
+      const camera = new PerspectiveCamera(50, containerWidth / containerHeight, 0.1, 1000);
       camera.position.set(-0.5, 0, 8);
       camera.lookAt(-0.5, 0, 0);
 
       // Renderer setup
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      const renderer = new WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(containerWidth, containerHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       
@@ -342,10 +358,10 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
       containerRef.current.appendChild(renderer.domElement);
 
       // Simple lighting
-      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      const ambientLight = new AmbientLight(0xffffff, 0.6);
       scene.add(ambientLight);
 
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+      const directionalLight = new DirectionalLight(0xffffff, 0.8);
       directionalLight.position.set(5, 5, 5);
       scene.add(directionalLight);
 
@@ -361,26 +377,26 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
       }
 
       // Create simple sleeve (box) - 1.4x larger, with mobile scaling
-      const sleeveGeometry = new THREE.BoxGeometry(
-        5.6 * mobileScale, 
-        5.6 * mobileScale, 
+      const sleeveGeometry = new BoxGeometry(
+        5.6 * mobileScale,
+        5.6 * mobileScale,
         0.28 * mobileScale
       );
-      const sleeveMaterial = new THREE.MeshLambertMaterial({ map: albumTexture });
-      const sleeve = new THREE.Mesh(sleeveGeometry, sleeveMaterial);
+      const sleeveMaterial = new MeshLambertMaterial({ map: albumTexture });
+      const sleeve = new Mesh(sleeveGeometry, sleeveMaterial);
       sleeve.position.set(-1.4 * mobileScale, 0, 0);
       sleeve.rotation.y = -0.15;
       scene.add(sleeve);
 
       // Create simple vinyl record (cylinder) - 1.4x larger, with mobile scaling
-      const recordGeometry = new THREE.CylinderGeometry(
-        2.8 * mobileScale, 
-        2.8 * mobileScale, 
-        0.14 * mobileScale, 
+      const recordGeometry = new CylinderGeometry(
+        2.8 * mobileScale,
+        2.8 * mobileScale,
+        0.14 * mobileScale,
         32
       );
-      const recordMaterial = new THREE.MeshLambertMaterial({ color: 0x0a0a0a });
-      const record = new THREE.Mesh(recordGeometry, recordMaterial);
+      const recordMaterial = new MeshLambertMaterial({ color: 0x0a0a0a });
+      const record = new Mesh(recordGeometry, recordMaterial);
       record.rotation.x = Math.PI / 2;
       record.position.set(0.28 * mobileScale, 0, 0.28 * mobileScale);
       record.rotation.z = 0.15;
@@ -388,9 +404,9 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
 
       // Add center label - 1.4x larger, with mobile scaling
       const labelTexture = createVinylLabel(album);
-      const labelGeometry = new THREE.CircleGeometry(0.84 * mobileScale, 32);
-      const labelMaterial = new THREE.MeshLambertMaterial({ map: labelTexture });
-      const label = new THREE.Mesh(labelGeometry, labelMaterial);
+      const labelGeometry = new CircleGeometry(0.84 * mobileScale, 32);
+      const labelMaterial = new MeshLambertMaterial({ map: labelTexture });
+      const label = new Mesh(labelGeometry, labelMaterial);
       label.position.z = 0.073 * mobileScale;
       record.add(label);
 
@@ -398,12 +414,12 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
       for (let i = 0; i < 8; i++) {
         const innerRadius = (0.7 + (i * 0.15)) * 1.4 * mobileScale;
         const outerRadius = innerRadius + (0.02 * 1.4 * mobileScale);
-        const grooveGeometry = new THREE.RingGeometry(innerRadius, outerRadius, 32);
-        const grooveMaterial = new THREE.MeshLambertMaterial({
+        const grooveGeometry = new RingGeometry(innerRadius, outerRadius, 32);
+        const grooveMaterial = new MeshLambertMaterial({
           color: 0x666666,
-          side: THREE.FrontSide
+          side: FrontSide
         });
-        const groove = new THREE.Mesh(grooveGeometry, grooveMaterial);
+        const groove = new Mesh(grooveGeometry, grooveMaterial);
         groove.position.z = 0.073 * mobileScale;
         record.add(groove);
       }
