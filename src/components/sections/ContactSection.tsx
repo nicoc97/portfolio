@@ -17,8 +17,6 @@ export const ContactSection: React.FC = () => {
   });
   const [formStatus, setFormStatus] = useState('');
   const [isComposing, setIsComposing] = useState(false);
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [pixelAnimation, setPixelAnimation] = useState('idle');
   const [emailCopied, setEmailCopied] = useState(false);
 
   // Animation hooks with reverse animations (matching other sections)
@@ -72,119 +70,11 @@ export const ContactSection: React.FC = () => {
     }, 500);
   };
 
-  // Handle CV download
-  const handleCVDownload = async () => {
-    setIsDownloading(true);
-    setPixelAnimation('downloading');
-
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      const link = document.createElement('a');
-      link.href = '/Nico Cruickshank CV - Web Developer.pdf'; // File in public folder
-      link.download = 'Nico_Cruickshank_CV.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      setPixelAnimation('success');
-      setTimeout(() => setPixelAnimation('idle'), 2000);
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        console.error('Download failed:', error);
-      }
-      setPixelAnimation('error');
-      setTimeout(() => setPixelAnimation('idle'), 2000);
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
   // Copy email to clipboard
   const copyEmail = () => {
     navigator.clipboard.writeText('nico@example.com');
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2000);
-  };
-
-  // Pixel robot animation component
-  const PixelRobot = () => {
-    const baseColor = pixelAnimation === 'success' ? '#7c9756' : '#ff8c42';
-    const eyeAnimation = pixelAnimation === 'downloading' ? 'animate-pulse' : '';
-
-    return (
-      <svg viewBox="0 0 128 128" className="w-full h-full">
-        <g className={pixelAnimation === 'downloading' ? 'animate-bounce' : ''}>
-          {/* Main body */}
-          <rect x="44" y="48" width="40" height="48" fill={baseColor} rx="2" />
-
-          {/* Head */}
-          <rect x="48" y="24" width="32" height="28" fill="#f5f2e8" rx="2" />
-
-          {/* Antenna */}
-          <rect x="62" y="16" width="4" height="12" fill={baseColor} />
-          <circle cx="64" cy="14" r="4" fill={baseColor} className={pixelAnimation === 'downloading' ? 'animate-pulse' : ''} />
-
-          {/* Eyes */}
-          <rect x="54" y="34" width="6" height="6" fill="#1a1611" className={eyeAnimation} />
-          <rect x="68" y="34" width="6" height="6" fill="#1a1611" className={eyeAnimation} />
-
-          {/* Mouth */}
-          {pixelAnimation === 'success' ? (
-            <path d="M56 44 Q64 48 72 44" stroke="#1a1611" strokeWidth="2" fill="none" />
-          ) : (
-            <rect x="58" y="44" width="12" height="2" fill="#1a1611" />
-          )}
-
-          {/* Arms */}
-          <rect x="36" y="56" width="8" height="24" fill={baseColor}
-            className={pixelAnimation === 'downloading' ? 'origin-top animate-wave-1' : ''} />
-          <rect x="84" y="56" width="8" height="24" fill={baseColor}
-            className={pixelAnimation === 'downloading' ? 'origin-top animate-wave-2' : ''} />
-
-          {/* Chest display */}
-          <rect x="54" y="58" width="20" height="12" fill="#1a1611" rx="1" />
-          {pixelAnimation === 'downloading' && (
-            <g className="animate-pulse">
-              <rect x="56" y="60" width="3" height="8" fill="#7c9756" />
-              <rect x="61" y="62" width="3" height="6" fill="#7c9756" />
-              <rect x="66" y="60" width="3" height="8" fill="#7c9756" />
-              <rect x="71" y="64" width="3" height="4" fill="#7c9756" />
-            </g>
-          )}
-          {pixelAnimation === 'success' && (
-            <text x="64" y="66" textAnchor="middle" fontSize="8" fill="#7c9756">✓</text>
-          )}
-
-          {/* Legs */}
-          <rect x="52" y="96" width="10" height="16" fill={baseColor} />
-          <rect x="66" y="96" width="10" height="16" fill={baseColor} />
-
-          {/* Feet */}
-          <rect x="50" y="112" width="14" height="6" fill="#1a1611" rx="1" />
-          <rect x="64" y="112" width="14" height="6" fill="#1a1611" rx="1" />
-        </g>
-
-        {/* Document floating animation */}
-        {pixelAnimation === 'downloading' && (
-          <g className="animate-pulse">
-            <rect x="96" y="40" width="24" height="32" fill="#f5f2e8" stroke="#1a1611" strokeWidth="1" />
-            <rect x="100" y="46" width="16" height="2" fill="#1a1611" />
-            <rect x="100" y="50" width="16" height="2" fill="#1a1611" />
-            <rect x="100" y="54" width="12" height="2" fill="#1a1611" />
-          </g>
-        )}
-
-        {/* Success sparkles */}
-        {pixelAnimation === 'success' && (
-          <g className="animate-pulse">
-            <text x="30" y="30" fontSize="20" fill="#7c9756">✦</text>
-            <text x="90" y="40" fontSize="16" fill="#7c9756">✦</text>
-            <text x="95" y="90" fontSize="18" fill="#7c9756">✦</text>
-          </g>
-        )}
-      </svg>
-    );
   };
 
   return (
@@ -303,33 +193,8 @@ export const ContactSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column - CV Download & Quick Links */}
+            {/* Right Column - Quick Links */}
             <div className={`space-y-8 animate-slide-up ${contentVisible[1] ? 'visible' : ''}`}>
-              {/* CV Download with Pixel Robot */}
-              <div className="bg-primary-bg/50 backdrop-blur-sm rounded-lg border border-accent-green/20 hover:border-accent-green/30 p-8 transition-all duration-300">
-                <h3 className="text-lg md:text-xl font-bold text-accent-green font-tech mb-6 uppercase tracking-wide">
-                  Download CV
-                </h3>
-
-                <div className="flex items-center justify-center mb-6 h-32">
-                  <PixelRobot />
-                </div>
-
-                <PixelButton
-                  variant="secondary"
-                  size="lg"
-                  onClick={handleCVDownload}
-                  disabled={isDownloading}
-                  className="w-full"
-                >
-                  {isDownloading ? 'DOWNLOADING...' : 'GET MY RESUME'}
-                </PixelButton>
-
-                <p className="text-text-secondary font-mono text-sm text-center mt-4">
-                  Full-stack Developer • PDF • 2MB
-                </p>
-              </div>
-
               {/* Quick Links - Email Only */}
               <div className="grid gap-4">
                 <button
@@ -412,30 +277,6 @@ export const ContactSection: React.FC = () => {
                     {isComposing ? 'COMPOSING...' : 'SEND EMAIL'}
                   </PixelButton>
                 </div>
-              </div>
-            </div>
-
-            {/* CV Download - Mobile */}
-            <div className={`animate-slide-up ${contentVisible[1] ? 'visible' : ''}`}>
-              <div className="bg-primary-bg/50 backdrop-blur-sm rounded-lg border border-accent-green/20 p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-accent-green font-tech uppercase tracking-wide">
-                    Download CV
-                  </h3>
-                  <div className="w-20 h-20">
-                    <PixelRobot />
-                  </div>
-                </div>
-
-                <PixelButton
-                  variant="secondary"
-                  size="md"
-                  onClick={handleCVDownload}
-                  disabled={isDownloading}
-                  className="w-full"
-                >
-                  {isDownloading ? 'DOWNLOADING...' : 'GET RESUME'}
-                </PixelButton>
               </div>
             </div>
 
