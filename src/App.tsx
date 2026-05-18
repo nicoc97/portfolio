@@ -1,11 +1,26 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { HeroSection } from './components/sections/HeroSection';
-import { ProjectsSection } from './components/sections/ProjectsSection';
-import { AboutSection } from './components/sections/AboutSection';
-import { JukeboxSection } from './components/sections/JukeboxSection';
-import { SkillsSection } from './components/sections/SkillsSection';
-import { ContactSection } from './components/sections/ContactSection';
 import { DotPagination } from './components/ui/DotPagination';
+
+const ProjectsSection = lazy(() =>
+  import('./components/sections/ProjectsSection').then(m => ({ default: m.ProjectsSection }))
+);
+const AboutSection = lazy(() =>
+  import('./components/sections/AboutSection').then(m => ({ default: m.AboutSection }))
+);
+const JukeboxSection = lazy(() =>
+  import('./components/sections/JukeboxSection').then(m => ({ default: m.JukeboxSection }))
+);
+const SkillsSection = lazy(() =>
+  import('./components/sections/SkillsSection').then(m => ({ default: m.SkillsSection }))
+);
+const ContactSection = lazy(() =>
+  import('./components/sections/ContactSection').then(m => ({ default: m.ContactSection }))
+);
+
+const SectionFallback = ({ id }: { id: string }) => (
+  <section id={id} className="section-fullscreen bg-primary-bg" aria-hidden="true" />
+);
 import { MobileMenu } from './components/ui/MobileMenu';
 import { ToastProvider } from './hooks/useToast';
 import { usePreloadAnimations, useCriticalPreload } from './components/lazy/LazyAnimations';
@@ -481,11 +496,21 @@ function App() {
       <div className="min-h-screen bg-primary-bg">
         {/* All sections rendered at once for scrolling */}
         <HeroSection onNavigateToSection={navigateToSection} />
-        <ProjectsSection />
-        <AboutSection />
-        <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
-        <SkillsSection />
-        <ContactSection />
+        <Suspense fallback={<SectionFallback id="projects" />}>
+          <ProjectsSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="about" />}>
+          <AboutSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="jukebox" />}>
+          <JukeboxSection onLightboxStateChange={setIsLightboxOpen} />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="skills" />}>
+          <SkillsSection />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="contact" />}>
+          <ContactSection />
+        </Suspense>
 
         {/* Desktop Dot Pagination - Right side */}
         <DotPagination

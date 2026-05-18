@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { VinylRecord } from '../ui/VinylRecord.tsx';
-import { VinylLightbox } from '../ui/VinylLightbox.tsx';
+import { LazyVinylRecord, LazyVinylLightbox } from '../lazy/LazyUIComponents';
 import { InteractiveText } from '../ui/InteractiveText.tsx';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 
@@ -249,7 +248,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                   `}>
                     <div className="flex justify-center items-center py-4">
                       <div className="w-full max-w-[280px] relative">
-                        <VinylRecord
+                        <LazyVinylRecord
                           album={selectedAlbum}
                           index={ALBUM_DATA.findIndex(a => a.id === selectedAlbum.id)}
                           onClick={() => handleRecordClick(selectedAlbum)}
@@ -373,7 +372,7 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
                 </div>
 
                 <div className="w-full max-w-lg relative z-10">
-                  <VinylRecord
+                  <LazyVinylRecord
                     album={selectedAlbum}
                     index={ALBUM_DATA.findIndex(album => album.id === selectedAlbum.id)}
                     onClick={() => handleRecordClick(selectedAlbum)}
@@ -386,11 +385,13 @@ export const JukeboxSection: React.FC<JukeboxSectionProps> = ({ onLightboxStateC
       </section>
 
       {/* Lightbox */}
-      <VinylLightbox
-        album={selectedAlbum}
-        isOpen={isLightboxOpen}
-        onClose={closeLightbox}
-      />
+      {isLightboxOpen && (
+        <LazyVinylLightbox
+          album={selectedAlbum}
+          isOpen={isLightboxOpen}
+          onClose={closeLightbox}
+        />
+      )}
     </>
   );
 };

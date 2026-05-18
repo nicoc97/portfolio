@@ -35,19 +35,11 @@ export default defineConfig({
           if (id.includes('components/animations') || id.includes('hooks/useScrollAnimation') || id.includes('hooks/useTypingAnimation')) {
             return 'animations';
           }
-          if (id.includes('components/ui') && !id.includes('LazyImage')) {
-            return 'ui-components';
-          }
-          if (id.includes('components/sections')) {
-            return 'sections';
-          }
           if (id.includes('utils/performance') || id.includes('utils/serviceWorker')) {
             return 'performance';
           }
-          // Keep LazyImage in main bundle for critical loading
-          if (id.includes('LazyImage')) {
-            return undefined;
-          }
+          // Sections and UI components: let Vite split them by dynamic-import boundary
+          // so each lazy-loaded section gets its own chunk and pulls only its deps.
         },
         // Optimize chunk naming for better caching
         chunkFileNames: () => {
