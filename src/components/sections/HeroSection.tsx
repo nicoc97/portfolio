@@ -68,8 +68,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
           <div>
             {/* Main heading container - centered on md+ screens */}
             <div className="w-full md:w-5/6 lg:w-4/5 mx-auto">
+              {/* TEMP: remove when site is ready */}
+              <div className="flex justify-center mb-2">
+                <span className="font-tech text-[0.65rem] md:text-xs uppercase tracking-[0.2em] text-accent-orange/70 animate-pulse">
+                  ▸ Site work in progress ◂
+                </span>
+              </div>
+
               {/* Name tag with typing animation */}
-              <div 
+              <div
                 ref={nameTagRef}
                 className={`flex justify-center mb-2 animate-pixel ${nameTagVisible ? 'visible' : ''}`}
               >
