@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { PixelButton } from '../ui/PixelButton';
-import { LazyThreeJS } from '../lazy/LazyAnimations';
+
+const WaveBackground = lazy(() =>
+  import('../ui/WaveBackground').then(m => ({ default: m.WaveBackground }))
+);
 import { useTypingAnimation } from '../../hooks/useTypingAnimation';
 import { HERO_CONSTANTS } from '../../constants/hero';
 import { useScrollAnimation } from '../../hooks/useScrollAnimation';
@@ -60,7 +63,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
   return (
     <section id="hero" className="section-fullscreen relative bg-primary-bg overflow-hidden">
       {/* Wave background - show on all devices except very low-end */}
-      <LazyThreeJS />
+      <Suspense fallback={null}>
+        <WaveBackground />
+      </Suspense>
 
       <div className="relative z-10 pt-20 md:pt-8 mobile-padding">
         <div className="flex flex-col justify-center min-h-[80vh] md:min-h-[85vh] lg:min-h-[85vh] xl:min-h-[90vh] 2xl:min-h-[95vh]">
