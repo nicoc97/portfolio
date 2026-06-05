@@ -110,7 +110,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
       onKeyDown={handleKeyDown}
       tabIndex={onClick ? 0 : -1}
       role={onClick ? 'button' : 'presentation'}
-      aria-label={`${skill.name} - ${skill.category} skill, proficiency ${skill.proficiency} out of 5`}
+      aria-label={`${skill.name} - ${skill.category} skill`}
       aria-describedby={showTooltipState ? `tooltip-${skill.name.replace(/\s+/g, '-').toLowerCase()}` : undefined}
     >
       {/* Pixel art icon and skill name */}
@@ -164,14 +164,7 @@ export const TechBadge: React.FC<TechBadgeProps> = ({
                 {skill.category.toUpperCase()}
               </span>
             </div>
-            
-            {/* Proficiency stars */}
-            <div className="mb-2">
-              <div className="text-accent-orange text-sm">
-                {'★'.repeat(skill.proficiency)}{'☆'.repeat(5 - skill.proficiency)}
-              </div>
-            </div>
-            
+
             {/* Description */}
             {skill.description && (
               <div className="text-text-secondary text-base leading-relaxed">

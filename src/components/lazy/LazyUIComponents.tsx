@@ -105,17 +105,7 @@ const UIComponentFallback: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({
 
 // Wrapper components with enhanced suspense
 export const LazyVinylRecord: React.FC<React.ComponentProps<typeof VinylRecordComponent>> = (props) => {
-  const recommendations = performanceMonitor.getPerformanceRecommendations();
-
-  // Skip heavy animations on low-end devices
-  if (recommendations.simplifyEffects) {
-    return (
-      <div className="w-32 h-32 bg-primary-bg-light rounded-full border-2 border-accent-orange/50 flex items-center justify-center">
-        <span className="font-tech text-xs text-accent-orange">[VINYL_SIMPLIFIED]</span>
-      </div>
-    );
-  }
-
+  // Always render the full Three.js vinyl record
   return (
     <Suspense fallback={<UIComponentFallback size="lg" />}>
       <VinylRecordComponent {...props} />
