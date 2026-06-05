@@ -25,7 +25,7 @@ const ALBUM_DATA: AlbumData[] = [
     labelColor: '#8B4513',
     accentColor: '#FFD700',
     spotifyUrl: 'https://open.spotify.com/track/2OyaNAq8BcGstyzueloqpE',
-    appleMusicUrl: 'https://music.apple.com/us/artist/cornelius-brothers-sister-rose/19280425',
+    appleMusicUrl: 'https://music.apple.com/us/album/too-late-to-turn-back-now/724661748?i=724661857',
     albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e025e7f7ea6cb07e6222bc51f41'
   },
   {
@@ -36,7 +36,7 @@ const ALBUM_DATA: AlbumData[] = [
     labelColor: '#000000',
     accentColor: '#8B0000',
     spotifyUrl: 'https://open.spotify.com/track/0JfWS5txNJcbTHnJavTImO',
-    appleMusicUrl: 'https://music.apple.com/us/song/bela-lugosis-dead/160070993',
+    appleMusicUrl: 'https://music.apple.com/us/album/bela-lugosis-dead-official-version/1434914005?i=1434914008',
     albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e02d951700560c3627500821e24'
   },
   {
@@ -47,7 +47,7 @@ const ALBUM_DATA: AlbumData[] = [
     labelColor: '#DC143C',
     accentColor: '#000000',
     spotifyUrl: 'https://open.spotify.com/track/7cdnq45E9aP2XDStHg5vd7',
-    appleMusicUrl: 'https://music.apple.com/us/album/the-runaways/1440747926',
+    appleMusicUrl: 'https://music.apple.com/us/album/cherry-bomb/1440747926?i=1440747928',
     albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e02a1c553575418ca43404cb48b'
   },
   {
@@ -58,7 +58,7 @@ const ALBUM_DATA: AlbumData[] = [
     labelColor: '#191970',
     accentColor: '#FFD700',
     spotifyUrl: 'https://open.spotify.com/track/5gaUkg5JNk8c4mr2jnpX8H',
-    appleMusicUrl: 'https://music.apple.com/us/album/give-me-the-night/309576571',
+    appleMusicUrl: 'https://music.apple.com/us/album/give-me-the-night/309576571?i=309576575',
     albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e029877c2b01fca3367809f9e27'
   },
   {
@@ -69,7 +69,7 @@ const ALBUM_DATA: AlbumData[] = [
     labelColor: '#FF69B4',
     accentColor: '#4B0082',
     spotifyUrl: 'https://open.spotify.com/track/2BHj31ufdEqVK5CkYDp9mA',
-    appleMusicUrl: 'https://music.apple.com/us/song/mayonaka-no-door-stay-with-me/1457961960',
+    appleMusicUrl: 'https://music.apple.com/us/album/mayonaka-no-door-stay-with-me-2008-remastered/1858846505?i=1858846510',
     albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e0281052badd62d5e14c3377786'
   },
   {
@@ -80,7 +80,7 @@ const ALBUM_DATA: AlbumData[] = [
     labelColor: '#FF8C00',
     accentColor: '#000000',
     spotifyUrl: 'https://open.spotify.com/track/1eamsmwcYYhJwTgMFdQ6YN',
-    appleMusicUrl: 'https://music.apple.com/us/album/rip-it-up/1183408278',
+    appleMusicUrl: 'https://music.apple.com/us/album/rip-it-up/1183408278?i=1183408281',
     albumArtUrl: 'https://i.scdn.co/image/ab67616d00001e0255e7c78ec58c4670bc0180fb'
   }
 ];
