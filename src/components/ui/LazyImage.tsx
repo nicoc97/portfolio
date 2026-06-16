@@ -11,16 +11,6 @@ interface LazyImageProps {
   pixelated?: boolean;
 }
 
-/**
- * LazyImage Component
- * 
- * Implements lazy loading with pixel-style placeholders and WebP optimization
- * Features:
- * - Intersection Observer for lazy loading
- * - WebP format with fallback
- * - Pixel-style loading animation
- * - Blur-up effect
- */
 export const LazyImage: React.FC<LazyImageProps> = ({
   src,
   alt,

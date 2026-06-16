@@ -11,53 +11,9 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
 import '../../styles/swiper-custom.css';
 
-/**
- * ProjectsSection Component
- * 
- * Displays a filterable grid of projects with:
- * - Category filtering (All, WordPress, Data Science, Full-Stack)
- * - Responsive grid layout
- * - Project cards with hover effects
- * - Vintage TV dial navigation
- * - Sample data (replace with real projects)
- */
-
-// Portfolio projects including WordPress sites from previous employers
 const portfolioProjects: Project[] = [
   {
     id: '1',
-    title: 'Interactive Data Dashboard',
-    description: 'A real-time analytics dashboard built with React and D3.js, featuring interactive charts and data visualization for business intelligence.',
-    techStack: ['React', 'TypeScript', 'D3.js', 'Python', 'FastAPI'],
-    imageUrl: '',
-    liveUrl: 'https://example.com/dashboard',
-    githubUrl: 'https://github.com/username/dashboard',
-    category: 'data',
-    status: 'wip'
-  },
-  {
-    id: '2',
-    title: 'E-commerce Platform',
-    description: 'Full-stack e-commerce solution with payment integration, inventory management, and admin dashboard.',
-    techStack: ['Next.js', 'TypeScript', 'Tailwind', 'Stripe', 'PostgreSQL'],
-    imageUrl: '',
-    liveUrl: 'https://example.com/shop',
-    githubUrl: 'https://github.com/username/ecommerce',
-    category: 'fullstack',
-    status: 'wip'
-  },
-  {
-    id: '3',
-    title: 'ML Model Visualizer',
-    description: 'Interactive tool for visualizing machine learning model performance and feature importance with real-time predictions.',
-    techStack: ['React', 'Python', 'Scikit-learn', 'Plotly', 'Flask'],
-    imageUrl: '',
-    githubUrl: 'https://github.com/username/ml-viz',
-    category: 'data',
-    status: 'wip'
-  },
-  {
-    id: '4',
     title: 'Denham Youd Website',
     description: 'Custom WordPress site developed from ground up at Scoot Digital.',
     techStack: ['WordPress', 'PHP w/ Twig', 'JavaScript', 'SCSS', 'ACF'],
@@ -68,7 +24,7 @@ const portfolioProjects: Project[] = [
     company: 'Scoot Digital'
   },
   {
-    id: '5',
+    id: '2',
     title: 'Golspie Golf Club Website',
     description: 'Complete WordPress site designed and developed at PlanIt Scotland.',
     techStack: ['WordPress', 'PHP', 'JavaScript', 'Elementor'],
@@ -79,7 +35,7 @@ const portfolioProjects: Project[] = [
     company: 'Freelance'
   },
   {
-    id: '6',
+    id: '3',
     title: 'T&E Racing WooCommerce Optimization',
     description: 'Vehicle parts search enhancement for WooCommerce store. Built custom queries and spreadsheet automation for product imports.',
     techStack: ['WordPress', 'WooCommerce', 'PHP', 'Excel/CSV', 'Python'],
@@ -93,7 +49,7 @@ const portfolioProjects: Project[] = [
 
 export const ProjectsSection: React.FC = () => {
   // State management
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'wordpress' | 'data' | 'fullstack'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'wordpress'>('all');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -152,12 +108,9 @@ export const ProjectsSection: React.FC = () => {
     swiperInstance.slideTo(filteredProjects.length - 1);
   };
 
-  // 🔧 UPDATE: Modify filter categories here if you have different project types
   const filterButtons = [
     { key: 'all', label: 'ALL PROJECTS' },
-    { key: 'wordpress', label: 'WORDPRESS' },
-    { key: 'data', label: 'DATA SCIENCE' },
-    { key: 'fullstack', label: 'FULL-STACK' }
+    { key: 'wordpress', label: 'WORDPRESS' }
   ] as const;
 
   return (
@@ -181,8 +134,7 @@ export const ProjectsSection: React.FC = () => {
               <div className="section-divider mb-6"></div>
               <p className="section-subtitle mb-4">Featured Work & Experiments</p>
               <p className="text-text-secondary text-left text-sm leading-relaxed max-w-2xl">
-                A collection of web applications, data science projects, and creative experiments
-                showcasing modern development practices.
+                WordPress and WooCommerce builds from my agency and freelance work.
               </p>
             </div>
           </ScrollReveal>
@@ -207,10 +159,7 @@ export const ProjectsSection: React.FC = () => {
                     className={`
                       px-4 py-2 rounded-lg font-tech border-2 transition-all duration-200 text-sm
                       ${selectedFilter === key
-                        ? (key === 'data'
-                          ? 'bg-accent-green text-primary-bg border-accent-green shadow-lg transform -translate-y-1'
-                          : 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform -translate-y-1'
-                        )
+                        ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform -translate-y-1'
                         : 'tech-badge-secondary hover:-translate-y-1'
                       }
                     `}
@@ -234,10 +183,7 @@ export const ProjectsSection: React.FC = () => {
                     className={`
                       w-full px-4 py-3 rounded-lg font-tech border-2 transition-all duration-200 text-left
                       ${selectedFilter === key
-                        ? (key === 'data'
-                          ? 'bg-accent-green text-primary-bg border-accent-green shadow-lg transform translate-x-2'
-                          : 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
-                        )
+                        ? 'bg-accent-orange text-primary-bg border-accent-orange shadow-lg transform translate-x-2'
                         : 'tech-badge-secondary hover:translate-x-1'
                       }
                     `}

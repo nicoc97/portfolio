@@ -2,12 +2,6 @@ import React, { useState } from 'react';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 import { PixelButton } from '../ui/PixelButton';
 
-/**
- * ContactSection Component
- * 
- * Modern contact section with pixel robot animation and email composer
- * Matches the design system of About and Jukebox sections
- */
 export const ContactSection: React.FC = () => {
   const [emailData, setEmailData] = useState({
     name: '',
@@ -19,7 +13,6 @@ export const ContactSection: React.FC = () => {
   const [isComposing, setIsComposing] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
 
-  // Animation hooks with reverse animations (matching other sections)
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
     animationType: 'slide',
@@ -37,7 +30,6 @@ export const ContactSection: React.FC = () => {
     }
   );
 
-  // Validate email data
   const validateEmail = () => {
     if (!emailData.name || !emailData.email || !emailData.message) {
       return false;
@@ -46,7 +38,6 @@ export const ContactSection: React.FC = () => {
     return emailRegex.test(emailData.email);
   };
 
-  // Handle email composition
   const handleEmailCompose = () => {
     if (!validateEmail()) {
       setFormStatus('Please fill in all required fields');
@@ -59,7 +50,7 @@ export const ContactSection: React.FC = () => {
 
     const subject = encodeURIComponent(emailData.subject || 'Portfolio Contact');
     const body = encodeURIComponent(`From: ${emailData.name}\nEmail: ${emailData.email}\n\nMessage:\n${emailData.message}`);
-    const mailtoLink = `mailto:nico@example.com?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:nicocruickshank@icloud.com?subject=${subject}&body=${body}`;
 
     setTimeout(() => {
       window.location.href = mailtoLink;
@@ -70,9 +61,8 @@ export const ContactSection: React.FC = () => {
     }, 500);
   };
 
-  // Copy email to clipboard
   const copyEmail = () => {
-    navigator.clipboard.writeText('nico@example.com');
+    navigator.clipboard.writeText('nicocruickshank@icloud.com');
     setEmailCopied(true);
     setTimeout(() => setEmailCopied(false), 2000);
   };
@@ -80,12 +70,12 @@ export const ContactSection: React.FC = () => {
   return (
     <section id="contact" className="section-fullscreen py-20 bg-primary-bg relative overflow-hidden">
       <div className="w-full md:w-4/5 mx-auto mobile-padding relative z-10">
-        {/* Large background text - matching other sections */}
+        {/* Large background text */}
         <div className="section-bg-text">
           <span>SEC05</span>
         </div>
 
-        {/* Section Header - matching exact style from other sections */}
+        {/* Section Header */}
         <div
           ref={headerRef}
           className={`mb-16 animate-slide-up ${headerVisible ? 'visible' : ''}`}
@@ -208,7 +198,7 @@ export const ContactSection: React.FC = () => {
                     </svg>
                   </div>
                   <div className="flex-1 text-left">
-                    <p className="text-text-primary font-mono">nico@example.com</p>
+                    <p className="text-text-primary font-mono">nicocruickshank@icloud.com</p>
                     <p className="text-text-secondary text-sm">
                       {emailCopied ? '✓ Copied!' : 'Click to copy'}
                     </p>

@@ -7,13 +7,6 @@ interface DotPaginationProps {
   isLightboxOpen?: boolean;
 }
 
-/**
- * DotPagination Component
- * 
- * Orange dot navigation that appears on the right side of the screen (desktop only).
- * Each dot represents a section and shows the current position on the site.
- * Hidden on mobile and tablet devices.
- */
 export const DotPagination: React.FC<DotPaginationProps> = ({
   sections,
   activeSection,

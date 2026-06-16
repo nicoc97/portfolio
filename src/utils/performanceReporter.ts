@@ -1,10 +1,3 @@
-/**
- * Performance Reporter
- * 
- * Collects and reports performance metrics from the application
- * Integrates with service worker for comprehensive monitoring
- */
-
 interface PerformanceReport {
   timestamp: number;
   url: string;

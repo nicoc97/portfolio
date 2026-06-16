@@ -463,7 +463,7 @@ export const VinylRecord: React.FC<VinylRecordProps> = ({ album, onClick }) => {
         }
       }
 
-      // Enhanced hover effects with mobile scaling
+      // Hover effects with mobile scaling
       if (sceneRef.current.sleeve) {
         const targetSleeveY = isHovered ? 0.2 * mobileScale : 0;
         sceneRef.current.sleeve.position.y += (targetSleeveY - sceneRef.current.sleeve.position.y) * 0.1;

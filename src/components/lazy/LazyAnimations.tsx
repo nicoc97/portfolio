@@ -1,13 +1,7 @@
 import React, { Suspense } from 'react';
 import { performanceMonitor } from '../../utils/performance';
 
-/**
- * Enhanced lazy-loaded animation components for code splitting
- * These components are loaded only when needed to reduce initial bundle size
- * Includes performance monitoring and adaptive loading
- */
-
-// Lazy load heavy animation components with error boundaries and performance tracking
+// Lazy-loaded animation components, code-split so they only load when needed.
 const ScrollAnimations = React.lazy(() => {
   const startTime = performance.now();
   return import('../animations/ScrollAnimations').then(module => {
@@ -73,7 +67,6 @@ const SwiperComponents = React.lazy(() => {
   });
 });
 
-// Enhanced pixel-style loading fallback with performance monitoring
 const AnimationFallback: React.FC<{ componentName?: string }> = ({ componentName = 'Animation' }) => {
   React.useEffect(() => {
     performanceMonitor.trackAnimationPerformance(`${componentName}-loading`, () => {
@@ -107,7 +100,7 @@ const MinimalFallback: React.FC = () => (
   <div className="w-2 h-2 bg-accent-orange animate-pulse rounded-full" />
 );
 
-// Wrapper components with enhanced suspense and error boundaries
+// Suspense wrappers that fall back to no animation on low-end devices.
 export const LazyScrollReveal: React.FC<React.ComponentProps<typeof ScrollAnimations>> = (props) => {
   const recommendations = performanceMonitor.getPerformanceRecommendations();
 
@@ -144,7 +137,6 @@ export const LazySwiper: React.FC<React.ComponentProps<typeof SwiperComponents>>
   </Suspense>
 );
 
-// Enhanced preload animations with performance monitoring
 export const preloadAnimations = () => {
   const recommendations = performanceMonitor.getPerformanceRecommendations();
 
@@ -170,7 +162,6 @@ export const preloadAnimations = () => {
   }
 };
 
-// Enhanced hook with adaptive preloading and memory management
 export const usePreloadAnimations = () => {
   React.useEffect(() => {
     const recommendations = performanceMonitor.getPerformanceRecommendations();

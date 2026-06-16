@@ -1,10 +1,3 @@
-/**
- * Performance Optimizer Utility
- * 
- * Provides adaptive performance optimizations based on device capabilities
- * and user preferences for better experience on low-end hardware
- */
-
 import { performanceMonitor } from './performance';
 
 export class PerformanceOptimizer {
@@ -24,7 +17,6 @@ export class PerformanceOptimizer {
     this.generateOptimizationSettings();
   }
 
-  // Detect comprehensive device capabilities
   private detectDeviceCapabilities(): void {
     const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
     

@@ -3,12 +3,7 @@ import { motion } from 'framer-motion';
 import { useParallaxScroll } from '../../hooks/useScrollAnimation';
 import { usePerformanceOptimization } from '../../utils/performanceOptimizer';
 
-/**
- * WaveBackground Component
- * 
- * Creates a smooth, groovy wave background with a 70s soul/funk vibe
- * featuring deep, symmetrical waves that flow horizontally across the screen
- */
+// 70s soul/funk-inspired animated wave background.
 export const WaveBackground = () => {
   const { shouldUseAnimation, shouldSimplifyUI, getDeviceCapabilities } = usePerformanceOptimization();
   

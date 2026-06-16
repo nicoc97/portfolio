@@ -1,18 +1,5 @@
 import type { TechSkill } from '../types';
 
-/**
- * Technical Skills Data
- * 
- * This file contains all the technical skills data for the portfolio.
- * Each skill includes category, pixel icon, and description based on real experience.
- * 
- * 🔧 UPDATE LOCATIONS:
- * - Add new skills to the appropriate category
- * - Modify descriptions to reflect current experience
- * - Add new pixel icons for new technologies
- * - Update skill relationships for better UX
- */
-
 export const techSkills: TechSkill[] = [
   // Frontend Skills
   {

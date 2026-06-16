@@ -1,9 +1,3 @@
-/**
- * Service Worker Registration Utilities
- * 
- * Handles service worker registration and lifecycle management
- */
-
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
   window.location.hostname === '[::1]' ||

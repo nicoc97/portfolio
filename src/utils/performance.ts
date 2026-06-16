@@ -1,9 +1,3 @@
-/**
- * Performance Utilities
- * 
- * Collection of utilities for performance monitoring and optimization
- */
-
 import React from 'react';
 
 // Extend Navigator interface for device memory
@@ -61,7 +55,7 @@ export class PerformanceMonitor {
     return measurements.reduce((sum, val) => sum + val, 0) / measurements.length;
   }
 
-  // Enhanced low-end device detection with more indicators
+  // Flags a device as low-end if at least two of these signals are present.
   isLowEndDevice(): boolean {
     // Check various indicators of device performance
     const checks = [
@@ -84,7 +78,6 @@ export class PerformanceMonitor {
     return checks.filter(Boolean).length >= 2;
   }
 
-  // Enhanced performance recommendations with more granular control
   getPerformanceRecommendations(): {
     reduceAnimations: boolean;
     disableParallax: boolean;
@@ -117,7 +110,6 @@ export class PerformanceMonitor {
   }
 }
 
-// Enhanced image optimization utilities
 export const ImageOptimizer = {
   // WebP support detection with caching
   _webpSupport: null as boolean | null,

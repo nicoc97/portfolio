@@ -1,12 +1,8 @@
 import React, { Suspense } from 'react';
 import { performanceMonitor } from '../../utils/performance';
 
-/**
- * Lazy-loaded UI components for code splitting
- * These components are loaded only when needed to reduce initial bundle size
- */
-
-// Lazy load VinylRecord component (heavy with animations)
+// Lazy-loaded UI components, code-split so they only load when needed.
+// VinylRecord is heavy (Three.js animations).
 const VinylRecordComponent = React.lazy(() => {
   const startTime = performance.now();
   return import('../ui/VinylRecord').then(module => {
@@ -103,7 +99,7 @@ const UIComponentFallback: React.FC<{ size?: 'sm' | 'md' | 'lg' }> = ({
   );
 };
 
-// Wrapper components with enhanced suspense
+// Suspense wrappers
 export const LazyVinylRecord: React.FC<React.ComponentProps<typeof VinylRecordComponent>> = (props) => {
   // Always render the full Three.js vinyl record
   return (

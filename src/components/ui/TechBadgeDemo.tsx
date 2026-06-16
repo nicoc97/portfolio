@@ -2,10 +2,6 @@ import React from 'react';
 import { TechBadge } from './TechBadge';
 import { techSkills, skillCategories } from '../../constants/skills';
 
-/**
- * Demo component to showcase TechBadge functionality
- * This component demonstrates all the features of the TechBadge component
- */
 export const TechBadgeDemo: React.FC = () => {
   const handleBadgeClick = (skillName: string) => {
     if (import.meta.env.DEV) {

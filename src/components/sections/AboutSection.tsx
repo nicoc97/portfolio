@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useScrollAnimation, useStaggeredAnimation } from '../../hooks/useScrollAnimation';
 import { WavyTimeline } from '../ui/WavyTimeline';
 
-/**
- * Counter Hook for animated numbers
- */
 const useCounter = (end: number, duration: number = 2000, isVisible: boolean = false) => {
   const [count, setCount] = useState(0);
 
@@ -31,14 +28,7 @@ const useCounter = (end: number, duration: number = 2000, isVisible: boolean = f
   return count;
 };
 
-/**
- * AboutSection Component
- * 
- * Minimal, contemporary about section with animated counters and concise content.
- * Inspired by modern portfolio designs with focus on impact over text.
- */
 export const AboutSection: React.FC = () => {
-  // Animation hooks with reverse animations
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({
     threshold: 0.3,
     triggerOnce: false,

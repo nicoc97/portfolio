@@ -29,18 +29,6 @@ import { MetaTags } from './components/SEO/MetaTags';
 import { performanceReporter } from './utils/performanceReporter';
 import { performanceMonitor } from './utils/performance';
 
-/**
- * Main App Component
- * 
- * This is the main application component that brings together all sections.
- * Uses full scrolling with navigation that jumps to sections.
- * 
- * Current sections:
- * - HeroSection: Landing area with typing animation
- * - ProjectsSection: Filterable project showcase
- * - AboutSection: Personal introduction
- * - Skills, Contact: Placeholder sections (ready for development)
- */
 function App() {
   const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'jukebox' | 'skills' | 'contact'>('hero');
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -83,12 +71,10 @@ function App() {
     return sections.indexOf(activeSection);
   };
 
-  // Optimized easing function for smoother scrolling
   const easeInOutCubic = (t: number): number => {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   };
 
-  // Optimized smooth scroll to section with performance monitoring
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (!element) return;
@@ -219,7 +205,7 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Enhanced scroll hijacking - Only on very large screens (2560px+) and above
+  // Scroll hijacking — only on very large screens (2560px+).
   useEffect(() => {
     let scrollAccumulator = 0;
     let lastWheelTime = 0;

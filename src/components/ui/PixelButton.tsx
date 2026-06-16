@@ -1,11 +1,6 @@
 import React from 'react';
 import type { PixelButtonProps } from '../../types';
 
-/**
- * Simple PixelButton Component
- * 
- * A clean button component with pixel-style aesthetics.
- */
 export const PixelButton: React.FC<PixelButtonProps> = ({
   variant = 'primary',
   size = 'md',

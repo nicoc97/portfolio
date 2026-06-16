@@ -7,13 +7,6 @@ interface MobileMenuProps {
   isLightboxOpen?: boolean;
 }
 
-/**
- * MobileMenu Component
- * 
- * Mobile and tablet navigation overlay with hamburger menu.
- * Shows only on mobile and tablet devices (hidden on desktop).
- * Features a full-screen overlay with section navigation.
- */
 export const MobileMenu: React.FC<MobileMenuProps> = ({
   sections,
   activeSection,
