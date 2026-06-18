@@ -7,7 +7,7 @@ export interface Project {
   imageUrl: string;
   liveUrl?: string;
   githubUrl?: string;
-  category: 'wordpress' | 'data' | 'fullstack';
+  category: 'wordpress' | 'woocommerce' | 'data' | 'fullstack';
   status: 'wip' | 'completed';
   company?: string;
 }

@@ -112,13 +112,13 @@ export const AboutSection: React.FC = () => {
                   Currently
                 </h3>
                 <h4 className="text-xl md:text-2xl lg:text-3xl xl:text-2xl 2xl:text-3xl font-bold text-text-primary font-retro mb-4">
-                  Freelance Developer
+                  Web Admin & Developer
                 </h4>
                 <p className="text-text-secondary text-lg mb-6">
-                  Independent • Glasgow, UK
+                  Balloons4U • Glasgow, UK
                 </p>
                 <span className="text-sm text-accent-green font-tech bg-accent-green/20 px-4 py-2 rounded-full border border-accent-green/30">
-                  AVAILABLE FOR PROJECTS
+                  SOLE TECHNICAL LEAD
                 </span>
               </div>
             </div>
@@ -160,7 +160,6 @@ export const AboutSection: React.FC = () => {
                     <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Tailwind CSS</div>
                     <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Responsive Design</div>
                     <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Performance Optimized</div>
-                    <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Accessibility Focused</div>
                   </div>
                 </div>
               </div>
@@ -264,7 +263,6 @@ export const AboutSection: React.FC = () => {
                         <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Tailwind CSS</div>
                         <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Responsive Design</div>
                         <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Performance Optimized</div>
-                        <div className="text-text-secondary hover:text-accent-orange transition-colors duration-200 cursor-default">• Accessibility Focused</div>
                       </div>
                     </div>
                   </div>

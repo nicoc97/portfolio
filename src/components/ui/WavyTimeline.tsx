@@ -14,6 +14,21 @@ interface TimelineItem {
 
 const timelineData: TimelineItem[] = [
   {
+    id: '0',
+    company: 'Balloons4U',
+    role: 'Web Admin & Developer',
+    period: 'Sept 2025 — Present',
+    location: 'Glasgow',
+    description: 'Sole technical lead, taking digital work from requirements gathering through to building and supporting bespoke WooCommerce features.',
+    highlights: [
+      'Bespoke WooCommerce features built to spec',
+      'Custom product search and stock-management tools',
+      'Lead-capture landing page for a trade expo',
+      'Scoped a WooCommerce to BigCommerce migration'
+    ],
+    color: 'blue'
+  },
+  {
     id: '1',
     company: 'Scoot Digital',
     role: 'WordPress Developer',
@@ -262,8 +277,8 @@ export const WavyTimeline: React.FC = () => {
       </div>
 
       {/* Desktop Layout - Wavy Timeline */}
-      <div className="hidden lg:block">
-        <div ref={containerRef} className="relative">
+      <div className="hidden lg:block overflow-x-auto pb-4">
+        <div ref={containerRef} className="relative min-w-max">
           {/* SVG Wave Background */}
           <svg
             ref={svgRef}
@@ -287,8 +302,8 @@ export const WavyTimeline: React.FC = () => {
             </defs>
           </svg>
 
-          {/* Timeline Items - Desktop Grid Layout */}
-          <div className="relative grid grid-cols-4 gap-6 lg:gap-8 py-8">
+          {/* Timeline Items - Desktop Horizontal Scrollable Layout */}
+          <div className="relative flex gap-6 lg:gap-8 py-8">
             {timelineData.map((item, index) => {
               const colors = getColorClasses(item.color);
               const isActive = activeItem === item.id;
@@ -296,7 +311,7 @@ export const WavyTimeline: React.FC = () => {
               return (
                 <div
                   key={item.id}
-                  className={`relative ${index % 2 === 0 ? 'mt-0' : 'mt-16'}`}
+                  className={`relative shrink-0 w-64 xl:w-72 ${index % 2 === 0 ? 'mt-0' : 'mt-16'}`}
                   onMouseEnter={() => setActiveItem(item.id)}
                   onMouseLeave={() => setActiveItem(null)}
                 >

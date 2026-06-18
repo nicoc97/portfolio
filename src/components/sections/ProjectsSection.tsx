@@ -41,15 +41,26 @@ const portfolioProjects: Project[] = [
     techStack: ['WordPress', 'WooCommerce', 'PHP', 'Excel/CSV', 'Python'],
     imageUrl: '',
     liveUrl: 'https://www.teracing.co.uk',
-    category: 'wordpress',
+    category: 'woocommerce',
     status: 'completed',
     company: 'Freelance'
+  },
+  {
+    id: '4',
+    title: 'Balloons4U Custom Product Search',
+    description: 'Bespoke WooCommerce product search facility built to the business’s specifications, with custom queries and a tailored results widget.',
+    techStack: ['WordPress', 'WooCommerce', 'PHP', 'JavaScript'],
+    imageUrl: '',
+    liveUrl: 'https://www.balloons4u.co.uk',
+    category: 'woocommerce',
+    status: 'wip',
+    company: 'Balloons4U'
   }
 ];
 
 export const ProjectsSection: React.FC = () => {
   // State management
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'wordpress'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | 'wordpress' | 'woocommerce'>('all');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -110,7 +121,8 @@ export const ProjectsSection: React.FC = () => {
 
   const filterButtons = [
     { key: 'all', label: 'ALL PROJECTS' },
-    { key: 'wordpress', label: 'WORDPRESS' }
+    { key: 'wordpress', label: 'WORDPRESS' },
+    { key: 'woocommerce', label: 'WOOCOMMERCE' }
   ] as const;
 
   return (
