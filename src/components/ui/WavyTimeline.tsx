@@ -277,7 +277,7 @@ export const WavyTimeline: React.FC = () => {
       </div>
 
       {/* Desktop Layout - Wavy Timeline */}
-      <div className="hidden lg:block overflow-x-auto pb-4">
+      <div className="hidden lg:block overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div ref={containerRef} className="relative min-w-max">
           {/* SVG Wave Background */}
           <svg

@@ -99,7 +99,7 @@ export const AboutSection: React.FC = () => {
                     {techCount}+
                   </div>
                   <p className="text-text-secondary text-base font-tech uppercase tracking-wide">
-                    Technologies Mastered
+                    Technologies
                   </p>
                 </div>
               </div>
@@ -201,7 +201,7 @@ export const AboutSection: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-text-secondary text-lg font-tech uppercase tracking-wide">
-                        Technologies Mastered
+                        Technologies
                       </p>
                     </div>
                   </div>

@@ -117,7 +117,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
               </div>
 
               {/* Buttons - centered */}
-              <div 
+              <div
                 ref={buttonsRef}
                 className={`flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale ${buttonsVisible ? 'visible' : ''}`}
               >
@@ -128,15 +128,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigateToSection })
                   className="min-w-44 text-base"
                 >
                   {HERO_CONSTANTS.BUTTONS.PRIMARY}
-                </PixelButton>
-
-                <PixelButton
-                  variant="secondary"
-                  size="lg"
-                  onClick={() => handleNavigation('contact')}
-                  className="min-w-44 text-base"
-                >
-                  {HERO_CONSTANTS.BUTTONS.SECONDARY}
                 </PixelButton>
               </div>
             </div>

@@ -14,9 +14,6 @@ const JukeboxSection = lazy(() =>
 const SkillsSection = lazy(() =>
   import('./components/sections/SkillsSection').then(m => ({ default: m.SkillsSection }))
 );
-const ContactSection = lazy(() =>
-  import('./components/sections/ContactSection').then(m => ({ default: m.ContactSection }))
-);
 
 const SectionFallback = ({ id }: { id: string }) => (
   <section id={id} className="section-fullscreen bg-primary-bg" aria-hidden="true" />
@@ -30,7 +27,7 @@ import { performanceReporter } from './utils/performanceReporter';
 import { performanceMonitor } from './utils/performance';
 
 function App() {
-  const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'jukebox' | 'skills' | 'contact'>('hero');
+  const [activeSection, setActiveSection] = useState<'hero' | 'projects' | 'about' | 'jukebox' | 'skills'>('hero');
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -64,7 +61,7 @@ function App() {
     return () => clearInterval(metricsInterval);
   }, []);
 
-  const sections = ['hero', 'projects', 'about', 'jukebox', 'skills', 'contact'];
+  const sections = ['hero', 'projects', 'about', 'jukebox', 'skills'];
 
   // Get current section index
   const getCurrentSectionIndex = () => {
@@ -354,7 +351,7 @@ function App() {
           break;
         case 'End':
           e.preventDefault();
-          navigateToSection('contact');
+          navigateToSection('skills');
           break;
       }
     };
@@ -459,12 +456,8 @@ function App() {
         description: "Learn about my background as a Full Stack Web Developer and my passion for modern web technologies"
       },
       skills: {
-        title: "Skills - Nico Cruickshank", 
+        title: "Skills - Nico Cruickshank",
         description: "My technical skills including React, TypeScript, Node.js, and modern web development tools"
-      },
-      contact: {
-        title: "Contact - Nico Cruickshank",
-        description: "Get in touch for freelance work or full-time opportunities in web development"
       }
     };
     return metaData[section as keyof typeof metaData] || metaData.hero;
@@ -493,9 +486,6 @@ function App() {
         </Suspense>
         <Suspense fallback={<SectionFallback id="skills" />}>
           <SkillsSection />
-        </Suspense>
-        <Suspense fallback={<SectionFallback id="contact" />}>
-          <ContactSection />
         </Suspense>
 
         {/* Desktop Dot Pagination - Right side */}
