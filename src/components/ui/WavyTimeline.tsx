@@ -193,7 +193,7 @@ export const WavyTimeline: React.FC = () => {
   return (
     <div
       ref={timelineRef}
-      className={`mt-32 animate-slide-up ${isVisible ? 'visible' : ''} w-full overflow-hidden`}
+      className={`mt-32 animate-slide-up ${isVisible ? 'visible' : ''} w-full`}
     >
       {/* Mobile Layout - Vertical Timeline with Wavy Center Line */}
       <div className="lg:hidden">
@@ -277,7 +277,7 @@ export const WavyTimeline: React.FC = () => {
       </div>
 
       {/* Desktop Layout - Wavy Timeline */}
-      <div className="hidden lg:block overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div className="hidden lg:block relative left-1/2 -translate-x-1/2 w-screen overflow-x-auto pb-4 pl-[10vw] pr-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <div ref={containerRef} className="relative min-w-max">
           {/* SVG Wave Background */}
           <svg
